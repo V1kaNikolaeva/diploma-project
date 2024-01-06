@@ -1,8 +1,8 @@
 <template>
   <div class="card__wrapper">
     <div class="card">
-      <p>{{ card.quantity }}{{ card.currency }}</p>
-      <p>{{ card.reason }}</p>
+      <strong>{{ card.quantity }}{{ card.currency }}</strong>
+      <strong>{{ card.reason }}</strong>
     </div>
   </div>
 </template>
@@ -31,16 +31,15 @@ export default {
   height: 100%;
   padding: 10px;
   border-radius: 10px;
-  background-image: url(../assets/images/bg-dots.jpg);
+  background-color: var(--card-color);
 }
 
-p:first-child {
+strong:first-child {
   text-align: end;
   width: 30%;
-  font-weight: bold;
 }
 
-p:nth-child(2) {
+strong:nth-child(2) {
   text-align: start;
   width: 70%;
 }

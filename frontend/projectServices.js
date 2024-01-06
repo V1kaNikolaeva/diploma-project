@@ -1,6 +1,6 @@
 export function createCard() {
     return {
-      id: lastCreateMeetupId--,
+      id: lastCreateMeetupId++,
       type: '',
       currency: '',
       quantity: '',

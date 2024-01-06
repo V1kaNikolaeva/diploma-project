@@ -7,34 +7,27 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
-      redirect: { name: 'income' },
-      children: [
-        {
-          path: 'income',
-          name: 'income',
-          props: true,
-        },
-        {
-          path: 'expenses',
-          name: 'expenses',
-          props: true,
-        },
-      ]
     },
     {
       path: '/profile',
       name: 'profile',
+      component: () => import('../views/ProfileView.vue')
     },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: () => import('../views/ProfileView.vue'),
-    // },
-    // {
-    //   path: '/graphics',
-    //   name: 'graphics',
-    //   component: () => import('../views/ProfileView.vue'),
-    // },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../views/SignUpView.vue'),
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/SignUpView.vue'),
+    },
+    {
+      path: '/graphs',
+      name: 'graphs',
+      component: () => import('../views/GraphsView.vue'),
+    },
   ]
 })
 

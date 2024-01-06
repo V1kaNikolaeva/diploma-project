@@ -1,6 +1,8 @@
 <template>
   <div class="cards__wrapper">
     <UICard v-for="card in cards" :card="card" />
+    <slot name="expensesCards" v-for="card in cards" :card="card"></slot>
+    <slot name="incomeCards"></slot>
   </div>
 </template>
 

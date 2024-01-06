@@ -2,7 +2,7 @@
   <header class="nav__header">
     <div class="logoWrapper">
       <div class="logo">
-        <h1>Incomes and Extences</h1>
+        <h1>Incomes and Expenses</h1>
       </div>
     </div>
 
@@ -18,7 +18,7 @@
         </h1>
         <h1>
           <RouterLink 
-            :to="{  }" 
+            :to="{ name: 'graphs' }" 
             class="link" 
           >
               Графики
@@ -26,7 +26,7 @@
         </h1>
         <h1>
           <RouterLink 
-            :to="{  }" 
+            :to="{ name: 'profile' }" 
             class="link" 
           >
               Профиль
@@ -34,7 +34,15 @@
         </h1>
         <h1>
           <RouterLink 
-            :to="{  }" 
+            :to="{ name: 'signup' }" 
+            class="link" 
+          >
+              Регистрация
+          </RouterLink>
+        </h1>
+        <h1>
+          <RouterLink 
+            :to="{ name: 'login' }" 
             class="link" 
           >
               Войти
@@ -70,7 +78,7 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   z-index: 4;
-  border-bottom: 1px solid var(--main-nav-underline);
+  border-bottom: 1px solid var(--main-line);
 }
 
 .logoWrapper{ 

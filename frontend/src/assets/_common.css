@@ -9,3 +9,15 @@ body {
   background-color: var(--main-bg);
   font-family: "Nunito Sans", sans-serif;
 }
+
+label {
+  color: var(--main-text);
+}
+
+a {
+  color: var(--main-text);
+}
+
+a:hover {
+  color: var(--light-green);
+}

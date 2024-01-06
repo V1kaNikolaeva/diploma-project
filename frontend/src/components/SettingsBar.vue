@@ -1,37 +1,88 @@
 <template>
-    <div class="settings__contanier">
-        <UIButton @click="openModalWindow(true)" :buttonType="'add'"><p>Добавить</p></UIButton>
+  <div class="settings__contanier">
+    <div class="button__wrapper">
+      <UIButton @click="openModalWindow(true)" :buttonType="'add'">
+        <p>Добавить</p>
+        <template #right-icon>
+          <UIIcon icon="add" />
+        </template>
+      </UIButton>
     </div>
+    <div class="button__wrapper">
+      <UIButton :buttonType="'show'">
+        <p>Все</p>
+        <template #right-icon>
+          <UIIcon icon="arrow" />
+        </template>
+      </UIButton>
+    </div>
+    <div class="button__wrapper">
+      <UIButton :buttonType="'show'">
+        <p>Доходы</p>
+        <template #right-icon>
+          <UIIcon icon="arrow" />
+        </template>
+      </UIButton>
+    </div>
+    <div class="button__wrapper">
+      <UIButton :buttonType="'show'">
+        <p>Расходы</p>
+        <template #right-icon>
+          <UIIcon icon="arrow" />
+        </template>
+      </UIButton>
+    </div>
+    <div class="button__wrapper">
+      <UIButton :buttonType="'default'">
+        <p>По дате</p>
+        <template #right-icon>
+          <UIIcon icon="sort" />
+        </template>
+      </UIButton>
+    </div>
+    <div class="button__wrapper">
+      <UIButton :buttonType="'default'">
+        <p>По цене</p>
+        <template #right-icon>
+          <UIIcon icon="sort" />
+        </template>
+      </UIButton>
+    </div>
+  </div>
 </template>
-  
+
 <script>
-import UIButton from './UIButton.vue';
+import UIButton from "./UIButton.vue";
+import UIIcon from "./UIIcon.vue";
 
 export default {
-    name: 'SettingsBar',
-    components: { UIButton },
-    props: {
-        isModalVisible: {
-            type: Boolean,
-            required: true,
-        }
+  name: "SettingsBar",
+  components: { UIButton, UIIcon },
+  props: {
+    isModalVisible: {
+      type: Boolean,
+      required: true,
     },
+  },
 
-    emits: ['update:isModalVisible'],
+  emits: ["update:isModalVisible"],
 
-    methods: {
-        openModalWindow(value) {
-            this.$emit('update:isModalVisible', value)
-        }
-    }
-}
-
+  methods: {
+    openModalWindow(value) {
+      this.$emit("update:isModalVisible", value);
+    },
+  },
+};
 </script>
 
 <style scoped>
 .settings__contanier {
-    margin-top: 10px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
+.button__wrapper {
+  margin: 10px;
+}
 </style>
