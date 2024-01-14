@@ -14,6 +14,8 @@
 export default {
   name: "UIInput",
 
+  inheritAttrs: false,
+  
   props: {
     multiline: {
       type: Boolean,

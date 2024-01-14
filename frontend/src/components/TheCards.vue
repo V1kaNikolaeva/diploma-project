@@ -1,8 +1,6 @@
 <template>
   <div class="cards__wrapper">
     <UICard v-for="card in cards" :card="card" />
-    <slot name="expensesCards" v-for="card in cards" :card="card"></slot>
-    <slot name="incomeCards"></slot>
   </div>
 </template>
 
@@ -28,7 +26,7 @@ export default {
           currency: "₽",
           quantity: 200,
           reason:
-            "Продал машину и очкнь надеюсь что выгодно а иначе плохо будет",
+            "Продал машину",
         },
         {
           id: 3,

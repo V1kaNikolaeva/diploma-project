@@ -1,5 +1,6 @@
 <template>
   <button :class="{ 
+    'button-icon' : $slots['right-icon'],
     'add__button' : buttonType === 'add',
     'cancel__button' : buttonType === 'cancel',
     'save__button' : buttonType === 'save',
@@ -32,15 +33,18 @@ export default {
 :slotted(p) {
   color: var(--main-text);
 }
-.add__button,
-.save__button,
-.cancel__button,
-.default__button,
-.show__button {
+.button-icon {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.add__button,
+.cancel__button,
+.default__button,
+.show__button,
+.save__button {
   padding: 5px;
   border-radius: 10px;
 }
