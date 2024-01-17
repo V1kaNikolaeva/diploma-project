@@ -1,13 +1,16 @@
 <template>
-    <div class="wrapper__home">
-      <div class="settings__wrapper">
-        <SettingsBar v-model:isModalVisible="isModalVisible" />
-      </div>
-      <div class="cards__wrapper">
-        <TheCards/>
-      </div>
+  <div class="incomes">
+    <p>Мои деньги: {{ 2000 }}</p>
+  </div>
+  <div class="wrapper__home">
+    <div class="settings__wrapper">
+      <SettingsBar v-model:isModalVisible="isModalVisible" />
     </div>
-    <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" />
+    <div class="cards__wrapper">
+      <TheCards/>
+    </div>
+  </div>
+  <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" />
 </template>
 
 <script>

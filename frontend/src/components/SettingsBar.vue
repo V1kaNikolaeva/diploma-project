@@ -10,22 +10,6 @@
     </div>
     <div class="button__wrapper">
       <UIButton :buttonType="'show'">
-        <p>Все</p>
-        <template #right-icon>
-          <UIIcon icon="arrow" />
-        </template>
-      </UIButton>
-    </div>
-    <div class="button__wrapper">
-      <UIButton :buttonType="'show'">
-        <p>Доходы</p>
-        <template #right-icon>
-          <UIIcon icon="arrow" />
-        </template>
-      </UIButton>
-    </div>
-    <div class="button__wrapper">
-      <UIButton :buttonType="'show'">
         <p>Расходы</p>
         <template #right-icon>
           <UIIcon icon="arrow" />
@@ -42,7 +26,7 @@
     </div>
     <div class="button__wrapper">
       <UIButton :buttonType="'default'">
-        <p>По цене</p>
+        <p>По сумме</p>
         <template #right-icon>
           <UIIcon icon="sort" />
         </template>
