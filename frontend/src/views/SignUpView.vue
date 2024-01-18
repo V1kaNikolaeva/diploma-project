@@ -4,10 +4,14 @@
 
 <script>
 import EnterForm from '../components/EnterForm.vue'
-
+import axios from 'axios'
 export default {
     components: {
         EnterForm,
+    },
+
+    setup() {
+      
     }
 }
 

@@ -56,7 +56,7 @@
           />
         </div>
         <div class="sign-up-labels__wrapper">
-            <UIButton class="signUp-button" type="submit" :buttonType="'save'">
+            <UIButton @click="sendform" class="signUp-button" type="submit" :buttonType="'save'">
                 <p>{{ submitText }}</p>
             </UIButton>
         </div>
@@ -91,6 +91,20 @@ export default {
         required: true,
     }
   },
+
+  emits: ['submit'],
+
+  data() {
+    return {
+      localCreateAccount: { ...createAccount }
+    }
+  },
+
+  methods: {
+    sendform() {
+      this.$emit('submit', localCreateAccount)
+    }
+  }
 };
 </script>
 

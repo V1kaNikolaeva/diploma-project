@@ -34,12 +34,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, blank=True, default='')
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
-    friends = models.ManyToManyField('self')
-    friends_count = models.IntegerField(default=0)
-
-    people_you_may_know = models.ManyToManyField('self')
-
-    posts_count = models.IntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -53,9 +47,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-    def get_avatar(self):
-        if self.avatar:
-            return settings.WEBSITE_URL + self.avatar.url
-        else:
-            return 'https://picsum.photos/200/200'
