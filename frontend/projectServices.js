@@ -10,7 +10,7 @@
 
 let lastCreateAccountId = -1;
 /**
- * Creates new Meetup object with temp negative id
+ * Creates new User object with temp negative id
  * @return {User}
  */
 
@@ -20,7 +20,7 @@ export function createAccount() {
     name: '',
     email: '',
     password: '',
-    repeatPAssword: '',
+    repeatPassword: '',
     date: new Date().setUTCHours(0, 0, 0, 0),
   };
 }

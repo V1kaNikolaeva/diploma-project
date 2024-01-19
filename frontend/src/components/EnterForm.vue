@@ -69,6 +69,8 @@
 import UIInput from "../components/UIInput.vue";
 import UIButton from "../components/UIButton.vue";
 import { RouterLink } from "vue-router";
+import { createAccount } from '../../projectServices';
+
 
 export default {
   name: "EnterForm",
@@ -102,7 +104,7 @@ export default {
 
   methods: {
     sendform() {
-      this.$emit('submit', localCreateAccount)
+      this.$emit('submit', this.localCreateAccount)
     }
   }
 };
