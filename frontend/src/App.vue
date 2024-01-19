@@ -1,9 +1,18 @@
 <script>
 import { RouterView } from 'vue-router'
 import NavigationBar from './components/NavigationBar.vue';
+import { createUser } from '../projectServices';
 
 export default {
-  components: { NavigationBar }
+  components: { NavigationBar },
+  setup() {
+    const user = createUser()
+
+    return {
+      user
+    }
+  }
+  //Сделать глобальный тостер
 }
 
 </script>
@@ -11,7 +20,7 @@ export default {
 <template>
   <NavigationBar/>
   <main class="main">
-    <RouterView />
+    <RouterView :user="user" />
   </main>
 </template>
 
@@ -20,3 +29,5 @@ export default {
   margin-top: 150px;
 }
 </style>
+
+

@@ -6,6 +6,8 @@
       'input-rounded' : rounded
     }"
     v-bind="$attrs"
+    :value="modelValue"
+    @[updateEvent]="$emit('update:modelValue', $event.target.value)"
   >
   </component>
 </template>
@@ -17,9 +19,17 @@ export default {
   inheritAttrs: false,
   
   props: {
+    modelValue: {
+      type: String,
+    },
     multiline: {
       type: Boolean,
       default: false,
+    },
+    modelModifiers: {
+      default: () => ({
+        lazy: false,
+      }),
     },
     fullWidth: {
       type: Boolean,
@@ -29,6 +39,13 @@ export default {
       type: Boolean,
       default: true,
     }
+  },
+  emits: ['update:modelValue'],
+
+  computed: {
+    updateEvent() {
+      return this.modelModifiers.lazy ? 'change' : 'input';
+    },
   },
 
   data() {

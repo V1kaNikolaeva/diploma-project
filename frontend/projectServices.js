@@ -8,19 +8,26 @@
  * @property date {number} - date timestamp at UTC midnight
  */
 
-let lastCreateAccountId = -1;
+let lastCreateUserId = -1;
 /**
  * Creates new User object with temp negative id
  * @return {User}
  */
 
-export function createAccount() {
+export function createUser() {
   return {
-    id: lastCreateAccountId++,
+    id: lastCreateUserId--,
     name: '',
     email: '',
     password: '',
     repeatPassword: '',
     date: new Date().setUTCHours(0, 0, 0, 0),
   };
+}
+
+export function loginUser() {
+  return {
+    email: '',
+    password: '',
+  }
 }
