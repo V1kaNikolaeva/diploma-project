@@ -5,11 +5,12 @@ import { createUser } from '../projectServices';
 
 export default {
   components: { NavigationBar },
+
   setup() {
     const user = createUser()
 
     return {
-      user
+      user,
     }
   }
   //Сделать глобальный тостер

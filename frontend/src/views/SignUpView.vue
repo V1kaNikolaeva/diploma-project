@@ -11,13 +11,13 @@
       </p>
     </div>
     <div class="sign-up__contanier">
-      <form action="" @submit.prevent="consoleUser">
+      <form action="" @submit.prevent="addUser">
         <div class="sign-up-labels__wrapper">
           <label class="sign-up__label" for="">Имя</label>
           <UIInput
             type="text"
             placeholder="Имя"
-            required
+            
             :fullWidth="true"
             v-model="localUser.name"
           />
@@ -27,7 +27,7 @@
           <UIInput
             type="text"
             placeholder="Почта"
-            required
+            
             :fullWidth="true"
             v-model="localUser.email"
           />
@@ -39,7 +39,7 @@
             name="password"
             autocomplete="off"
             placeholder="Пароль"
-            required
+            
             :fullWidth="true"
             v-model="localUser.password"
           />
@@ -63,18 +63,22 @@
       </form>
     </div>
   </div>
+  <TheToaster ref="toaster"></TheToaster>
 </template>
 
 <script>
 import UIInput from "../components/UIInput.vue";
 import UIButton from "../components/UIButton.vue";
+import TheToaster from "../components/TheToaster.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
 //import axios from 'axios'
 
 export default {
   name: 'SignUpView',
-  components: { UIButton, UIInput },
+
+  components: { UIButton, UIInput, TheToaster, TheToaster },
+
   props: {
     user: {
       type: Object,
@@ -83,15 +87,34 @@ export default {
   },
 
   setup(props, context) {
-    const localUser = ref({...props.user})
-
-    const consoleUser = () => {
-      //Отправка формы, валидация, тосты
+    const toaster = ref(null)
+    const handleErrorClick = () => {
+      toaster.value.error('Error ' + new Date().toLocaleTimeString());
     }
+
+    const localUser = ref({...props.user})
+    const addUser = () => {
+      if (localUser.value.name === '') {
+        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+      } else if (localUser.value.email === '') {
+        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+      } else if (localUser.value.password === '') {
+        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+      } else if (localUser.value.repeatPassword === '') {
+        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+      } else {
+        toaster.value.success('Success ' + new Date().toLocaleTimeString());
+      }
+      
+    }
+
+
 
     return {
       localUser,
-      consoleUser,
+      addUser,
+      toaster,
+      handleErrorClick,
     }
   }
 }

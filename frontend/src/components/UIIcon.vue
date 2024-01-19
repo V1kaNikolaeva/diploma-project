@@ -7,13 +7,16 @@ import Close from "../assets/icons/icon-close.svg";
 import Sort from "../assets/icons/icon-sort.svg";
 import Add from "../assets/icons/icon-add.svg";
 import Arrow from "../assets/icons/icon-right-arrow.svg";
-
+import Error from "../assets/icons/icon-error.svg"
+import Check from "../assets/icons/icon-check.svg"
 
 const icons = {
   "close": Close,
   "sort": Sort,
   "add": Add,
   "arrow": Arrow,
+  "error": Error,
+  "check": Check,
 };
 
 export default {
