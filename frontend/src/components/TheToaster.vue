@@ -80,7 +80,7 @@ export default {
   padding: 16px;
   background: var(--card-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 18px;
   line-height: 28px;
   width: auto;

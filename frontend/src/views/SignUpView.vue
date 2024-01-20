@@ -51,6 +51,7 @@
             name="password"
             autocomplete="off"
             placeholder="Повторите пароль"
+            
             :fullWidth="true"
             v-model="localUser.repeatPassword"
           />
@@ -72,7 +73,7 @@ import UIButton from "../components/UIButton.vue";
 import TheToaster from "../components/TheToaster.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
-//import axios from 'axios'
+import axios from 'axios'
 
 export default {
   name: 'SignUpView',
@@ -87,7 +88,7 @@ export default {
   },
 
   setup(props, context) {
-    const toaster = ref(null)
+    const toaster = ref(null);
     const handleErrorClick = () => {
       toaster.value.error('Error ' + new Date().toLocaleTimeString());
     }
@@ -95,20 +96,31 @@ export default {
     const localUser = ref({...props.user})
     const addUser = () => {
       if (localUser.value.name === '') {
-        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+        toaster.value.error('Проверьте имя');
       } else if (localUser.value.email === '') {
-        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+        toaster.value.error('Проверьте e-mail');
       } else if (localUser.value.password === '') {
-        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+        toaster.value.error('Проверьте пароль');
       } else if (localUser.value.repeatPassword === '') {
-        toaster.value.error('Error ' + new Date().toLocaleTimeString());
+        toaster.value.error('Проверьте пароль');
       } else {
-        toaster.value.success('Success ' + new Date().toLocaleTimeString());
+        //axios and api
+        axios
+          .post('/api/signup/', localUser.value)
+          .then(response => {
+            if (response.data.message === 'success') {
+              toaster.value.success('Вы зарегистрировались!');
+            } else {
+              console.log(response.data.message)
+              toaster.value.error('Что-то пошло не так...');
+            }
+            
+          }).catch(error => {
+            console.log(error)
+          })
       }
       
     }
-
-
 
     return {
       localUser,

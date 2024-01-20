@@ -1,4 +1,3 @@
-from django.db import models
 import uuid
 # Create your models here.
 from django.conf import settings
@@ -12,7 +11,6 @@ class CustomUserManager(UserManager):
     def _create_user(self, name, email, password, **extra_fields):
         if not email:
             raise ValueError("You have not provided a valid e-mail address")
-        
         email = self.normalize_email(email)
         user = self.model(email=email, name=name, **extra_fields)
         user.set_password(password)
