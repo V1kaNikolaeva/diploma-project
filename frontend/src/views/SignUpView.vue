@@ -11,7 +11,7 @@
       </p>
     </div>
     <div class="sign-up__contanier">
-      <form action="" @submit.prevent="addUser">
+      <form action="" @submit.prevent="signup">
         <div class="sign-up-labels__wrapper">
           <label class="sign-up__label" for="">Имя</label>
           <UIInput
@@ -81,7 +81,7 @@ export default {
   components: { UIButton, UIInput, TheToaster, TheToaster },
 
   props: {
-    user: {
+    userSignup: {
       type: Object,
       required: true,
     }
@@ -93,8 +93,8 @@ export default {
       toaster.value.error('Error ' + new Date().toLocaleTimeString());
     }
 
-    const localUser = ref({...props.user})
-    const addUser = () => {
+    const localUser = ref({...props.userSignup})
+    const signup = () => {
       if (localUser.value.name === '') {
         toaster.value.error('Проверьте имя');
       } else if (localUser.value.email === '') {
@@ -111,7 +111,6 @@ export default {
             if (response.data.message === 'success') {
               toaster.value.success('Вы зарегистрировались!');
             } else {
-              console.log(response.data.message)
               toaster.value.error('Что-то пошло не так...');
             }
             
@@ -124,7 +123,7 @@ export default {
 
     return {
       localUser,
-      addUser,
+      signup,
       toaster,
       handleErrorClick,
     }

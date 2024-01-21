@@ -7,13 +7,13 @@
       </p>
     </div>
     <div class="sign-up__contanier">
-      <form action="" @submit.prevent="consoleUser">
+      <form action="" @submit.prevent="login">
         <div class="sign-up-labels__wrapper">
           <label class="sign-up__label" for="">Почта</label>
           <UIInput
             type="text"
             placeholder="Почта"
-            required
+            v-model="localUserLogin.email"
             :fullWidth="true"
             :multiline="false"
           />
@@ -25,7 +25,7 @@
             name="password"
             autocomplete="off"
             placeholder="Пароль"
-            required
+            v-model="localUserLogin.password"
             :fullWidth="true"
             :multiline="false"
           />
@@ -43,7 +43,10 @@
 <script>
 import UIInput from "../components/UIInput.vue";
 import UIButton from "../components/UIButton.vue";
-
+import axios from "axios";
+import { useUserStore } from "../stores/user";
+import { useRouter } from "vue-router";
+import { ref } from 'vue'
 
 export default {
   name: "EnterForm",
@@ -53,6 +56,53 @@ export default {
   },
 
   
+  props: {
+    userLogin: {
+      type: Object,
+      required: true
+    }
+  },
+
+  setup(props, context) {
+    const userStore = useUserStore();
+    const localUserLogin = ref({...props.userLogin});
+    const router = useRouter();
+
+    const login = async () => {
+      if (localUserLogin.value.email === '') {
+        toaster.value.error('Проверьте e-mail');
+      } else if (localUserLogin.value.password === '') {
+        toaster.value.error('Проверьте пароль');
+      } else {
+        //login
+        await axios
+          .post('/api/login/', localUserLogin.value)
+          .then(response => {
+            userStore.setToken(response.data);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access
+          })
+          .catch(error => {
+            console.log('error', error);
+          })
+        //user page
+        await axios
+          .get('/api/home/')
+          .then(response => {
+            userStore.setUserInfo(response.data);
+            router.push('/')
+          })
+          .catch(error => {
+            console.log('error', error);
+          })
+      }
+    }
+
+    return {
+      login,
+      localUserLogin,
+      userStore,
+    }
+  }
 
 
 };

@@ -14,7 +14,7 @@ let lastCreateUserId = -1;
  * @return {User}
  */
 
-export function createUser() {
+export function signupUser() {
   return {
     id: lastCreateUserId--,
     name: '',

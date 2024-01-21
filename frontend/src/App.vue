@@ -1,16 +1,17 @@
 <script>
 import { RouterView } from 'vue-router'
 import NavigationBar from './components/NavigationBar.vue';
-import { createUser } from '../projectServices';
+import { signupUser, loginUser } from '../projectServices';
 
 export default {
   components: { NavigationBar },
 
   setup() {
-    const user = createUser()
-
+    const userSignup = signupUser()
+    const userLogin = loginUser()
     return {
-      user,
+      userSignup,
+      userLogin
     }
   }
   //Сделать глобальный тостер
@@ -21,7 +22,7 @@ export default {
 <template>
   <NavigationBar/>
   <main class="main">
-    <RouterView :user="user" />
+    <RouterView :userSignup="userSignup" :userLogin="userLogin" />
   </main>
 </template>
 
