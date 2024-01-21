@@ -44,6 +44,7 @@
 import UIInput from "../components/UIInput.vue";
 import UIButton from "../components/UIButton.vue";
 import axios from "axios";
+import { loginUser } from "../../services/projectServices";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
 import { ref } from 'vue'
@@ -55,17 +56,11 @@ export default {
     UIButton,
   },
 
-  
-  props: {
-    userLogin: {
-      type: Object,
-      required: true
-    }
-  },
-
   setup(props, context) {
     const userStore = useUserStore();
-    const localUserLogin = ref({...props.userLogin});
+
+    const userLogin = loginUser();
+    const localUserLogin = ref({...userLogin});
     const router = useRouter();
 
     const login = async () => {
@@ -99,6 +94,7 @@ export default {
 
     return {
       login,
+      userLogin,
       localUserLogin,
       userStore,
     }

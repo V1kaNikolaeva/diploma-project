@@ -1,17 +1,28 @@
 <script>
 import { RouterView } from 'vue-router'
 import NavigationBar from './components/NavigationBar.vue';
-import { signupUser, loginUser } from '../projectServices';
+import { useUserStore } from './stores/user';
+import axios from 'axios';
 
 export default {
   components: { NavigationBar },
 
   setup() {
-    const userSignup = signupUser()
-    const userLogin = loginUser()
+    const userStore = useUserStore()
     return {
-      userSignup,
-      userLogin
+
+      userStore,
+    }
+  },
+
+  created() {
+    this.userStore.initStore()
+
+    const token = this.userStore.user.access
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    } else {
+      axios.defaults.headers.common["Authorization"] = "";
     }
   }
   //Сделать глобальный тостер
@@ -22,7 +33,7 @@ export default {
 <template>
   <NavigationBar/>
   <main class="main">
-    <RouterView :userSignup="userSignup" :userLogin="userLogin" />
+    <RouterView />
   </main>
 </template>
 

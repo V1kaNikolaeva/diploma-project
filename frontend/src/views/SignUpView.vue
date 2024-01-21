@@ -19,7 +19,7 @@
             placeholder="Имя"
             
             :fullWidth="true"
-            v-model="localUser.name"
+            v-model="localSignupUser.name"
           />
         </div>
         <div class="sign-up-labels__wrapper">
@@ -29,7 +29,7 @@
             placeholder="Почта"
             
             :fullWidth="true"
-            v-model="localUser.email"
+            v-model="localSignupUser.email"
           />
         </div>
         <div class="sign-up-labels__wrapper">
@@ -41,7 +41,7 @@
             placeholder="Пароль"
             
             :fullWidth="true"
-            v-model="localUser.password"
+            v-model="localSignupUser.password"
           />
         </div>
         <div class="sign-up-labels__wrapper">
@@ -53,7 +53,7 @@
             placeholder="Повторите пароль"
             
             :fullWidth="true"
-            v-model="localUser.repeatPassword"
+            v-model="localSignupUser.repeatPassword"
           />
         </div>
         <div class="sign-up-labels__wrapper">
@@ -71,6 +71,8 @@
 import UIInput from "../components/UIInput.vue";
 import UIButton from "../components/UIButton.vue";
 import TheToaster from "../components/TheToaster.vue";
+import { signupUser } from "../../services/projectServices";
+import { useRouter } from "vue-router";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
 import axios from 'axios'
@@ -78,38 +80,39 @@ import axios from 'axios'
 export default {
   name: 'SignUpView',
 
-  components: { UIButton, UIInput, TheToaster, TheToaster },
+  components: { UIButton, UIInput, TheToaster },
 
-  props: {
-    userSignup: {
-      type: Object,
-      required: true,
-    }
-  },
-
-  setup(props, context) {
+  setup() {
     const toaster = ref(null);
-    const handleErrorClick = () => {
-      toaster.value.error('Error ' + new Date().toLocaleTimeString());
-    }
+    const router = useRouter();
 
-    const localUser = ref({...props.userSignup})
+    //простой конструктор для User
+    const userSignup = signupUser();
+
+    const localSignupUser = ref({...userSignup});
+
+
     const signup = () => {
-      if (localUser.value.name === '') {
+      if (localSignupUser.value.name === '') {
         toaster.value.error('Проверьте имя');
-      } else if (localUser.value.email === '') {
+
+      } else if (localSignupUser.value.email === '') {
         toaster.value.error('Проверьте e-mail');
-      } else if (localUser.value.password === '') {
+
+      } else if (localSignupUser.value.password === '') {
         toaster.value.error('Проверьте пароль');
-      } else if (localUser.value.repeatPassword === '') {
+
+      } else if (localSignupUser.value.repeatPassword === '') {
         toaster.value.error('Проверьте пароль');
+
       } else {
         //axios and api
         axios
-          .post('/api/signup/', localUser.value)
+          .post('/api/signup/', localSignupUser.value)
           .then(response => {
             if (response.data.message === 'success') {
-              toaster.value.success('Вы зарегистрировались!');
+              toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
+              router.push('/login')
             } else {
               toaster.value.error('Что-то пошло не так...');
             }
@@ -122,10 +125,10 @@ export default {
     }
 
     return {
-      localUser,
+      userSignup,
+      localSignupUser,
       signup,
       toaster,
-      handleErrorClick,
     }
   }
 }
