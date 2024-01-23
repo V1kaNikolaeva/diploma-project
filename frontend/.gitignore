@@ -29,4 +29,11 @@ coverage
 
 *.tsbuildinfo
 
-.env/*
+
+backend/.env*
+.env*.local
+.env.*
+*.env.example
+*.env.local
+*.env.staging
+
