@@ -9,6 +9,7 @@ import Add from "../assets/icons/icon-add.svg";
 import Arrow from "../assets/icons/icon-right-arrow.svg";
 import Error from "../assets/icons/icon-error.svg"
 import Check from "../assets/icons/icon-check.svg"
+import Edit from "../assets/icons/icon-edit.svg"
 
 const icons = {
   "close": Close,
@@ -17,6 +18,7 @@ const icons = {
   "arrow": Arrow,
   "error": Error,
   "check": Check,
+  "edit": Edit,
 };
 
 export default {

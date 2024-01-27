@@ -38,11 +38,13 @@
       </form>
     </div>
   </div>
+  <TheToaster ref="toaster"></TheToaster>
 </template>
 
 <script>
 import UIInput from "../components/UIInput.vue";
 import UIButton from "../components/UIButton.vue";
+import TheToaster from "../components/TheToaster.vue";
 import axios from "axios";
 import { loginUser } from "../../services/projectServices";
 import { useUserStore } from "../stores/user";
@@ -54,10 +56,12 @@ export default {
   components: {
     UIInput,
     UIButton,
+    TheToaster,
   },
 
   setup(props, context) {
     const userStore = useUserStore();
+    const toaster = ref(null);
 
     const userLogin = loginUser();
     const localUserLogin = ref({...userLogin});
@@ -84,6 +88,7 @@ export default {
           .get('/api/home/')
           .then(response => {
             userStore.setUserInfo(response.data);
+            toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
             router.push('/')
           })
           .catch(error => {
@@ -93,6 +98,7 @@ export default {
     }
 
     return {
+      toaster,
       login,
       userLogin,
       localUserLogin,

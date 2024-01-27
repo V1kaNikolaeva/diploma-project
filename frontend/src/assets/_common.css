@@ -10,6 +10,10 @@ body {
   font-family: "Nunito Sans", sans-serif;
 }
 
+p {
+  color: var(--main-text)
+}
+
 label {
   color: var(--main-text);
 }
