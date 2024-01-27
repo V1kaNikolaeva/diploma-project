@@ -85,7 +85,7 @@ export default {
   setup() {
     const toaster = ref(null);
     const router = useRouter();
-
+    
     //простой конструктор для User
     const userSignup = signupUser();
 
