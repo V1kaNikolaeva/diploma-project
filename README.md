@@ -15,7 +15,16 @@ python -m venv env
 ```
 pip install -r requirements.txt
 ```
+В директории backend запустить сервер
+```
+python manage.py runserver
+```
 Затем перейти в директорию frontend и установить node_modules
 ```
 npm install
 ```
+И запустить сервер
+```
+npm run dev
+```
+Перейти по ссылке localhost
