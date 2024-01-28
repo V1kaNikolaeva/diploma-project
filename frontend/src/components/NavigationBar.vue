@@ -12,6 +12,7 @@
           <RouterLink 
             :to="{ name: 'home' }" 
             class="link" 
+            exactActiveClass="active-link"
           >
               Главная
           </RouterLink>
@@ -20,6 +21,7 @@
           <RouterLink 
             :to="{ name: 'graphs' }" 
             class="link" 
+            exactActiveClass="active-link"
           >
               Графики
           </RouterLink>
@@ -28,6 +30,7 @@
           <RouterLink 
             :to="{ name: 'profile' }" 
             class="link" 
+            exactActiveClass="active-link"
           >
               Профиль
           </RouterLink>
@@ -36,6 +39,7 @@
           <RouterLink 
             :to="{ name: 'signup' }" 
             class="link" 
+            exactActiveClass="active-link"
           >
               Регистрация
           </RouterLink>
@@ -44,6 +48,7 @@
           <RouterLink 
             :to="{ name: 'login' }" 
             class="link" 
+            exactActiveClass="active-link"
           >
               Войти
           </RouterLink>
@@ -80,7 +85,6 @@ export default {
   z-index: 4;
   border-bottom: 1px solid var(--main-line);
 }
-
 .logoWrapper{ 
   height: 100%;
   align-items: center;
@@ -101,9 +105,26 @@ export default {
   cursor: pointer;
   text-decoration: none;
 }
+.link::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: var(--light-green);
+    transition: width .3s;
+}
+.link:hover::after {
+    width: 100%;
+    transition: width .3s;
+}
 .link:hover {
   color: var(--light-green);
   transition: .3s;
+}
+
+.active-link {
+  color: var(--light-green);
+  border-bottom: 2px var(--light-green) solid;
 }
 
 .nav__active {

@@ -49,19 +49,19 @@ export default {
   border-radius: 10px;
 }
 .add__button {
-  border: 1px solid var(--light-green);
+  border: 2px solid var(--light-green);
 }
 .save__button {
-  border: 1px solid var(--light-green);
+  border: 2px solid var(--light-green);
 }
 .cancel__button {
-  border: 1px solid var(--light-red);
+  border: 2px solid var(--light-red);
 }
 .default__button {
-  border: 1px solid var(--button-color);
+  border: 2px solid var(--button-color);
 }
 
 .show__button {
-  border: 1px solid var(--light-orange);
+  border: 2px solid var(--light-orange);
 }
 </style>

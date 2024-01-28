@@ -1,22 +1,46 @@
 <template>
   <div class="card__wrapper">
     <div class="card">
-      <strong>{{ card.quantity }}{{ card.currency }}</strong>
       <strong>{{ card.reason }}</strong>
+      <strong>{{ card.quantity }}{{ card.currency }}</strong>
+      <UIIcon 
+        class="icon-category" 
+        :icon="
+          category === 'medications' ? 'medkit' : 
+          category === 'products' ? 'cart' :
+          category === 'entertainment' ? 'gamepad' :
+          category === 'electronics' ? 'laptop' :
+          category === 'trips' ? 'plane' :
+          category === 'cloth' ? 't-shirt' :
+          category === 'present' ? 'gift' :
+          category === 'other' ? 'other' :
+          null
+        ">
+      </UIIcon>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "UICard",
-  props: {
-    card: {
-      type: Object,
-      required: true,
-    },
+<script setup>
+//Категории карточки:
+//-Медицина 
+//-Продукты (корзина)
+//-Развлечения
+//-Электроника
+//-Путешествия
+//-Одежда
+//-Подарки
+import UIIcon from './UIIcon.vue';
+
+const props = defineProps({
+  card: {
+    type: Object,
+    required: true,
   },
-};
+  category: {
+    type: String
+  }
+});
 </script>
 
 <style scoped>
@@ -26,7 +50,8 @@ export default {
 }
 .card {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
+  align-items: center;
   width: 100%;
   height: 100%;
   padding: 10px;
@@ -35,12 +60,22 @@ export default {
 }
 
 strong:first-child {
-  text-align: end;
-  width: 30%;
+  text-align: start;
+  width: 60%;
 }
 
 strong:nth-child(2) {
-  text-align: start;
-  width: 70%;
+  text-align: end;
+  font-size: 18px;
+  width: 30%;
+}
+
+.icon-category:nth-child(3) {
+  text-align: end;
+  width: 10%;
+}
+
+.icon-category {
+  margin-left: 5px;
 }
 </style>

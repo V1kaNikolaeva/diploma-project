@@ -1,6 +1,6 @@
 <template>
   <div class="cards__wrapper">
-    <UICard v-for="card in cards" :card="card" />
+    <UICard v-for="card in cards" :card="card" :category="card.category" />
   </div>
 </template>
 
@@ -18,28 +18,32 @@ export default {
           type: "expenses",
           currency: "₽",
           quantity: 200,
-          reason: "Купил машину",
+          category: "products",
+          reason: "Купил машину тут я описываю причину продажии все такое",
         },
         {
           id: 2,
-          type: "income",
+          type: "expenses",
           currency: "₽",
           quantity: 200,
+          category: "medications",
           reason:
             "Продал машину",
         },
         {
           id: 3,
-          type: "income",
+          type: "expenses",
           currency: "₽",
-          quantity: 200,
-          reason: "Продал машину",
+          quantity: 25000,
+          category: "electronics",
+          reason: "Купил ноутбук",
         },
         {
           id: 4,
-          type: "income",
+          type: "expenses",
           currency: "₽",
           quantity: 200,
+          category: "medications",
           reason: "Продал машину",
         },
         {
@@ -47,6 +51,7 @@ export default {
           type: "income",
           currency: "₽",
           quantity: 200,
+          category: "medications",
           reason: "Продал машину",
         },
         {
@@ -54,6 +59,7 @@ export default {
           type: "income",
           currency: "₽",
           quantity: 200,
+          category: "medications",
           reason: "Продал машину",
         },
         {
@@ -61,6 +67,7 @@ export default {
           type: "expenses",
           currency: "₽",
           quantity: 100,
+          category: "medications",
           reason: "Купил сырок",
         },
         {
@@ -68,6 +75,7 @@ export default {
           type: "income",
           currency: "₽",
           quantity: 100,
+          category: "products",
           reason: "Продал сырок",
         },
         {
@@ -75,6 +83,7 @@ export default {
           type: "income",
           currency: "₽",
           quantity: 1000,
+          category: "products",
           reason: "Пришла зп",
         },
       ],

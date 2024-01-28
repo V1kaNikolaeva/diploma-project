@@ -1,7 +1,7 @@
 <template>
   <div class="settings__contanier">
     <div class="button__wrapper">
-      <UIButton @click="openModalWindow(true)" :buttonType="'add'">
+      <UIButton @click="createCard(true)" :buttonType="'add'">
         <p>Добавить</p>
         <template #right-icon>
           <UIIcon icon="add" />
@@ -53,18 +53,24 @@ import UIIcon from "./UIIcon.vue";
 
 export default {
   name: "SettingsBar",
+
   components: { UIButton, UIIcon },
+  
   props: {
     isModalVisible: {
       type: Boolean,
       required: true,
     },
+    balance: {
+      type: [Number, null],
+      required: true,
+    }
   },
 
   emits: ["update:isModalVisible"],
 
   methods: {
-    openModalWindow(value) {
+    createCard(value) {
       this.$emit("update:isModalVisible", value);
     },
   },

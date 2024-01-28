@@ -2,19 +2,34 @@
   <div class="balance__wrapper">
 
     <div v-if="balance" class="balance">
-      <p>Мои баланс: <strong>{{ balance }}</strong></p>
-      <div class="button__wrapper">
-        <UIIcon icon="edit" />
-      </div>
+      <p>Мой баланс: <strong>{{ balance }}</strong></p>
+        <div class="button__wrapper">
+          <UIButton :buttonType="'default'">
+            <p>Изменить</p>
+            <template #right-icon>
+              <UIIcon icon="edit"/>
+            </template>
+          </UIButton>
+        </div>
     </div>
 
-    <p v-else-if="!balance">Мои баланс: </p>
+    <div v-else-if="!balance" class="balance">
+      <p>Денег нет!</p>
+        <div class="button__wrapper">
+          <UIButton :buttonType="'add'">
+            <p>Пополнить</p>
+            <template #right-icon>
+              <UIIcon icon="add"/>
+            </template>
+          </UIButton>
+        </div>
+    </div>
 
   </div>
 
   <div class="wrapper__home">
     <div class="settings__wrapper">
-      <SettingsBar v-model:isModalVisible="isModalVisible" />
+      <SettingsBar v-model:isModalVisible="isModalVisible" :balance="balance" />
     </div>
     <div class="cards__wrapper">
       <TheCards/>
@@ -37,7 +52,7 @@
 
     setup() {
       let isModalVisible = ref(false)
-      let balance = ref(1000)
+      let balance = ref(null)
       return {
         isModalVisible,
         balance,
