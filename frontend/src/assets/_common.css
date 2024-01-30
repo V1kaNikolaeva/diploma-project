@@ -10,7 +10,7 @@ body {
   font-family: "Nunito Sans", sans-serif;
 }
 
-p {
+p, strong, h1, h2, h3, h4, h5, span {
   color: var(--main-text)
 }
 
@@ -24,4 +24,16 @@ a {
 
 a:hover {
   color: var(--light-green);
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(26, 24, 47, 0.15);
+  border-radius: 5px;
+  height: 200px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--scroll-bar-color);
+  border-radius: 5px;
 }

@@ -39,7 +39,8 @@ export default {
 
 <style scoped>
 .main {
-  margin-top: 150px;
+  padding-top: 150px;
+  padding-bottom: 150px;
 }
 </style>
 
