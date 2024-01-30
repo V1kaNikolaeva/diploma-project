@@ -1,8 +1,8 @@
 <template>
   <div class="card__wrapper">
     <div class="card">
-      <strong>{{ card.reason }}</strong>
-      <strong>{{ card.quantity }}{{ card.currency }}</strong>
+      <p>{{ card.reason }}</p>
+      <strong>{{ cardQuantityRUBFormat }}{{ card.currency }}</strong>
       <UIIcon 
         class="icon-category" 
         :icon="
@@ -30,6 +30,7 @@
 //-Путешествия
 //-Одежда
 //-Подарки
+import { computed } from 'vue';
 import UIIcon from './UIIcon.vue';
 
 const props = defineProps({
@@ -38,9 +39,35 @@ const props = defineProps({
     required: true,
   },
   category: {
-    type: String
+    type: String,
+  },
+  currencyType: {
+    type: String,
   }
 });
+
+//Конвертор в рубли
+const RUBCurrency = new Intl.NumberFormat('ru-RU', {
+    currency: 'RUB',
+});
+
+//Конвертор в доллары
+const USDCurrency = new Intl.NumberFormat('en-US', {
+    currency: 'USD',
+});
+
+const { quantity } = props.card
+const cardQuantityRUBFormat = computed(() => {
+  return RUBCurrency.format(quantity)
+}) 
+
+const cardQuantityUSDFormat = computed(() => {
+  return USDCurrency.format(quantity)
+}) 
+    
+//currency лучше убрать  
+
+
 </script>
 
 <style scoped>
@@ -52,6 +79,7 @@ const props = defineProps({
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
   padding: 10px;
@@ -59,15 +87,17 @@ const props = defineProps({
   background-color: var(--card-color);
 }
 
-strong:first-child {
+p:first-child {
   text-align: start;
+  color: var(--main-text);
   width: 60%;
 }
 
 strong:nth-child(2) {
   text-align: end;
+  color: var(--main-text);
   font-size: 18px;
-  width: 30%;
+  width: auto;
 }
 
 .icon-category:nth-child(3) {
