@@ -6,14 +6,14 @@
       <UIIcon 
         class="icon-category" 
         :icon="
-          category === 'medications' ? 'medkit' : 
+          category === 'medications' ? 'pulse' : 
           category === 'products' ? 'cart' :
-          category === 'entertainment' ? 'gamepad' :
-          category === 'electronics' ? 'laptop' :
+          category === 'entertainment' ? 'acoustic-guitar' :
+          category === 'electronics' ? 'smartwatch' :
           category === 'trips' ? 'plane' :
           category === 'cloth' ? 't-shirt' :
           category === 'present' ? 'gift' :
-          category === 'other' ? 'other' :
+          category === 'other' ? 'search' :
           null
         ">
       </UIIcon>
