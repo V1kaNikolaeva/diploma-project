@@ -30,7 +30,7 @@ body::-webkit-scrollbar {
   width: 8px;
   background-color: rgba(26, 24, 47, 0.15);
   border-radius: 5px;
-  height: 200px;
+
 }
 
 body::-webkit-scrollbar-thumb {

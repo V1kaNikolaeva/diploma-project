@@ -6,6 +6,7 @@
     'save__button' : buttonType === 'save',
     'default__button' : buttonType === 'default',
     'show__button' : buttonType === 'show',
+    'cash-vault' : buttonType === 'cashVault',
    }">
     <slot />
     <div v-if="$slots['right-icon']" class="button-group__icon">
@@ -23,7 +24,7 @@ export default {
       type: String,
       required: false,
       default: "default",
-      validator: (value) => ["add", "save", "cancel", "default", "show"].includes(value),
+      validator: (value) => ["add", "save", "cancel", "default", "show", "cashVault"].includes(value),
     },
   },
 };
@@ -39,12 +40,17 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-
 .add__button,
 .cancel__button,
 .default__button,
 .show__button,
 .save__button {
+  border: none;    
+  background: none;
+  height: 40px;
+  width: 110px;
+  font-size: 15px;
+  color: var(--main-text);
   padding: 5px;
   border-radius: 10px;
 }
@@ -60,8 +66,19 @@ export default {
 .default__button {
   border: 2px solid var(--button-color);
 }
-
 .show__button {
   border: 2px solid var(--light-orange);
+}
+.cash-vault {
+  position: fixed;
+  border: none;
+  bottom: 30px;
+  right: 30px;
+  width: 80px;
+  height: 80px;
+  padding: 5px;
+  z-index: 4;
+  border-radius: 60px;
+  background-color:  var(--card-color);
 }
 </style>

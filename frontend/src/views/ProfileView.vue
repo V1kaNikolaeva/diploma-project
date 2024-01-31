@@ -1,3 +1,8 @@
 <template>
-    <h1>PROFILE</h1>
+    <UIButton :buttonType="'cashVault'"></UIButton>
 </template>
+
+<script setup>
+import UIButton from '../components/UIButton.vue';
+
+</script>

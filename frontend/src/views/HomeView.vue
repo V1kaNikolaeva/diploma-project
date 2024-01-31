@@ -36,6 +36,9 @@
     </div>
   </div>
   <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" />
+  <UIButton class="user-bank__button" :buttonType="'cashVault'">
+    <UIIcon :icon="'bank'"></UIIcon>
+  </UIButton>
 </template>
 
 <script>
@@ -86,5 +89,11 @@
   flex-direction: row;
   justify-content: center;
   margin: 20px;
+}
+
+.user-bank__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

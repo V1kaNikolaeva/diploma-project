@@ -18,6 +18,7 @@ import Plane from "../assets/icons/icon-plane.svg"
 import Tshirt from "../assets/icons/icon-t-shirt.svg"
 import Gift from "../assets/icons/icon-gift.svg"
 import Other from "../assets/icons/icon-other.svg"
+import Bank from "../assets/icons/icon-bank.svg"
 
 const icons = {
   "close": Close,
@@ -35,6 +36,7 @@ const icons = {
   "t-shirt": Tshirt,
   "gift": Gift,
   "other": Other,
+  "bank": Bank,
 };
 
 export default {
