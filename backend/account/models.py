@@ -43,3 +43,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+class ExpenseCard():
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    quantity = models.PositiveIntegerField(max_length=9, blank=True)
+
+    date_created = models.DateTimeField(default=timezone.now)
+    # category = models.Choices()

@@ -6,9 +6,9 @@ from .forms import SignupForm
 @api_view(['GET'])
 def home(request):
     return JsonResponse({
-        'id': request.data.get('id'),
-        'name': request.data.get('name'),
-        'email': request.data.get('email'),
+        'id': request.user.id,
+        'name': request.user.name,
+        'email': request.user.email,
     })
 
 @api_view(['POST'])
