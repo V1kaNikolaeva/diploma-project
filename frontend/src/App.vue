@@ -15,7 +15,7 @@ export default {
     }
   },
 
-  created() {
+  beforeCreate() {
     this.userStore.initStore()
 
     const token = this.userStore.user.access

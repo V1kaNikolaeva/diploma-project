@@ -88,8 +88,9 @@ export default {
           .get('/api/home/')
           .then(response => {
             userStore.setUserInfo(response.data);
-            toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
-            router.push('/')
+            console.log(response.data);
+            toaster.value.success('Вы авторизировались!'); //починить Je89cC2ThV3y
+            //router.push('/')
           })
           .catch(error => {
             console.log('error', error);

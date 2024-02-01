@@ -98,5 +98,9 @@ export const useUserStore = defineStore({
           this.removeToken();
         });
     },
+
+    getUserInfo() {
+      return this.user
+    }
   },
 });
