@@ -2,7 +2,8 @@
  * Авторизован ли текущий пользователь
  * @return {boolean}
  */
-export function isAuthenticated() {
+import { useUserStore } from "../src/stores/user";
 
-    //написать проверку
+export function isAuthenticated() {
+    return useUserStore().getUserInfo().isAuthenticated
 }
