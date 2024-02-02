@@ -28,15 +28,6 @@
         </h1>
         <h1>
           <RouterLink 
-            :to="{ name: 'profile' }" 
-            class="link" 
-            exactActiveClass="active-link"
-          >
-              Профиль
-          </RouterLink>
-        </h1>
-        <h1>
-          <RouterLink 
             :to="{ name: 'signup' }" 
             class="link" 
             exactActiveClass="active-link"
@@ -49,8 +40,17 @@
             :to="{ name: 'login' }" 
             class="link" 
             exactActiveClass="active-link"
+            v-if="!userName"
           >
               Войти
+          </RouterLink>
+          <RouterLink 
+            :to="{ name: 'profile' }" 
+            class="link" 
+            exactActiveClass="active-link"
+            v-else="userName"
+          >
+              {{ userName }}
           </RouterLink>
         </h1>
       </nav>
@@ -59,14 +59,15 @@
   </header>
 </template>
 
-<script>
+<script setup>
 import { RouterLink } from 'vue-router';
-export default {
-  data() {
-    return {
-    }    
-  },
-}
+
+const props = defineProps({
+  userName: {
+    required: true,
+  }
+})
+
 </script>
 
 <style scoped>

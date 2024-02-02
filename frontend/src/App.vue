@@ -3,14 +3,20 @@ import { RouterView } from 'vue-router'
 import NavigationBar from './components/NavigationBar.vue';
 import { useUserStore } from './stores/user';
 import axios from 'axios';
+import { computed } from 'vue';
 
 export default {
   components: { NavigationBar },
 
   setup() {
     const userStore = useUserStore()
-    return {
+    
+    const userNameData = computed(() => {
+      return userStore.getUserInfo().name
+    })
 
+    return {
+      userNameData,
       userStore,
     }
   },
@@ -25,13 +31,14 @@ export default {
       axios.defaults.headers.common["Authorization"] = "";
     }
   }
+
   //Сделать глобальный тостер
 }
 
 </script>
 
 <template>
-  <NavigationBar/>
+  <NavigationBar :userName="userNameData"/>
   <main class="main">
     <RouterView />
   </main>

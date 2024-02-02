@@ -1,8 +1,7 @@
 <template>
-    <UIButton :buttonType="'cashVault'"></UIButton>
+    <h1>profile</h1>
 </template>
 
 <script setup>
-import UIButton from '../components/UIButton.vue';
-
+//выйти из акка
 </script>

@@ -5,6 +5,10 @@
       <p>
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum exercitationem labore magnam, ipsum nihil, at tempora ea sint amet, delectus distinctio ex consequuntur. Explicabo, hic eaque aperiam repudiandae sapiente ipsa.
       </p>
+      <p>
+        Нет аккаунта?
+        <RouterLink :to="{ name: 'signup' }">Нажми сюда</RouterLink>, чтобы зарегистрироваться
+      </p>
     </div>
     <div class="sign-up__contanier">
       <form action="" @submit.prevent="login">
@@ -88,7 +92,9 @@ export default {
           .get('/api/home/')
           .then(response => {
             userStore.setUserInfo(response.data);
-            console.log(response.data);
+            //Можно сделать подстановку ника по кнопку войти, убрать регистрацию
+            //На кнопке войти будет ссылка на регистрацию
+            //нажав на ник перейдете в вкладку профиль
             toaster.value.success('Вы авторизировались!'); //починить Je89cC2ThV3y
             //router.push('/')
           })

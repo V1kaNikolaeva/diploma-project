@@ -63,13 +63,15 @@ const router = createRouter({
 
 
 router.beforeEach((to, from) => {
-  if (!isAuthenticated()) {
+  if (isAuthenticated()) {
+    if (to.name === 'login') {
+      router.push('/profile')
+    }
+
+  } else if (!isAuthenticated()) {
     if (to.meta.requireGuest === false) {
       router.push('/signup')
     }
-
-  } else if (isAuthenticated()) {
-    return true;
   }
 })
 
