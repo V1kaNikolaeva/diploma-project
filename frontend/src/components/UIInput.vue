@@ -1,4 +1,5 @@
 <template>
+  <label v-if="label" class="label" for="">{{ label }}</label>
   <component 
     :is="multiline ? 'textarea' : 'input'"
     :class="{ 
@@ -7,59 +8,52 @@
     }"
     v-bind="$attrs"
     :value="modelValue"
-    @[updateEvent]="$emit('update:modelValue', $event.target.value)"
+    @input="$emit('update:modelValue', $event.target.value)"
   >
   </component>
 </template>
 
-<script>
-export default {
-  name: "UIInput",
+<script setup>
 
+defineOptions({
+  name: 'UIInput',
   inheritAttrs: false,
-  
-  props: {
-    modelValue: {
-      type: String,
-    },
-    multiline: {
-      type: Boolean,
-      default: false,
-    },
-    modelModifiers: {
-      default: () => ({
-        lazy: false,
-      }),
-    },
-    fullWidth: {
-      type: Boolean,
-      default: true,
-    },
-    rounded: {
-      type: Boolean,
-      default: true,
-    }
-  },
-  emits: ['update:modelValue'],
+})
 
-  computed: {
-    updateEvent() {
-      return this.modelModifiers.lazy ? 'change' : 'input';
-    },
+const props = defineProps({
+  modelValue: {
+    type: String,
   },
+  multiline: {
+    type: Boolean,
+    default: false,
+  },
+  label: {
+    type: String,
+  },
+  fullWidth: {
+    type: Boolean,
+    default: true,
+  },
+  rounded: {
+    type: Boolean,
+    default: true,
+  }
+})
 
-  data() {
-    return {};
-  },
-};
+const emits = defineEmits(['update:modelValue'])
+
 </script>
 
 <style scoped>
 .input-full {
   width: 100%;
 }
-
 .input-rounded {
   border-radius: 10px;
+}
+.label {
+    width: 100%;
+    margin-bottom: 5px;
 }
 </style>
