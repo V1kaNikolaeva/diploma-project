@@ -13,22 +13,22 @@
     <div class="sign-up__contanier">
       <form action="" @submit.prevent="login">
         <div class="sign-up-labels__wrapper">
-          <label class="sign-up__label" for="">Почта</label>
           <UIInput
             type="text"
             placeholder="Почта"
+            label="Почта"
             v-model="localUserLogin.email"
             :fullWidth="true"
             :multiline="false"
           />
         </div>
         <div class="sign-up-labels__wrapper">
-          <label class="sign-up__label" for="">Пароль</label>
           <UIInput
             type="password"
             name="password"
             autocomplete="off"
             placeholder="Пароль"
+            label="Пароль"
             v-model="localUserLogin.password"
             :fullWidth="true"
             :multiline="false"
@@ -96,7 +96,7 @@ export default {
             //На кнопке войти будет ссылка на регистрацию
             //нажав на ник перейдете в вкладку профиль
             toaster.value.success('Вы авторизировались!'); //починить Je89cC2ThV3y
-            //router.push('/')
+            router.push({ name: 'profile' })
           })
           .catch(error => {
             console.log('error', error);

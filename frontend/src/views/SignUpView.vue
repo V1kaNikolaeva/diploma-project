@@ -13,45 +13,41 @@
     <div class="sign-up__contanier">
       <form action="" @submit.prevent="signup">
         <div class="sign-up-labels__wrapper">
-          <label class="sign-up__label" for="">Имя</label>
           <UIInput
             type="text"
             placeholder="Имя"
-            
+            label="Имя"
             :fullWidth="true"
             v-model="localSignupUser.name"
           />
         </div>
         <div class="sign-up-labels__wrapper">
-          <label class="sign-up__label" for="">Почта</label>
           <UIInput
             type="text"
             placeholder="Почта"
-            
+            label="Почта"
             :fullWidth="true"
             v-model="localSignupUser.email"
           />
         </div>
         <div class="sign-up-labels__wrapper">
-          <label class="sign-up__label" for="">Пароль</label>
           <UIInput
             type="password"
             name="password"
             autocomplete="off"
             placeholder="Пароль"
-            
+            label="Пароль"
             :fullWidth="true"
             v-model="localSignupUser.password"
           />
         </div>
         <div class="sign-up-labels__wrapper">
-          <label class="sign-up__label" for="">Повторите пароль</label>
           <UIInput
             type="password"
             name="password"
             autocomplete="off"
             placeholder="Повторите пароль"
-            
+            label="Повторите пароль"
             :fullWidth="true"
             v-model="localSignupUser.repeatPassword"
           />
