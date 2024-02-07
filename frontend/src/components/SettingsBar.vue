@@ -1,63 +1,140 @@
 <template>
   <div class="settings__contanier">
+
     <div class="button__wrapper">
-      <UIButton @click="createCard(true)" :buttonType="'add'">
-        <p>Добавить</p>
-        <template #right-icon>
-          <UIIcon icon="add" />
+      <UIButton @click="actions = !actions" buttonType="show">
+        <p>Действия</p>
+        <template #left-icon>
+          <Transition name="icon">
+            <UIIcon 
+              :icon="actions ? 'downArrow' : 'upArrow'"
+            />
+          </Transition>
         </template>
       </UIButton>
+      <Transition name="list">
+        <div v-show="actions" class="contanier">
+            <UIButton @click="createCard(true)" :border="false" buttonType="add">
+              <p>Добавить</p>
+              <template #right-icon>
+                <UIIcon icon="add" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Удалить</p>
+              <template #right-icon>
+                <UIIcon icon="delete" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Изменить</p>
+              <template #right-icon>
+                <UIIcon icon="change" />
+              </template>
+            </UIButton>
+        </div>
+      </Transition>
     </div>
 
     <div class="button__wrapper">
-      <UIButton :buttonType="'show'">
-        <p>Расходы</p>
-        <template #right-icon>
-          <UIIcon icon="arrow" />
+      <UIButton @click="categories = !categories" buttonType="show">
+        <p>Категории</p>
+        <template #left-icon>
+          <UIIcon 
+            :icon="categories ? 'downArrow' : 'upArrow'"
+          />
         </template>
       </UIButton>
+      <Transition name="list">
+        <div v-show="categories" class="contanier">
+            <UIButton :border="false" buttonType="add">
+              <p>Продукты</p>
+              <template #right-icon>
+                <UIIcon icon="cart" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Электроника</p>
+              <template #right-icon>
+                <UIIcon icon="smartwatch" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Медицина</p>
+              <template #right-icon>
+                <UIIcon icon="pulse" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Развлечения</p>
+              <template #right-icon>
+                <UIIcon icon="acousticGuitar" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Путешествия</p>
+              <template #right-icon>
+                <UIIcon icon="plane" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Одежда</p>
+              <template #right-icon>
+                <UIIcon icon="tShirt" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Подарки</p>
+              <template #right-icon>
+                <UIIcon icon="gift" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" buttonType="add">
+              <p>Другое</p>
+              <template #right-icon>
+                <UIIcon icon="search" />
+              </template>
+            </UIButton>
+        </div>
+      </Transition>
     </div>
 
     <div class="button__wrapper">
-      <UIButton :buttonType="'show'">
-        <p>Доходы</p>
-        <template #right-icon>
-          <UIIcon icon="arrow" />
+      <UIButton @click="sorting = !sorting" buttonType="show">
+        <p>Сортировки</p>
+        <template #left-icon>
+          <UIIcon 
+            :icon="sorting ? 'downArrow' : 'upArrow'" 
+          />
         </template>
       </UIButton>
-    </div>
-
-    <div class="button__wrapper">
-      <UIButton :buttonType="'default'">
-        <p>По дате</p>
-        <template #right-icon>
-          <UIIcon icon="sort" />
-        </template>
-      </UIButton>
-    </div>
-
-    <div class="button__wrapper">
-      <UIButton :buttonType="'default'">
-        <p>По сумме</p>
-        <template #right-icon>
-          <UIIcon icon="sort" />
-        </template>
-      </UIButton>
+      <Transition name="list">
+        <div v-show="sorting" class="contanier">
+            <UIButton :border="false" :buttonType="'default'">
+              <p>По дате</p>
+              <template #right-icon>
+                <UIIcon icon="sort" />
+              </template>
+            </UIButton>
+            <UIButton :border="false" :buttonType="'default'">
+              <p>По сумме</p>
+              <template #right-icon>
+                <UIIcon icon="sort" />
+              </template>
+            </UIButton>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import UIButton from "./UIButton.vue";
 import UIIcon from "./UIIcon.vue";
 
-export default {
-  name: "SettingsBar",
-
-  components: { UIButton, UIIcon },
-  
-  props: {
-    isModalVisible: {
+const props = defineProps({
+  isModalVisible: {
       type: Boolean,
       required: true,
     },
@@ -65,16 +142,19 @@ export default {
       type: [Number, null],
       required: true,
     }
-  },
+})
 
-  emits: ["update:isModalVisible"],
+const emits = defineEmits(["update:isModalVisible"])
 
-  methods: {
-    createCard(value) {
-      this.$emit("update:isModalVisible", value);
-    },
-  },
-};
+const createCard = (value) => {
+  emits("update:isModalVisible", value);
+}
+
+let actions = ref(false);
+let categories = ref(false);
+let sorting = ref(false);
+
+
 </script>
 
 <style scoped>
@@ -82,9 +162,31 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 0px 30px 0px 30px;
+}
+
+.contanier {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
 }
 
 .button__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
   margin: 10px;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.list-enter-from, .list-leave-to {
+  opacity: 0;
 }
 </style>

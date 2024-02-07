@@ -1,16 +1,23 @@
 <template>
-  <button :class="{ 
-    'button-icon' : $slots['right-icon'],
-    'add__button' : buttonType === 'add',
-    'cancel__button' : buttonType === 'cancel',
-    'save__button' : buttonType === 'save',
-    'default__button' : buttonType === 'default',
-    'show__button' : buttonType === 'show',
-    'cash-vault' : buttonType === 'cashVault',
+  <button 
+    :class="{ 
+    'button-icon-right' : $slots['right-icon'],
+    'button-icon-left' : $slots['left-icon'],
+    'add__button' : buttonType === 'add' && border,
+    'cancel__button' : buttonType === 'cancel' && border,
+    'save__button' : buttonType === 'save' && border,
+    'default__button' : buttonType === 'default' && border,
+    'show__button' : buttonType === 'show' && border,
+    'cash-vault' : buttonType === 'cashVault' && border,
+    'without-border' : !border,
    }">
     <slot />
-    <div v-if="$slots['right-icon']" class="button-group__icon">
+    <div v-if="$slots['right-icon']" class="button-group__icon-right">
       <slot name="right-icon" class="icon" alt="icon"/>
+
+    </div>
+    <div v-if="$slots['left-icon']" class="button-group__icon-left">
+      <slot name="left-icon" class="icon" alt="icon"/>
 
     </div>
    </button>
@@ -26,48 +33,60 @@ export default {
       default: "default",
       validator: (value) => ["add", "save", "cancel", "default", "show", "cashVault"].includes(value),
     },
+    border: {
+      type: Boolean,
+      default: true,
+    }
   },
 };
 </script>
 
 <style scoped>
 :slotted(p) {
-  color: var(--main-text);
+  margin-right: 10px;
 }
-.button-icon {
+.button-icon-right {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
+.button-icon-left {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-group__icon-left {
+  margin-right: 10px;
+}
+
 .add__button,
 .cancel__button,
 .default__button,
 .show__button,
-.save__button {
+.save__button,
+.without-border {
   border: none;    
   background: none;
   height: 40px;
-  width: 110px;
   font-size: 15px;
   color: var(--main-text);
   padding: 5px;
   border-radius: 10px;
 }
 .add__button {
-  border: 2px solid var(--light-green);
+  border: 1px solid var(--light-green);
 }
 .save__button {
-  border: 2px solid var(--light-green);
+  border: 1px solid var(--light-green);
 }
 .cancel__button {
-  border: 2px solid var(--light-red);
+  border: 1px solid var(--light-red);
 }
 .default__button {
-  border: 2px solid var(--button-color);
-}
-.show__button {
-  border: 2px solid var(--light-orange);
+  border: 1px solid var(--button-color);
 }
 .cash-vault {
   position: fixed;
@@ -80,5 +99,9 @@ export default {
   z-index: 4;
   border-radius: 60px;
   background-color:  var(--card-color);
+}
+
+.without-border {
+  border: none;
 }
 </style>

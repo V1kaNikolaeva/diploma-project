@@ -6,6 +6,8 @@
 import Close from "../assets/icons/icon-close.svg";
 import Sort from "../assets/icons/icon-sort.svg";
 import Add from "../assets/icons/icon-add.svg";
+import Delete from "../assets/icons/icon-delete.svg";
+import Change from "../assets/icons/icon-change.svg";
 import Arrow from "../assets/icons/icon-right-arrow.svg";
 import Error from "../assets/icons/icon-error.svg"
 import Check from "../assets/icons/icon-check.svg"
@@ -19,24 +21,30 @@ import Tshirt from "../assets/icons/icon-t-shirt.svg"
 import Gift from "../assets/icons/icon-gift.svg"
 import Search from "../assets/icons/icon-search.svg"
 import Bank from "../assets/icons/icon-bank.svg"
+import DownArrow from "../assets/icons/icon-down-arrow.svg"
+import UpArrow from "../assets/icons/icon-up-arrow.svg"
 
 const icons = {
   "close": Close,
   "sort": Sort,
   "add": Add,
+  "delete": Delete,
+  "change": Change,
   "arrow": Arrow,
   "error": Error,
   "check": Check,
   "edit": Edit,
   "pulse": Pulse,
   "cart": Cart,
-  "acoustic-guitar": Guitar,
+  "acousticGuitar": Guitar,
   "smartwatch": Smartwatch,
   "plane": Plane,
-  "t-shirt": Tshirt,
+  "tShirt": Tshirt,
   "gift": Gift,
   "search": Search,
   "bank": Bank,
+  "downArrow": DownArrow,
+  "upArrow": UpArrow,
 };
 
 export default {

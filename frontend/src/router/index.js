@@ -14,6 +14,15 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"),
     },
     {
+      path: "/head",
+      name: "head",
+      meta: {
+        requireGuest: true,
+        requireAuth: true,
+      },
+      component: () => import("../views/HomeView.vue"),
+    },
+    {
       path: "/profile",
       name: "profile",
       meta: {

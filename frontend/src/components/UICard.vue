@@ -8,10 +8,10 @@
         :icon="
           category === 'medications' ? 'pulse' : 
           category === 'products' ? 'cart' :
-          category === 'entertainment' ? 'acoustic-guitar' :
+          category === 'entertainment' ? 'acousticGuitar' :
           category === 'electronics' ? 'smartwatch' :
           category === 'trips' ? 'plane' :
-          category === 'cloth' ? 't-shirt' :
+          category === 'cloth' ? 'tShirt' :
           category === 'present' ? 'gift' :
           category === 'other' ? 'search' :
           null
@@ -83,8 +83,7 @@ const cardQuantityUSDFormat = computed(() => {
   width: 100%;
   height: 100%;
   padding: 10px;
-  border-radius: 10px;
-  background-color: var(--card-color);
+  border: 1px solid var(--main-line);
 }
 
 p:first-child {

@@ -4,7 +4,7 @@
     <div v-if="balance" class="balance">
       <p>Мой баланс: <strong>{{ balance }}</strong></p>
         <div class="button__wrapper">
-          <UIButton :buttonType="'default'">
+          <UIButton :border="false" :buttonType="'default'">
             <p>Изменить</p>
             <template #right-icon>
               <UIIcon icon="edit"/>
@@ -16,7 +16,7 @@
     <div v-else-if="!balance" class="balance">
       <p>Денег нет!</p>
         <div class="button__wrapper">
-          <UIButton :buttonType="'add'">
+          <UIButton :border="false" :buttonType="'add'">
             <p>Пополнить</p>
             <template #right-icon>
               <UIIcon icon="add"/>
@@ -55,7 +55,7 @@
 
     setup() {
       let isModalVisible = ref(false)
-      let balance = ref(null)
+      let balance = ref(1000)
       return {
         isModalVisible,
         balance,
@@ -77,7 +77,7 @@
 }
 .balance {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -89,6 +89,15 @@
   flex-direction: row;
   justify-content: center;
   margin: 20px;
+}
+
+.settings__wrapper {
+  width: 16em;
+  flex: none;
+}
+
+.cards__wrapper {
+
 }
 
 .user-bank__button {

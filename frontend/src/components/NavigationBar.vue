@@ -2,7 +2,7 @@
   <header class="nav__header">
     <div class="logoWrapper">
       <div class="logo">
-        <h1>Incomes and Expenses</h1>
+        <h1>Incomes</h1>
       </div>
     </div>
 
@@ -75,7 +75,7 @@ const props = defineProps({
   color: var(--main-text);
   background-color: var(--main-bg);
   top: 0;
-  height: 100px;
+  height: 80px;
   width: 100%;
   margin: 0px auto;
   padding: 20px;
