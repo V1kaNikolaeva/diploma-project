@@ -150,9 +150,9 @@ const createCard = (value) => {
   emits("update:isModalVisible", value);
 }
 
-let actions = ref(false);
-let categories = ref(false);
-let sorting = ref(false);
+let actions = ref(true);
+let categories = ref(true);
+let sorting = ref(true);
 
 
 </script>
@@ -188,5 +188,14 @@ let sorting = ref(false);
 
 .list-enter-from, .list-leave-to {
   opacity: 0;
+}
+
+.icon-enter-active,
+.icon-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.icon-enter-from, .icon-leave-to {
+  transform: rotate(90deg);
 }
 </style>

@@ -29,7 +29,7 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
-    name = models.CharField(max_length=255, blank=True, default='')
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -44,9 +44,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-class ExpenseCard():
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    quantity = models.PositiveIntegerField(max_length=9, blank=True)
+# class ExpenseCard():
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     quantity = models.PositiveIntegerField(max_length=9, blank=True)
 
-    date_created = models.DateTimeField(default=timezone.now)
+#     date_created = models.DateTimeField(default=timezone.now)
     # category = models.Choices()

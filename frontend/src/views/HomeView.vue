@@ -56,6 +56,8 @@
     setup() {
       let isModalVisible = ref(false)
       let balance = ref(1000)
+      let cards = ref()
+
       return {
         isModalVisible,
         balance,

@@ -110,7 +110,7 @@ const props = defineProps({
     content: '';
     display: block;
     width: 0;
-    height: 2px;
+    height: 1px;
     background: var(--light-green);
     transition: width .3s;
 }
@@ -125,7 +125,7 @@ const props = defineProps({
 
 .active-link {
   color: var(--light-green);
-  border-bottom: 2px var(--light-green) solid;
+  border-bottom: 1px var(--light-green) solid;
 }
 
 .nav__active {

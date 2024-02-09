@@ -4,11 +4,11 @@
 pip install virtualenv
 ```
 ```
-python -m venv env 
+python -m venv venv
 ```
 Затем активировать
 ```
-.\env\scripts\activate   
+.\.venv\scripts\activate   
 ```
 После активации установить зависимости
 ```
