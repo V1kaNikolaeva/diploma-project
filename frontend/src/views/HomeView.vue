@@ -29,10 +29,10 @@
 
   <div class="wrapper__home">
     <div class="settings__wrapper">
-      <SettingsBar v-model:isModalVisible="isModalVisible" :balance="balance" />
+      <SettingsBar v-model:isModalVisible="isModalVisible" v-model:sortQuantityType="sortQuantityType" :balance="balance" />
     </div>
     <div class="cards__wrapper">
-      <TheCards/>
+      <TheCards :cards="cards" :sortQuantityType="sortQuantityType"/>
     </div>
   </div>
   <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" />
@@ -41,31 +41,41 @@
   </UIButton>
 </template>
 
-<script>
-  import TheCards from '../components/TheCards.vue';
-  import SettingsBar from '../components/SettingsBar.vue';
-  import UIModalWindow from '../components/UIModalWindow.vue';
-  import UIButton from '../components/UIButton.vue';
-  import UIIcon from '../components/UIIcon.vue';
-  import { ref } from 'vue';
+<script setup>
+import TheCards from '../components/TheCards.vue';
+import SettingsBar from '../components/SettingsBar.vue';
+import UIModalWindow from '../components/UIModalWindow.vue';
+import UIButton from '../components/UIButton.vue';
+import UIIcon from '../components/UIIcon.vue';
+import { ref } from 'vue';
 
-  export default {
-    name: 'HomeView',
-    components: { TheCards, SettingsBar, UIModalWindow, UIButton, UIIcon },
+let isModalVisible = ref(false)
+let balance = ref(1000)
+let sortQuantityType = ref('common')
 
-    setup() {
-      let isModalVisible = ref(false)
-      let balance = ref(1000)
-      let cards = ref()
-
-      return {
-        isModalVisible,
-        balance,
-      }
-    }
-
-  }
-
+let cards = ref([
+  {
+    id: 1,
+    currencyCodeISO: "RUB",
+    quantity: 2000,
+    category: "products",
+    reason: "Продукты на неделю",
+  },
+  {
+    id: 2,
+    currencyCodeISO: "RUB",
+    quantity: 800,
+    category: "entertainment",
+    reason: "Билет в кино",
+  },
+  {
+    id: 3,
+    currencyCodeISO: "RUB",
+    quantity: 25000,
+    category: "electronics",
+    reason: "Купил ноутбук",
+  },
+])
 </script>
 
 <style scoped>

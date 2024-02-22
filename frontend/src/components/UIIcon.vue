@@ -4,7 +4,9 @@
 
 <script>
 import Close from "../assets/icons/icon-close.svg";
-import Sort from "../assets/icons/icon-sort.svg";
+import SortUp from "../assets/icons/icon-sort-up.svg";
+import SortDown from "../assets/icons/icon-sort-down.svg";
+import SortCommon from "../assets/icons/icon-sort-common.svg";
 import Add from "../assets/icons/icon-add.svg";
 import Delete from "../assets/icons/icon-delete.svg";
 import Change from "../assets/icons/icon-change.svg";
@@ -26,7 +28,9 @@ import UpArrow from "../assets/icons/icon-up-arrow.svg"
 
 const icons = {
   "close": Close,
-  "sort": Sort,
+  "sortUp": SortUp,
+  "sortDown": SortDown,
+  "sortCommon": SortCommon,
   "add": Add,
   "delete": Delete,
   "change": Change,

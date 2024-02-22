@@ -22,14 +22,15 @@
 </template>
 
 <script setup>
-//Категории карточки:
-//-Медицина 
-//-Продукты (корзина)
-//-Развлечения
-//-Электроника
-//-Путешествия
-//-Одежда
-//-Подарки
+// Категории карточки:
+// -Медицина 
+// -Продукты (корзина)
+// -Развлечения
+// -Электроника
+// -Путешествия
+// -Одежда
+// -Подарки
+// -Другое
 import { computed } from 'vue';
 import UIIcon from './UIIcon.vue';
 
@@ -56,7 +57,7 @@ const USDCurrency = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
-const { quantity } = props.card
+let { quantity } = props.card
 const cardQuantityRUBFormat = computed(() => {
   return RUBCurrency.format(quantity)
 }) 
