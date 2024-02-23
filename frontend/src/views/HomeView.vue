@@ -4,7 +4,7 @@
     <div v-if="balance" class="balance">
       <p>Мой баланс: <strong>{{ balance }}</strong></p>
         <div class="button__wrapper">
-          <UIButton :border="false" :buttonType="'default'">
+          <UIButton @click="userBalance" :border="false" :buttonType="'default'">
             <p>Изменить</p>
             <template #right-icon>
               <UIIcon icon="edit"/>
@@ -48,9 +48,10 @@ import UIModalWindow from '../components/UIModalWindow.vue';
 import UIButton from '../components/UIButton.vue';
 import UIIcon from '../components/UIIcon.vue';
 import { ref } from 'vue';
+import axios from 'axios';
 
 let isModalVisible = ref(false)
-let balance = ref(1000)
+let balance = ref(111110)
 let sortQuantityType = ref('common')
 
 let cards = ref([
@@ -76,6 +77,22 @@ let cards = ref([
     reason: "Купил ноутбук",
   },
 ])
+
+
+let data;
+const userBalance = async () => {
+  await axios
+  .get('/api/balance/')
+  .then(response => {
+    console.log(response.data)
+    data = response.data
+  
+  })
+  .catch(error => {
+    console.log('error', error);
+  })
+}
+
 </script>
 
 <style scoped>

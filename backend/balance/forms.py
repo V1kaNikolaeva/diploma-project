@@ -5,4 +5,4 @@ from .models import Balance
 class BalanceForm(ModelForm):
     class Meta:
         model = Balance
-        fields = ('balance')
+        fields = ('amount',)
