@@ -109,3 +109,4 @@ strong:nth-child(2) {
   margin-left: 5px;
 }
 </style>
+./UiIcon.vue

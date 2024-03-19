@@ -101,4 +101,4 @@ export default {
 .toast.toast_error {
   color: var(--red-error);
 }
-</style>
+</style>./UiIcon.vue

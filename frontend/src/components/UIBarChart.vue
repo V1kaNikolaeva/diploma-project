@@ -24,4 +24,4 @@ export default {
   },
 
 }
-</script>
+</script>./UiBarChart.vue

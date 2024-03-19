@@ -173,3 +173,4 @@ export default {
     /* не рабоатет */
 }
 </style>
+../components/UiInput.vue../components/UiButton.vue

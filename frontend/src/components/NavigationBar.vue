@@ -7,52 +7,57 @@
     </div>
 
     <div class="navWrapper">
-      <nav class="navigation">
-        <h1>
-          <RouterLink 
-            :to="{ name: 'home' }" 
-            class="link" 
-            exactActiveClass="active-link"
-          >
-              Главная
-          </RouterLink>
-        </h1>
-        <h1>
-          <RouterLink 
-            :to="{ name: 'graphs' }" 
-            class="link" 
-            exactActiveClass="active-link"
-          >
+      <nav class="nav-contanier">
+        <ul class="navigation">
+          <li>
+            <RouterLink 
+              :to="{ name: 'home' }" 
+              class="link" 
+              exactActiveClass="active-link"
+            >
+                Главная
+            </RouterLink>
+          </li>
+
+          <li>
+            <RouterLink 
+              :to="{ name: 'graphs' }" 
+              class="link" 
+              exactActiveClass="active-link"
+            >
               Графики
-          </RouterLink>
-        </h1>
-        <h1>
-          <RouterLink 
-            :to="{ name: 'signup' }" 
-            class="link" 
-            exactActiveClass="active-link"
-          >
+            </RouterLink>
+          </li>
+
+          <li>
+            <RouterLink 
+              :to="{ name: 'signup' }" 
+              class="link" 
+              exactActiveClass="active-link"
+            >
               Регистрация
-          </RouterLink>
-        </h1>
-        <h1>
-          <RouterLink 
-            :to="{ name: 'login' }" 
-            class="link" 
-            exactActiveClass="active-link"
-            v-if="!userName"
-          >
-              Войти
-          </RouterLink>
-          <RouterLink 
-            :to="{ name: 'profile' }" 
-            class="link" 
-            exactActiveClass="active-link"
-            v-else="userName"
-          >
-              {{ userName }}
-          </RouterLink>
-        </h1>
+            </RouterLink>
+          </li>
+
+          <li>
+            <RouterLink 
+              :to="{ name: 'login' }" 
+              class="link" 
+              exactActiveClass="active-link"
+              v-if="!userName"
+            >
+                Войти
+            </RouterLink>
+            <RouterLink 
+              :to="{ name: 'profile' }" 
+              class="link" 
+              exactActiveClass="active-link"
+              v-else="userName"
+            >
+                {{ userName }}
+            </RouterLink>
+          </li>
+        </ul>
       </nav>
     </div>
 
@@ -94,6 +99,10 @@ const props = defineProps({
 .navWrapper {
   width: 700px;
 }
+
+.nav-contanier {
+  height: 100%;
+}
 .navigation { 
   height: 100%;
   display: flex;
@@ -105,6 +114,7 @@ const props = defineProps({
   color: var(--main-text);
   cursor: pointer;
   text-decoration: none;
+  font-size: 20px;
 }
 .link::after {
     content: '';

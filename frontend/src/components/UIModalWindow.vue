@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import UIButton from "./UIButton.vue";
+import UIButton from "./UiButton.vue";
 
 export default {
   name: "UIModalWindow",
@@ -68,4 +68,4 @@ export default {
     height: 35px;
     background-image: url(../assets/icons/icons8-close.svg)
 } */
-</style>
+</style>./UiModalWindow.vue./UiButton.vue

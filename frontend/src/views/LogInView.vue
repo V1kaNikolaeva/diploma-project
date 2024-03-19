@@ -158,4 +158,4 @@ export default {
     width: 100%; 
     /* не рабоатет */
 }
-</style>
+</style>../components/UiInput.vue../components/UiButton.vue

@@ -42,50 +42,92 @@
       </UIButton>
       <Transition name="list">
         <div v-show="categories" class="contanier">
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('products')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Продукты</p>
             <template #right-icon>
               <UIIcon icon="cart" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('electronics')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Электроника</p>
             <template #right-icon>
               <UIIcon icon="smartwatch" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('medications')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Медицина</p>
             <template #right-icon>
               <UIIcon icon="pulse" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('entertainment')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Развлечения</p>
             <template #right-icon>
               <UIIcon icon="acousticGuitar" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('trips')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Путешествия</p>
             <template #right-icon>
               <UIIcon icon="plane" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('cloth')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Одежда</p>
             <template #right-icon>
               <UIIcon icon="tShirt" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('present')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Подарки</p>
             <template #right-icon>
               <UIIcon icon="gift" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton
+            @click="sortCategory('other')"
+            :border="false"
+            buttonType="add"
+          >
             <p>Другое</p>
+            <template #right-icon>
+              <UIIcon icon="search" />
+            </template>
+          </UIButton>
+          <UIButton
+            @click="sortCategory('all')"
+            :border="false"
+            buttonType="add"
+          >
+            <p>Все</p>
             <template #right-icon>
               <UIIcon icon="search" />
             </template>
@@ -103,12 +145,6 @@
       </UIButton>
       <Transition name="list">
         <div v-show="sorting" class="contanier">
-          <UIButton :border="false" :buttonType="'default'">
-            <p>По дате</p>
-            <template #right-icon>
-              <UIIcon icon="sortCommon" />
-            </template>
-          </UIButton>
           <UIButton
             @click="sortQuantity(sortValue[sortIndex])"
             :border="false"
@@ -116,7 +152,17 @@
           >
             <p>По сумме</p>
             <template #right-icon>
-              <UIIcon :icon="sortQuantityType === 'up' ? 'sortUp' : sortQuantityType === 'down' ? 'sortDown' : sortQuantityType === 'common' ? 'sortCommon' : null" />
+              <UIIcon
+                :icon="
+                  sortQuantityType === 'up'
+                    ? 'sortUp'
+                    : sortQuantityType === 'down'
+                    ? 'sortDown'
+                    : sortQuantityType === 'common'
+                    ? 'sortCommon'
+                    : null
+                "
+              />
             </template>
           </UIButton>
         </div>
@@ -127,7 +173,7 @@
 
 <script setup>
 import { ref } from "vue";
-import UIButton from "./UIButton.vue";
+import UIButton from "./UiButton.vue";
 import UIIcon from "./UIIcon.vue";
 
 const props = defineProps({
@@ -142,11 +188,22 @@ const props = defineProps({
   sortQuantityType: {
     type: String,
     required: true,
-    default: 'commmon'
-  }
+    default: "commmon",
+  },
+  sortCategoryType: {
+    type: String,
+    required: true,
+    default: "all",
+    // validator: (value) => ['up', 'down', 'common'].includes(value)
+  },
 });
 
-const emit = defineEmits(["update:isModalVisible", "update:sortQuantityType"]);
+const emit = defineEmits([
+  "update:isModalVisible",
+  "update:sortQuantityType",
+  "update:sortCategoryType",
+  "update:sortDateType",
+]);
 
 const createCard = (value) => {
   emit("update:isModalVisible", value);
@@ -167,6 +224,10 @@ const sortQuantity = (value) => {
     sortIndex.value++;
     emit("update:sortQuantityType", value);
   }
+};
+
+const sortCategory = (value) => {
+  emit("update:sortCategoryType", value);
 };
 </script>
 
@@ -214,3 +275,4 @@ const sortQuantity = (value) => {
   transform: rotate(90deg);
 }
 </style>
+./UiIcon.vue./UiButton.vue
