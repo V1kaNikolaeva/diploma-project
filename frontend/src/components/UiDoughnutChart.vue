@@ -1,5 +1,5 @@
 <template>
-    <DoughnutChart v-if="chartData" :chartData="chartData" />
+    <DoughnutChart v-if="chartData" :chartData="chartData" :options="chartOptions"  />
 </template>
   
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-    <LineChart v-if="chartData" :chartData="chartData" />
+    <LineChart v-if="chartData" :chartData="chartData" :options="chartOptions" />
 </template>
   
 <script setup>

@@ -63,4 +63,10 @@ const pickedItem = (name, value) => {
   padding: 5px;
   cursor: pointer;
 }
+.item:last-child {
+  border-radius: 0px 0px 10px 10px;
+}
+.item:hover {
+  background-color: var(--button-color);
+}
 </style>

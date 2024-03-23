@@ -1,40 +1,31 @@
 <template>
   <UiDoughnutChart
     v-if="chartType === 'doughnutChart'"
-    :chartData="{
-      labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre', 'Autre', 'Autre'],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5, 77, 80],
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED', '#A5C8ED', '#A5C8ED'],
-        },
-      ],
-    }"
+    :chartData="chartData"
   >
   </UiDoughnutChart>
   <UiLineChart
     v-if="chartType === 'lineChart'"
-    :chartData="{
-      labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre', 'Autre', 'Autre'],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5, 77, 80],
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED', '#A5C8ED', '#A5C8ED'],
+    :chartData="chartData"
+
+    :chartOptions="{
+      plugins: {
+        legend: {
+          display: false,
         },
-      ],
+      },
     }"
   >
   </UiLineChart>
   <UIBarChart
     v-if="chartType === 'barChart'"
-    :chartData="{
-      labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre', 'Autre', 'Autre'],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5, 77, 80],
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED', '#A5C8ED', '#A5C8ED'],
+    :chartData="chartData"
+    :chartOptions="{
+      plugins: {
+        legend: {
+          display: false,
         },
-      ],
+      },
     }"
   >
   </UIBarChart>
@@ -50,5 +41,9 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  chartData: {
+    type: Array,
+    required: true,
+  }
 });
 </script>

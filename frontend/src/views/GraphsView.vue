@@ -6,7 +6,7 @@
         <UiSelect :items="selectItems" v-model:modelValue="categoriesChart"></UiSelect>
       </div>
       <div class="chart-contanier">
-        <TheCharts :chartType="categoriesChart"></TheCharts>
+        <TheCharts :chartType="categoriesChart" :chartData="categories"></TheCharts>
       </div>
     </div>
 
@@ -16,7 +16,7 @@
         <UiSelect :items="selectItems" v-model:modelValue="spentChart"></UiSelect>
       </div>
       <div class="chart-contanier">
-        <TheCharts :chartType="spentChart"></TheCharts>
+        <TheCharts :chartType="spentChart" :chartData="spent"></TheCharts>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
         <UiSelect :items="selectItems" v-model:modelValue="balanceChart"></UiSelect>
       </div>
       <div class="chart-contanier">
-        <TheCharts :chartType="balanceChart"></TheCharts>
+        <TheCharts :chartType="balanceChart" :chartData="balance"></TheCharts>
       </div>
     </div>
   </div>
@@ -46,6 +46,34 @@ const selectItems = [
 let categoriesChart = ref('doughnutChart');
 let spentChart = ref('doughnutChart');
 let balanceChart = ref('doughnutChart');
+
+const categories = {
+  labels: ['Здоровье', 'Продукты', 'Развлечения', 'Электроника', 'Путешествия', 'Одежда', 'Подарки', 'Другое'],
+  datasets: [
+    {
+      data: [30, 50, 30, 30, 30, 70, 30, 30],
+      backgroundColor: ['#FF6666', '#B2FF66', '#66FFB2', '#C0C0C0', '#66FFFF', '#FFB266', '#FFFF66', '#606060'],
+    },
+  ],
+};
+const spent = {
+  labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+  datasets: [
+    {
+      data: [30, 50, 40, 30, 30, 70, 77, 37, 45, 70, 50, 30],
+      backgroundColor: ['#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875'],
+    },
+  ],
+};
+const balance = {
+  labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+  datasets: [
+    {
+      data: [30, 50, 40, 30, 30, 70, 77, 37, 45, 70, 50, 30],
+      backgroundColor: ['#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875'],
+    },
+  ],
+};
 
 let cards = ref([
   {

@@ -1,5 +1,5 @@
 <template>
-    <BarChart v-if="chartData" :chartData="chartData" />
+    <BarChart v-if="chartData" :chartData="chartData" :options="chartOptions"  />
 </template>
   
 <script setup>

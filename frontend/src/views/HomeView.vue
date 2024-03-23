@@ -162,4 +162,3 @@ const userBalance = async () => {
   justify-content: center;
 }
 </style>
-../components/UiModalWindow.vue../components/UiIcon.vue../components/UiButton.vue
