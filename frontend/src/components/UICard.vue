@@ -32,7 +32,7 @@
 // -Подарки
 // -Другое
 import { computed } from 'vue';
-import UIIcon from './UIIcon.vue';
+import UIIcon from './UiIcon.vue';
 
 const props = defineProps({
   card: {
@@ -109,4 +109,3 @@ strong:nth-child(2) {
   margin-left: 5px;
 }
 </style>
-./UiIcon.vue

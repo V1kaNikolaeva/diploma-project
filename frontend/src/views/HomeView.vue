@@ -57,8 +57,8 @@
 import TheCards from "../components/TheCards.vue";
 import SettingsBar from "../components/SettingsBar.vue";
 import UIModalWindow from "../components/UiModalWindow.vue";
-import UIButton from "../components/UiButton.vue";
-import UIIcon from "../components/UIIcon.vue";
+import UIButton from "../components/UIButton.vue";
+import UIIcon from "../components/UiIcon.vue";
 import { ref } from "vue";
 import axios from "axios";
 

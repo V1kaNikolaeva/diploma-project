@@ -1,7 +1,7 @@
 <template>
   <div class="settings__contanier">
     <div class="button__wrapper">
-      <UIButton @click="actions = !actions" buttonType="show">
+      <UIButton @click="actions = !actions" :border="false">
         <p>Действия</p>
         <template #left-icon>
           <Transition name="icon">
@@ -11,19 +11,19 @@
       </UIButton>
       <Transition name="list">
         <div v-show="actions" class="contanier">
-          <UIButton @click="createCard(true)" :border="false" buttonType="add">
+          <UIButton @click="createCard(true)" :border="false">
             <p>Добавить</p>
             <template #right-icon>
               <UIIcon icon="add" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton :border="false">
             <p>Удалить</p>
             <template #right-icon>
               <UIIcon icon="delete" />
             </template>
           </UIButton>
-          <UIButton :border="false" buttonType="add">
+          <UIButton :border="false">
             <p>Изменить</p>
             <template #right-icon>
               <UIIcon icon="change" />
@@ -34,7 +34,7 @@
     </div>
 
     <div class="button__wrapper">
-      <UIButton @click="categories = !categories" buttonType="show">
+      <UIButton @click="categories = !categories" :border="false">
         <p>Категории</p>
         <template #left-icon>
           <UIIcon :icon="categories ? 'downArrow' : 'upArrow'" />
@@ -45,7 +45,6 @@
           <UIButton
             @click="sortCategory('products')"
             :border="false"
-            buttonType="add"
           >
             <p>Продукты</p>
             <template #right-icon>
@@ -55,7 +54,6 @@
           <UIButton
             @click="sortCategory('electronics')"
             :border="false"
-            buttonType="add"
           >
             <p>Электроника</p>
             <template #right-icon>
@@ -65,7 +63,6 @@
           <UIButton
             @click="sortCategory('medications')"
             :border="false"
-            buttonType="add"
           >
             <p>Медицина</p>
             <template #right-icon>
@@ -75,7 +72,6 @@
           <UIButton
             @click="sortCategory('entertainment')"
             :border="false"
-            buttonType="add"
           >
             <p>Развлечения</p>
             <template #right-icon>
@@ -85,7 +81,6 @@
           <UIButton
             @click="sortCategory('trips')"
             :border="false"
-            buttonType="add"
           >
             <p>Путешествия</p>
             <template #right-icon>
@@ -95,7 +90,6 @@
           <UIButton
             @click="sortCategory('cloth')"
             :border="false"
-            buttonType="add"
           >
             <p>Одежда</p>
             <template #right-icon>
@@ -105,7 +99,6 @@
           <UIButton
             @click="sortCategory('present')"
             :border="false"
-            buttonType="add"
           >
             <p>Подарки</p>
             <template #right-icon>
@@ -115,7 +108,6 @@
           <UIButton
             @click="sortCategory('other')"
             :border="false"
-            buttonType="add"
           >
             <p>Другое</p>
             <template #right-icon>
@@ -125,7 +117,6 @@
           <UIButton
             @click="sortCategory('all')"
             :border="false"
-            buttonType="add"
           >
             <p>Все</p>
             <template #right-icon>
@@ -137,7 +128,7 @@
     </div>
 
     <div class="button__wrapper">
-      <UIButton @click="sorting = !sorting" buttonType="show">
+      <UIButton @click="sorting = !sorting" :border="false">
         <p>Сортировки</p>
         <template #left-icon>
           <UIIcon :icon="sorting ? 'downArrow' : 'upArrow'" />
@@ -148,7 +139,6 @@
           <UIButton
             @click="sortQuantity(sortValue[sortIndex])"
             :border="false"
-            :buttonType="'default'"
           >
             <p>По сумме</p>
             <template #right-icon>
@@ -173,8 +163,8 @@
 
 <script setup>
 import { ref } from "vue";
-import UIButton from "./UiButton.vue";
-import UIIcon from "./UIIcon.vue";
+import UIButton from "./UIButton.vue";
+import UIIcon from "./UiIcon.vue";
 
 const props = defineProps({
   isModalVisible: {
@@ -275,4 +265,3 @@ const sortCategory = (value) => {
   transform: rotate(90deg);
 }
 </style>
-./UiIcon.vue./UiButton.vue

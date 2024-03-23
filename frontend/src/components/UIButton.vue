@@ -1,42 +1,43 @@
 <template>
-  <button 
-    :class="{ 
-    'button-icon-right' : $slots['right-icon'],
-    'button-icon-left' : $slots['left-icon'],
-    'add__button' : buttonType === 'add' && border,
-    'cancel__button' : buttonType === 'cancel' && border,
-    'save__button' : buttonType === 'save' && border,
-    'default__button' : buttonType === 'default' && border,
-    'show__button' : buttonType === 'show' && border,
-    'cash-vault' : buttonType === 'cashVault' && border,
-    'without-border' : !border,
-   }">
+  <button
+    :class="{
+      'button-icon-right': $slots['right-icon'],
+      'button-icon-left': $slots['left-icon'],
+      default__button: buttonType === 'default',
+      select__button: buttonType === 'select',
+      'cash-vault': buttonType === 'cashVault',
+      'without-border': !border,
+      'open-select': openSelect,
+    }"
+  >
     <slot />
     <div v-if="$slots['right-icon']" class="button-group__icon-right">
-      <slot name="right-icon" class="icon" alt="icon"/>
-
+      <slot name="right-icon" class="icon" alt="icon" />
     </div>
     <div v-if="$slots['left-icon']" class="button-group__icon-left">
-      <slot name="left-icon" class="icon" alt="icon"/>
-
+      <slot name="left-icon" class="icon" alt="icon" />
     </div>
-   </button>
+  </button>
 </template>
 
 <script>
 export default {
-  name: "UIButton",
+  name: 'UiButton',
   props: {
     buttonType: {
       type: String,
       required: false,
-      default: "default",
-      validator: (value) => ["add", "save", "cancel", "default", "show", "cashVault"].includes(value),
+      default: 'default',
+      validator: (value) => ['add', 'save', 'cancel', 'default', 'show', 'cashVault', 'select'].includes(value),
     },
+
     border: {
       type: Boolean,
       default: true,
-    }
+    },
+    openSelect: {
+      type: Boolean,
+    },
   },
 };
 </script>
@@ -62,13 +63,9 @@ export default {
   margin-right: 10px;
 }
 
-.add__button,
-.cancel__button,
 .default__button,
-.show__button,
-.save__button,
-.without-border {
-  border: none;    
+.select__button {
+  border: none;
   background: none;
   height: 40px;
   font-size: 15px;
@@ -76,17 +73,16 @@ export default {
   padding: 5px;
   border-radius: 10px;
 }
-.add__button {
-  border: 1px solid var(--light-green);
-}
-.save__button {
-  border: 1px solid var(--light-green);
-}
-.cancel__button {
-  border: 1px solid var(--light-red);
-}
-.default__button {
+
+.default__button,
+.select__button {
   border: 1px solid var(--button-color);
+}
+.select__button {
+  width: 100%;
+}
+.open-select {
+  border-radius: 10px 10px 0px 0px;
 }
 .cash-vault {
   position: fixed;
@@ -98,11 +94,10 @@ export default {
   padding: 5px;
   z-index: 4;
   border-radius: 60px;
-  background-color:  var(--card-color);
+  background-color: var(--card-color);
 }
 
 .without-border {
   border: none;
 }
 </style>
-./UiButton.vue

@@ -1,9 +1,9 @@
 <template>
-    <BarChart v-if="chartData" :chartData="chartData" />
+    <DoughnutChart v-if="chartData" :chartData="chartData" />
 </template>
   
 <script setup>
-import { BarChart } from 'vue-chart-3';
+import { DoughnutChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);

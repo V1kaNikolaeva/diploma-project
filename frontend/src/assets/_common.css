@@ -34,6 +34,7 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
+  width: 8px;
   background: var(--scroll-bar-color);
   border-radius: 5px;
 }

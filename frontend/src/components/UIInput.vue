@@ -7,11 +7,11 @@
       'input-rounded' : rounded
     }"
     v-bind="$attrs"
-    :value="modelValue"
+    :value="modelValue" 
     @input="$emit('update:modelValue', $event.target.value)"
   >
   </component>
-</template>
+</template> 
 
 <script setup>
 

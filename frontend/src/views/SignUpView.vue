@@ -65,7 +65,7 @@
 
 <script>
 import UIInput from "../components/UIInput.vue";
-import UIButton from "../components/UIButton.vue";
+import UIButton from "../components/UiButton.vue";
 import TheToaster from "../components/TheToaster.vue";
 import { signupUser } from "../../services/projectServices";
 import { useRouter } from "vue-router";
