@@ -1,27 +1,27 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .models import Balance
-from .serializer import BalanceSerializer
+from .serializers import BalanceSerializer
 from .forms import BalanceForm
 
 
 @api_view(['GET'])
-def user_balance(request):
-    balance = Balance.objects.all()
+def user_balance(request, id):
+    balance = Balance.objects.filter(created_by_id=id)
     serializer = BalanceSerializer(balance, many=True)
     return JsonResponse({'data': serializer.data})
 
 @api_view(['POST'])
 def create_balance(request):
-    message = 'success'
-
-    form = BalanceForm({
-        'amount': request.data.get('amount'),
-    })
+    form = BalanceForm(request.data)
 
     if form.is_valid():
-        form.save()
-    else: 
-        message = form.errors.as_json()
+        balance = form.save(commit=False)
+        balance.created_by = request.user
+        balance.save()
 
-    return JsonResponse({'message': message})
+        serializer = BalanceSerializer(balance)
+
+        return JsonResponse(serializer.data, safe=False)
+    else: 
+        return JsonResponse({'message': 'error'})

@@ -5,7 +5,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: "/home/:id",
       name: "home",
       meta: {
         requireGuest: false,
@@ -50,7 +50,7 @@ const router = createRouter({
       component: () => import("../views/LogInView.vue"),
     },
     {
-      path: "/graphs",
+      path: "/graphs/:id",
       name: "graphs",
       meta: {
         requireGuest: false,

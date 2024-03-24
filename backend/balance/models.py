@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.timesince import timesince
 
 from account.models import User
 
@@ -10,3 +11,9 @@ class Balance(models.Model):
     amount = models.IntegerField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created_at',)
+    
+    def created_at_formated(self):
+        return timesince(self.created_at)

@@ -1,26 +1,21 @@
 <template>
   <div class="balance__wrapper">
-    <div v-if="balance" class="balance">
+    <div class="balance">
       <p>
-        Мой баланс: <strong>{{ balance }}</strong>
+        Мой баланс: <strong>{{ amount }}</strong>
       </p>
+
       <div class="button__wrapper">
         <UIButton @click="userBalance" :border="false" :buttonType="'default'">
-          <p>Изменить</p>
+          <p>Пополнить</p>
           <template #right-icon>
             <UIIcon icon="edit" />
           </template>
         </UIButton>
-      </div>
-    </div>
-
-    <div v-else-if="!balance" class="balance">
-      <p>Денег нет!</p>
-      <div class="button__wrapper">
-        <UIButton :border="false" :buttonType="'add'">
-          <p>Пополнить</p>
+        <UIButton @click="addBalance" :border="false" :buttonType="'default'">
+          <p>созать</p>
           <template #right-icon>
-            <UIIcon icon="add" />
+            <UIIcon icon="edit" />
           </template>
         </UIButton>
       </div>
@@ -32,96 +27,107 @@
       <SettingsBar
         v-model:isModalVisible="isModalVisible"
         v-model:sortQuantityType="sortQuantityType"
-        :balance="balance"
+        :balance="amount"
         v-model:sortCategoryType="sortCategoryType"
       />
     </div>
     <div class="cards__wrapper">
-      <TheCards
-        :cards="cards"
-        :sortQuantityType="sortQuantityType"
-        :sortCategoryType="sortCategoryType"
-      />
+      <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
     </div>
   </div>
-  <UIModalWindow
-    v-if="isModalVisible"
-    v-model:isModalVisible="isModalVisible"
-  />
+  <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" />
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
   </UIButton>
 </template>
 
 <script setup>
-import TheCards from "../components/TheCards.vue";
-import SettingsBar from "../components/SettingsBar.vue";
-import UIModalWindow from "../components/UiModalWindow.vue";
-import UIButton from "../components/UIButton.vue";
-import UIIcon from "../components/UiIcon.vue";
-import { ref } from "vue";
-import axios from "axios";
+import TheCards from '../components/TheCards.vue';
+import SettingsBar from '../components/SettingsBar.vue';
+import UIModalWindow from '../components/UiModalWindow.vue';
+import UIButton from '../components/UIButton.vue';
+import UIIcon from '../components/UiIcon.vue';
+import { computed, ref } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
 
 let isModalVisible = ref(false);
-let balance = ref(111110);
-let sortQuantityType = ref("common");
-let sortCategoryType = ref("all");
+let sortQuantityType = ref('common');
+let sortCategoryType = ref('all');
 
 let cards = ref([
   {
     id: 1,
-    currencyCodeISO: "RUB",
+    currencyCodeISO: 'RUB',
     quantity: 2000,
-    category: "products",
-    reason: "Продукты на неделю",
-    date: "2024-03-18",
+    category: 'products',
+    reason: 'Продукты на неделю',
+    date: '2024-03-18',
   },
   {
     id: 2,
-    currencyCodeISO: "RUB",
+    currencyCodeISO: 'RUB',
     quantity: 800,
-    category: "entertainment",
-    reason: "Билет в кино",
-    date: "2024-03-18",
+    category: 'entertainment',
+    reason: 'Билет в кино',
+    date: '2024-03-18',
   },
   {
     id: 3,
-    currencyCodeISO: "RUB",
+    currencyCodeISO: 'RUB',
     quantity: 25000,
-    category: "electronics",
-    reason: "Купил ноутбук",
-    date: "2024-03-18",
+    category: 'electronics',
+    reason: 'Купил ноутбук',
+    date: '2024-03-18',
   },
   {
     id: 4,
-    currencyCodeISO: "RUB",
+    currencyCodeISO: 'RUB',
     quantity: 4500,
-    category: "products",
-    reason: "Продукты на неделю",
-    date: "2024-03-18",
+    category: 'products',
+    reason: 'Продукты на неделю',
+    date: '2024-03-18',
   },
   {
     id: 5,
-    currencyCodeISO: "RUB",
+    currencyCodeISO: 'RUB',
     quantity: 3000,
-    category: "products",
-    reason: "Продукты на неделю",
-    date: "2016-01-01",
+    category: 'products',
+    reason: 'Продукты на неделю',
+    date: '2016-01-01',
   },
 ]);
 
-let data;
+let balances = ref();
+const route = useRoute()
+
 const userBalance = async () => {
   await axios
-    .get("/api/balance/")
+    .get(`/api/balance/${route.params.id}`)
     .then((response) => {
-      console.log(response.data);
-      data = response.data;
+      balances.value = Object.values(response.data).flat()
+      console.log(balances.value)
     })
     .catch((error) => {
-      console.log("error", error);
+      console.log('error', error);
     });
 };
+
+const amount = computed(() => {
+  return balances.value ? balances.value.reduce((acc, num) => acc + num.amount,  0) : 0
+})
+
+// const addBalance = async () => {
+//   await axios
+//     .post('/api/balance/create/', { 'amount': amount.value })
+//     .then((response) => {
+//       console.log(response.data);
+//       console.log(response);
+//     })
+//     .catch((error) => {
+//       console.log('error', error);
+//     });
+// }
 </script>
 
 <style scoped>
@@ -151,9 +157,6 @@ const userBalance = async () => {
 .settings__wrapper {
   width: 16em;
   flex: none;
-}
-
-.cards__wrapper {
 }
 
 .user-bank__button {

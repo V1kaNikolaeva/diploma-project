@@ -42,7 +42,7 @@ const props = defineProps({
     required: true,
   },
   chartData: {
-    type: Array,
+    type: Object,
     required: true,
   }
 });

@@ -11,7 +11,7 @@
         <ul class="navigation">
           <li>
             <RouterLink 
-              :to="{ name: 'home' }" 
+              :to="{ name: 'home', params: { 'id': userStore.user.id } }" 
               class="link" 
               exactActiveClass="active-link"
             >
@@ -21,7 +21,7 @@
 
           <li>
             <RouterLink 
-              :to="{ name: 'graphs' }" 
+              :to="{ name: 'graphs', params: { 'id': userStore.user.id } }" 
               class="link" 
               exactActiveClass="active-link"
             >
@@ -66,12 +66,15 @@
 
 <script setup>
 import { RouterLink } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 const props = defineProps({
   userName: {
     required: true,
   }
 })
+
+const userStore = useUserStore()
 
 </script>
 
