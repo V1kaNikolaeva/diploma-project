@@ -6,14 +6,8 @@
       </p>
 
       <div class="button__wrapper">
-        <UIButton @click="userBalance" :border="false" :buttonType="'default'">
+        <UIButton @click="" :border="false" :buttonType="'default'">
           <p>Пополнить</p>
-          <template #right-icon>
-            <UIIcon icon="edit" />
-          </template>
-        </UIButton>
-        <UIButton @click="addBalance" :border="false" :buttonType="'default'">
-          <p>созать</p>
           <template #right-icon>
             <UIIcon icon="edit" />
           </template>
@@ -47,7 +41,7 @@ import SettingsBar from '../components/SettingsBar.vue';
 import UIModalWindow from '../components/UiModalWindow.vue';
 import UIButton from '../components/UIButton.vue';
 import UIIcon from '../components/UiIcon.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
@@ -100,8 +94,7 @@ let cards = ref([
 
 let balances = ref();
 const route = useRoute()
-
-const userBalance = async () => {
+const getUserBalance = async () => {
   await axios
     .get(`/api/balance/${route.params.id}`)
     .then((response) => {
@@ -112,6 +105,10 @@ const userBalance = async () => {
       console.log('error', error);
     });
 };
+
+onMounted(() => {
+  getUserBalance()
+})
 
 const amount = computed(() => {
   return balances.value ? balances.value.reduce((acc, num) => acc + num.amount,  0) : 0
