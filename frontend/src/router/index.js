@@ -14,13 +14,13 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"),
     },
     {
-      path: "/head",
-      name: "head",
+      path: "",
+      name: "tips",
       meta: {
         requireGuest: true,
         requireAuth: true,
       },
-      component: () => import("../views/HomeView.vue"),
+      component: () => import("../views/TipsView.vue"),
     },
     {
       path: "/profile",

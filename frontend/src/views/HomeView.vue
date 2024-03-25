@@ -6,7 +6,7 @@
       </p>
 
       <div class="button__wrapper">
-        <UIButton @click="" :border="false" :buttonType="'default'">
+        <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
           <p>Пополнить</p>
           <template #right-icon>
             <UIIcon icon="edit" />
@@ -29,7 +29,7 @@
       <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
     </div>
   </div>
-  <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" />
+  <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" :modalFormType="modalFormType" />
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
   </UIButton>
@@ -48,6 +48,14 @@ import { useRoute } from 'vue-router';
 let isModalVisible = ref(false);
 let sortQuantityType = ref('common');
 let sortCategoryType = ref('all');
+
+const modalFormTypes = ['createCard', 'replenishBalance']
+
+let modalFormType = ref();
+const replenishBalance = () => {
+  isModalVisible.value = true;
+  modalFormType.value = 'replenishBalance'
+}
 
 let cards = ref([
   {

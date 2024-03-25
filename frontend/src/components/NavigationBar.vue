@@ -11,6 +11,16 @@
         <ul class="navigation">
           <li>
             <RouterLink 
+              :to="{ name: 'tips' }" 
+              class="link" 
+              exactActiveClass="active-link"
+            >
+                Советы
+            </RouterLink>
+          </li>
+
+          <li>
+            <RouterLink 
               :to="{ name: 'home', params: { 'id': userStore.user.id } }" 
               class="link" 
               exactActiveClass="active-link"

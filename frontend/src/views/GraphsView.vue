@@ -41,6 +41,7 @@ const selectItems = [
   { name: 'Круговая', value: 'doughnutChart' },
   { name: 'Столбцами', value: 'barChart' },
   { name: 'График', value: 'lineChart' },
+  { name: 'Пузырьком', value: 'polarAreaChart' },
 ];
 
 let categoriesChart = ref('doughnutChart');

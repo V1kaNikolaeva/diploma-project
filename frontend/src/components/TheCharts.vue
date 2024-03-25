@@ -2,18 +2,52 @@
   <UiDoughnutChart
     v-if="chartType === 'doughnutChart'"
     :chartData="chartData"
+    :chartOptions="{
+      borderColor: '#474747',
+      borderWidth: 3,
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+    }"
   >
   </UiDoughnutChart>
   <UiLineChart
     v-if="chartType === 'lineChart'"
     :chartData="chartData"
-
     :chartOptions="{
       plugins: {
         legend: {
           display: false,
         },
       },
+      elements: {
+        point: {
+          pointRadius: 6,
+          pointHoverRadius: 9,
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: '#474747',
+          },
+        },
+
+        x: {
+          grid: {
+            color: '#474747',
+          },
+        },
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      borderWidth: 3,
+
+      borderColor: '#474747',
     }"
   >
   </UiLineChart>
@@ -26,15 +60,69 @@
           display: false,
         },
       },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: '#474747',
+          },
+        },
+
+        x: {
+          grid: {
+            color: '#474747',
+          },
+        },
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      borderWidth: 3,
+      borderColor: '#474747',
     }"
   >
   </UIBarChart>
+  <UiPolarAreaChart
+    v-if="chartType === 'polarAreaChart'"
+    :chartData="chartData"
+    :chartOptions="{
+      plugins: {
+        legend: {
+          display: false,
+          tooltip: false,
+        },
+      },
+      scales: {
+        r: {
+          grid: {
+            color: '#474747',
+          },
+          ticks: {
+            display: false,
+          },
+          pointLabels: {
+            display: true,
+            centerPointLabels: true,
+          },
+        },
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      borderWidth: 3,
+      borderColor: '#474747',
+    }"
+  >
+  </UiPolarAreaChart>
 </template>
 
 <script setup>
 import UIBarChart from '../components/UiBarChart.vue';
 import UiLineChart from '../components/UiLineChart.vue';
 import UiDoughnutChart from '../components/UiDoughnutChart.vue';
+import UiPolarAreaChart from '../components/UiPolarAreaChart.vue';
 
 const props = defineProps({
   chartType: {
@@ -44,6 +132,6 @@ const props = defineProps({
   chartData: {
     type: Object,
     required: true,
-  }
+  },
 });
 </script>

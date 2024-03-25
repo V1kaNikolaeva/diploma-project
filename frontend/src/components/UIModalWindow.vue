@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import UIButton from "./UiButton.vue";
+import UIButton from "./UIButton.vue";
 
 export default {
   name: "UIModalWindow",
@@ -22,6 +22,10 @@ export default {
   props: {
     isModalVisible: {
       type: Boolean,
+      required: true,
+    },
+    modalFormType: {
+      type: String,
       required: true,
     },
   },
