@@ -188,15 +188,17 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits([
+const emits = defineEmits([
   "update:isModalVisible",
+  "update:modalFormType",
   "update:sortQuantityType",
   "update:sortCategoryType",
   "update:sortDateType",
 ]);
 
 const createCard = (value) => {
-  emit("update:isModalVisible", value);
+  emits("update:isModalVisible", value);
+  emits("update:modalFormType", 'createCard');
 };
 
 let actions = ref(true);
@@ -209,15 +211,15 @@ let sortValue = ref(["up", "down", "common"]);
 const sortQuantity = (value) => {
   if (sortIndex.value >= 2) {
     sortIndex.value = 0;
-    emit("update:sortQuantityType", value);
+    emits("update:sortQuantityType", value);
   } else {
     sortIndex.value++;
-    emit("update:sortQuantityType", value);
+    emits("update:sortQuantityType", value);
   }
 };
 
 const sortCategory = (value) => {
-  emit("update:sortCategoryType", value);
+  emits("update:sortCategoryType", value);
 };
 </script>
 

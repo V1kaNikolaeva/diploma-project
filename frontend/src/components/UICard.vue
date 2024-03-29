@@ -32,7 +32,7 @@
 // -Подарки
 // -Другое
 import { computed } from 'vue';
-import UIIcon from './UiIcon.vue';
+import UIIcon from './UIIcon.vue';
 
 const props = defineProps({
   card: {

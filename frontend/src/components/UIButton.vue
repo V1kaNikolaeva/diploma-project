@@ -3,10 +3,13 @@
     :class="{
       'button-icon-right': $slots['right-icon'],
       'button-icon-left': $slots['left-icon'],
-      default__button: buttonType === 'default',
-      select__button: buttonType === 'select',
+      'default__button': buttonType === 'default',
+      'success-button': buttonType === 'success',
+      'cancel-button': buttonType === 'cancel',
+      'select__button': buttonType === 'select',
       'cash-vault': buttonType === 'cashVault',
       'without-border': !border,
+      'without-icon': withoutIcon,
       'open-select': openSelect,
     }"
   >
@@ -28,12 +31,16 @@ export default {
       type: String,
       required: false,
       default: 'default',
-      validator: (value) => ['add', 'save', 'cancel', 'default', 'show', 'cashVault', 'select'].includes(value),
+      validator: (value) => ['success', 'cancel', 'cancel', 'default', 'show', 'cashVault', 'select'].includes(value),
     },
 
     border: {
       type: Boolean,
       default: true,
+    },
+    withoutIcon: {
+      type: Boolean,
+      default: false,
     },
     openSelect: {
       type: Boolean,
@@ -64,9 +71,12 @@ export default {
 }
 
 .default__button,
-.select__button {
+.select__button,
+.cancel-button,
+.success-button {
   border: none;
   background: none;
+  text-align: center;
   height: 40px;
   font-size: 15px;
   color: var(--main-text);
@@ -78,6 +88,19 @@ export default {
 .select__button {
   border: 1px solid var(--button-color);
 }
+
+.success-button {
+  width: 100%;
+  margin-left: 10px;
+  border: 1px solid var(--light-green);
+}
+
+.cancel-button {
+  width: 100%;
+  margin-right: 10px;
+  border: 1px solid var(--light-red);
+}
+
 .select__button {
   width: 100%;
 }
@@ -99,5 +122,11 @@ export default {
 
 .without-border {
   border: none;
+}
+
+.without-icon {
+  :slotted(p) {
+      margin-right: 0px;
+  } 
 }
 </style>

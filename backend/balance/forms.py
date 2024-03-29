@@ -6,3 +6,4 @@ class BalanceForm(ModelForm):
     class Meta:
         model = Balance
         fields = ('amount',)
+

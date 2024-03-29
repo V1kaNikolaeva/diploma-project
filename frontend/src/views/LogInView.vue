@@ -35,7 +35,7 @@
           />
         </div>
         <div class="sign-up-labels__wrapper">
-            <UIButton class="signUp-button" type="submit" :buttonType="'save'">
+            <UIButton class="signUp-button" type="submit">
                 <p>Войти</p>
             </UIButton>
         </div>

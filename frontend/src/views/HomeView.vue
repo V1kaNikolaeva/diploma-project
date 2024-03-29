@@ -23,13 +23,17 @@
         v-model:sortQuantityType="sortQuantityType"
         :balance="amount"
         v-model:sortCategoryType="sortCategoryType"
+        v-model:modalFormType="modalFormType"
       />
     </div>
     <div class="cards__wrapper">
       <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
     </div>
   </div>
-  <UIModalWindow v-if="isModalVisible" v-model:isModalVisible="isModalVisible" :modalFormType="modalFormType" />
+  <UIModalWindow v-if="isModalVisible" :isModalVisible="isModalVisible" >
+    <ReplenishBalanceForm v-if="modalFormType === 'replenishBalance'" v-model:isModalVisible="isModalVisible"/>
+    <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible"/>
+  </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
   </UIButton>
@@ -38,6 +42,8 @@
 <script setup>
 import TheCards from '../components/TheCards.vue';
 import SettingsBar from '../components/SettingsBar.vue';
+import ReplenishBalanceForm from '../components/ReplenishBalanceForm.vue'
+import CreateCardForm from '../components/CreateCardForm.vue'
 import UIModalWindow from '../components/UiModalWindow.vue';
 import UIButton from '../components/UIButton.vue';
 import UIIcon from '../components/UiIcon.vue';

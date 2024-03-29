@@ -31,3 +31,9 @@ export function loginUser() {
     password: '',
   }
 }
+
+export function balance() {
+  return {
+    balance: null,
+  }
+}

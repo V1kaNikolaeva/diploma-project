@@ -1,12 +1,7 @@
 <template>
   <div :class="{ modal__wrapper: isModalVisible, hidden: !isModalVisible }">
     <div class="modal__content">
-      <UIButton @click="closeModalWindow(false)" :buttonType="'cancel'">
-        <p>Отмена</p>
-      </UIButton>
-      <UIButton @click="closeModalWindow(false)" :buttonType="'add'">
-        <p>Добавить</p>
-      </UIButton>
+      <slot/>
     </div>
   </div>
 </template>
@@ -24,18 +19,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    modalFormType: {
-      type: String,
-      required: true,
-    },
-  },
-
-  emits: ["update:isModalVisible"],
-
-  methods: {
-    closeModalWindow(value) {
-      this.$emit("update:isModalVisible", value);
-    },
   },
 };
 </script>
@@ -47,6 +30,8 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 200px;
+  padding-left: 20px;
+  padding-right: 20px;
   left: 0;
   top: 0;
   background-color: rgb(0, 0, 0);
@@ -59,10 +44,10 @@ export default {
 
 .modal__content {
   position: relative;
-  width: 40%;
-  height: 70%;
+  max-width: 500px;
+  max-height: 400px;
   margin: auto;
-  padding: 10px;
+  padding: 40px;
   background-color: var(--main-bg);
   border-radius: 10px;
 }

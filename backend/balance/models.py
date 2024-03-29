@@ -1,6 +1,8 @@
 import uuid
 
 from django.db import models
+from django.db.models import Sum
+
 from django.utils.timesince import timesince
 
 from account.models import User
@@ -17,3 +19,5 @@ class Balance(models.Model):
     
     def created_at_formated(self):
         return timesince(self.created_at)
+    
+

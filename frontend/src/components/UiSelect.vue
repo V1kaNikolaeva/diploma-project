@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import UiIcon from './UiIcon.vue';
+import UiIcon from './UIIcon.vue';
 import UiButton from './UIButton.vue';
 import { ref } from 'vue';
 
