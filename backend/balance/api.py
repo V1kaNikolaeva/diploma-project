@@ -23,5 +23,6 @@ def create_balance(request):
         serializer = BalanceSerializer(balance)
 
         return JsonResponse(serializer.data, safe=False)
-    else: 
-        return JsonResponse({'message': 'error'})
+    else:
+        message = form.errors.as_json() 
+        return JsonResponse({'message': message})

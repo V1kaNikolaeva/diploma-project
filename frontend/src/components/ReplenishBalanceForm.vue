@@ -8,28 +8,32 @@
     />
     <UiErrorContanier>
       <ErrorMessage
-        :messageType="!$v.balance.required ? 'required' : !$v.balance.numeric ? 'numeric' : false"
+        :messageType="$v.balance.required.$invalid ? 'required' : $v.balance.numeric.$invalid ? 'numeric' : false"
         labelName="баланс"
         v-show="$v.balance.$error"
       ></ErrorMessage>
     </UiErrorContanier>
     <div class="buttons-contanier">
-      <UIButton :buttonType="'cancel'" type="" :withoutIcon="true" @click="replenishBalance(false)">
+      <UIButton :buttonType="'cancel'" type="submit" :withoutIcon="true" @click="replenishBalance(false)">
         <p>Отмена</p>
       </UIButton>
-      <UIButton :buttonType="'success'" :withoutIcon="true" @click="replenishBalance(true)">
+      <UIButton :buttonType="'success'" :withoutIcon="true" @click="replenishBalance(localBalance)">
         <p>Добавить</p>
       </UIButton>
     </div>
   </form>
+  <TheToaster ref="toaster"></TheToaster>
 </template>
 
 <script setup>
 import UIInput from './UIInput.vue';
 import UIButton from './UIButton.vue';
+import TheToaster from './TheToaster.vue';
 import ErrorMessage from './ErrorMessage.vue';
 import UiErrorContanier from './UiErrorContanier.vue';
 import { balance } from '../../services/projectServices';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, numeric } from '@vuelidate/validators';
@@ -40,20 +44,46 @@ const props = defineProps({
   isModalVisible: {
     type: Boolean,
   },
+  balances: {
+    type: Array,
+  },
 });
-const emits = defineEmits(['update:isModalVisible']);
+const emits = defineEmits(['update:isModalVisible', 'update:balances']);
+const route = useRoute();
+const toaster = ref(null);
 
 const rules = {
   balance: { required, numeric },
 };
 const $v = useVuelidate(rules, localBalance);
-const replenishBalance = (value) => {
+
+const replenishBalance = async (value) => {
   if (value === false) {
     return emits('update:isModalVisible', value);
-  }
-  if ($v.value.$invalid) {
+  } else if ($v.value.$invalid) {
     $v.value.$touch();
-    console.log('mda');
+  } else {
+
+    await axios
+      .post('/api/balance/create/', { amount: Number(localBalance.value.balance) })
+      .then((response) => {
+        toaster.value.success('Пополнено!')
+        console.log(response.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+
+    await axios
+      .get(`/api/balance/${route.params.id}`)
+      .then((response) => {
+        emits('update:balances', Object.values(response.data).flat());
+        console.log(props.balances);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
   }
 };
 </script>

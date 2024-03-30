@@ -5,14 +5,18 @@
         Мой баланс: <strong>{{ amount }}</strong>
       </p>
 
-      <div class="button__wrapper">
         <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
           <p>Пополнить</p>
           <template #right-icon>
-            <UIIcon icon="edit" />
+            <UIIcon icon="add" />
           </template>
         </UIButton>
-      </div>
+        <UIButton @click="balanceHistory" :border="false" :buttonType="'default'">
+          <p>История пополнений</p>
+          <template #right-icon>
+            <UIIcon icon="archive" />
+          </template>
+        </UIButton>
     </div>
   </div>
 
@@ -31,8 +35,9 @@
     </div>
   </div>
   <UIModalWindow v-if="isModalVisible" :isModalVisible="isModalVisible" >
-    <ReplenishBalanceForm v-if="modalFormType === 'replenishBalance'" v-model:isModalVisible="isModalVisible"/>
+    <ReplenishBalanceForm v-if="modalFormType === 'replenishBalance'" v-model:isModalVisible="isModalVisible" v-model:balances="balances"/>
     <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible"/>
+    <BalanceHistory v-else-if="modalFormType === 'balanceHistory'" v-model:isModalVisible="isModalVisible" v-model:balances="balances"/>
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
@@ -44,9 +49,10 @@ import TheCards from '../components/TheCards.vue';
 import SettingsBar from '../components/SettingsBar.vue';
 import ReplenishBalanceForm from '../components/ReplenishBalanceForm.vue'
 import CreateCardForm from '../components/CreateCardForm.vue'
+import BalanceHistory from '../components/BalanceHistory.vue'
 import UIModalWindow from '../components/UiModalWindow.vue';
 import UIButton from '../components/UIButton.vue';
-import UIIcon from '../components/UiIcon.vue';
+import UIIcon from '../components/UIIcon.vue';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
@@ -61,6 +67,11 @@ let modalFormType = ref();
 const replenishBalance = () => {
   isModalVisible.value = true;
   modalFormType.value = 'replenishBalance'
+}
+
+const balanceHistory = () => {
+  isModalVisible.value = true;
+  modalFormType.value = 'balanceHistory'
 }
 
 let cards = ref([
@@ -128,17 +139,7 @@ const amount = computed(() => {
   return balances.value ? balances.value.reduce((acc, num) => acc + num.amount,  0) : 0
 })
 
-// const addBalance = async () => {
-//   await axios
-//     .post('/api/balance/create/', { 'amount': amount.value })
-//     .then((response) => {
-//       console.log(response.data);
-//       console.log(response);
-//     })
-//     .catch((error) => {
-//       console.log('error', error);
-//     });
-// }
+
 </script>
 
 <style scoped>
@@ -153,7 +154,8 @@ const amount = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  height: 130px;
 }
 .button__wrapper {
   margin: 10px;

@@ -1,9 +1,9 @@
 import uuid
 
 from django.db import models
-from django.db.models import Sum
 
-from django.utils.timesince import timesince
+from django.utils import timezone
+tz = timezone.get_default_timezone()
 
 from account.models import User
 
@@ -18,6 +18,6 @@ class Balance(models.Model):
         ordering = ('-created_at',)
     
     def created_at_formated(self):
-        return timesince(self.created_at)
+        return format(self.created_at.astimezone(tz).strftime('%d.%m.%Y'))
     
 

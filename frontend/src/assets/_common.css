@@ -10,7 +10,7 @@ body {
   font-family: "Nunito Sans", sans-serif;
 }
 
-p, strong, h1, h2, h3, h4, h5, span, li {
+p, strong, h1, h2, h3, h4, h5, span, li, th, td {
   color: var(--main-text)
 }
 
@@ -30,7 +30,6 @@ body::-webkit-scrollbar {
   width: 8px;
   background-color: rgba(26, 24, 47, 0.15);
   border-radius: 5px;
-
 }
 
 body::-webkit-scrollbar-thumb {

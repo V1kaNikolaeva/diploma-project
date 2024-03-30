@@ -57,7 +57,7 @@ export default {
 .toasts {
   position: fixed;
   bottom: 8px;
-  right: 8px;
+  right: 22px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -67,8 +67,8 @@ export default {
 
 @media all and (min-width: 992px) {
   .toasts {
-    bottom: 72px;
-    right: 112px;
+    bottom: 68px;
+    right: 72px;
   }
 }
 
@@ -84,6 +84,7 @@ export default {
   font-size: 18px;
   line-height: 28px;
   width: auto;
+  z-index: 999;
 }
 
 .toast + .toast {
@@ -101,4 +102,4 @@ export default {
 .toast.toast_error {
   color: var(--red-error);
 }
-</style>./UiIcon.vue
+</style>
