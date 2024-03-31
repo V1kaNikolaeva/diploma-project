@@ -1,26 +1,19 @@
 <template>
-  <div :class="{ modal__wrapper: isModalVisible, hidden: !isModalVisible }">
+  <div :class="{ modal__wrapper: props.isModalVisible, hidden: !props.isModalVisible }">
     <div class="modal__content">
       <slot/>
     </div>
   </div>
 </template>
 
-<script>
-import UIButton from "./UIButton.vue";
+<script setup>
 
-export default {
-  name: "UIModalWindow",
-
-  components: { UIButton },
-
-  props: {
-    isModalVisible: {
+const props = defineProps({
+  isModalVisible: {
       type: Boolean,
       required: true,
     },
-  },
-};
+})
 </script>
 
 <style scoped>

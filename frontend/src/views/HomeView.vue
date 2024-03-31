@@ -34,7 +34,7 @@
       <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
     </div>
   </div>
-  <UIModalWindow v-if="isModalVisible" :isModalVisible="isModalVisible" >
+  <UIModalWindow ref="innerModal" v-if="isModalVisible" :isModalVisible="isModalVisible" >
     <ReplenishBalanceForm v-if="modalFormType === 'replenishBalance'" v-model:isModalVisible="isModalVisible" v-model:balances="balances"/>
     <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible"/>
     <BalanceHistory v-else-if="modalFormType === 'balanceHistory'" v-model:isModalVisible="isModalVisible" v-model:balances="balances"/>
@@ -56,19 +56,24 @@ import UIIcon from '../components/UIIcon.vue';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import { useClickOutside } from '../composables/useClickOutside'
 
 let isModalVisible = ref(false);
+const innerModal = ref(null);
+
+useClickOutside(innerModal.value, () => {
+  isModalVisible.value = false;
+})
+
 let sortQuantityType = ref('common');
 let sortCategoryType = ref('all');
 
-const modalFormTypes = ['createCard', 'replenishBalance']
 
 let modalFormType = ref();
 const replenishBalance = () => {
   isModalVisible.value = true;
   modalFormType.value = 'replenishBalance'
 }
-
 const balanceHistory = () => {
   isModalVisible.value = true;
   modalFormType.value = 'balanceHistory'
