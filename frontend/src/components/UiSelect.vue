@@ -1,5 +1,5 @@
 <template>
-  <div class="select">
+  <div class="select"  v-on-click-outside="outsideClose">
     <UiButton buttonType="select" :border="true" :openSelect="open" @click="selectBar()">
       <p>{{ currentItem }}</p>
       <template #right-icon>
@@ -16,6 +16,7 @@
 
 <script setup>
 import UiIcon from './UIIcon.vue';
+import { vOnClickOutside } from '@vueuse/components'
 import UiButton from './UIButton.vue';
 import { ref } from 'vue';
 
@@ -31,11 +32,16 @@ const emits = defineEmits(['update:modelValue']);
 let visibility = ref('hidden');
 let open = ref(false);
 
+const outsideClose = () => {
+  visibility.value = 'hidden';
+  open.value = false
+}
+
 const selectBar = () => {
   open.value = !open.value;
   if (open.value === true) {
     visibility.value = 'visible';
-  } else {
+  } else if (open.value === false) {
     visibility.value = 'hidden';
   }
 };

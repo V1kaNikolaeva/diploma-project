@@ -1,12 +1,14 @@
 <template>
   <div :class="{ modal__wrapper: props.isModalVisible, hidden: !props.isModalVisible }">
-    <div class="modal__content">
+
+    <div v-on-click-outside="outsideClose" class="modal__content">
       <slot/>
     </div>
   </div>
 </template>
 
 <script setup>
+import { vOnClickOutside } from '@vueuse/components'
 
 const props = defineProps({
   isModalVisible: {
@@ -14,6 +16,15 @@ const props = defineProps({
       required: true,
     },
 })
+const emits = defineEmits(
+  ['update:isModalVisible']
+)
+
+
+const outsideClose = () => {
+  emits('update:isModalVisible', false)
+}
+
 </script>
 
 <style scoped>
