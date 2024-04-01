@@ -1,6 +1,6 @@
 <script>
 import { RouterView } from "vue-router";
-import NavigationBar from "./components/NavigationBar.vue";
+import NavigationBar from "./components/common/NavigationBar.vue";
 import { useUserStore } from "./stores/user";
 import axios from "axios";
 import { computed, ref } from "vue";

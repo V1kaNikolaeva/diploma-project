@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
-import UIInput from './UIInput.vue';
-import UIButton from './UIButton.vue';
-import TheToaster from './TheToaster.vue';
-import ErrorMessage from './ErrorMessage.vue';
-import UiErrorContanier from './UiErrorContanier.vue';
+import UIInput from '../ui/UiInput.vue';
+import UIButton from '../ui/UiButton.vue';
+import TheToaster from '../common/TheToaster.vue';
+import ErrorMessage from '../common/ErrorMessage.vue';
+import UiErrorContanier from '../ui/UiErrorContanier.vue';
 import { balance } from '../../services/projectServices';
 import { useRoute } from 'vue-router';
 import axios from 'axios';

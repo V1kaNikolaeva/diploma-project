@@ -1,5 +1,5 @@
 <template>
-  <div class="select"  v-on-click-outside="outsideClose">
+  <div class="select" v-on-click-outside="outsideClose">
     <UiButton buttonType="select" :border="true" :openSelect="open" @click="selectBar()">
       <p>{{ currentItem }}</p>
       <template #right-icon>
@@ -17,7 +17,7 @@
 <script setup>
 import UiIcon from './UIIcon.vue';
 import { vOnClickOutside } from '@vueuse/components'
-import UiButton from './UIButton.vue';
+import UiButton from './UiButton.vue';
 import { ref } from 'vue';
 
 const props = defineProps({

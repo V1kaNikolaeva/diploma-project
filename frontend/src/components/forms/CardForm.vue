@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-import UIInput from './UIInput.vue';
-import UIButton from './UIButton.vue';
+import UIInput from '../ui/UiInput.vue';
+import UIButton from '../ui/UiButton.vue';
 import { balance } from '../../services/projectServices';
 import { ref } from 'vue';
 

@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import UICard from "./UiCard.vue";
+import UICard from "../ui/UiCard.vue";
 import { computed, ref } from "vue";
 
 const props = defineProps({

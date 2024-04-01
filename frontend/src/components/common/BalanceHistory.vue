@@ -33,8 +33,8 @@
 </template>
 
 <script setup>
-import UIButton from './UIButton.vue';
-import UiIcon from './UiIcon.vue';
+import UIButton from '../ui/UiButton.vue';
+import UiIcon from '../ui/UiIcon.vue';
 
 const props = defineProps({
   isModalVisible: {

@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import UiToast from './UiToast.vue'
-import UIIcon from './UIIcon.vue';
+import UiToast from '../ui/UiToast.vue'
+import UIIcon from '../ui/UiIcon.vue';
 
 
 export default {

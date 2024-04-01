@@ -119,10 +119,10 @@
 </template>
 
 <script setup>
-import UIBarChart from '../components/UiBarChart.vue';
-import UiLineChart from '../components/UiLineChart.vue';
-import UiDoughnutChart from '../components/UiDoughnutChart.vue';
-import UiPolarAreaChart from '../components/UiPolarAreaChart.vue';
+import UIBarChart from '../ui/UiBarChart.vue';
+import UiLineChart from '../ui/UiLineChart.vue';
+import UiDoughnutChart from '../ui/UiDoughnutChart.vue';
+import UiPolarAreaChart from '../ui/UiPolarAreaChart.vue';
 
 const props = defineProps({
   chartType: {

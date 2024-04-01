@@ -34,8 +34,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import TheCharts from '../components/TheCharts.vue';
-import UiSelect from '../components/UiSelect.vue';
+import TheCharts from '../components/common/TheCharts.vue';
+import UiSelect from '../components/ui/UiSelect.vue';
 
 const selectItems = [
   { name: 'Круговая', value: 'doughnutChart' },

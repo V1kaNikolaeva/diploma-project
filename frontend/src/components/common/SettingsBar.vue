@@ -163,8 +163,8 @@
 
 <script setup>
 import { ref } from "vue";
-import UIButton from "./UIButton.vue";
-import UIIcon from "./UiIcon.vue";
+import UIButton from "../ui/UiButton.vue";
+import UIIcon from "../ui/UiIcon.vue";
 
 const props = defineProps({
   isModalVisible: {

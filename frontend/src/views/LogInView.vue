@@ -46,11 +46,11 @@
 </template>
 
 <script>
-import UIInput from "../components/UIInput.vue";
-import UIButton from "../components/UIButton.vue";
-import TheToaster from "../components/TheToaster.vue";
+import UIInput from "../components/ui/UiInput.vue";
+import UIButton from "../components/ui/UiButton.vue";
+import TheToaster from "../components/common/TheToaster.vue";
 import axios from "axios";
-import { loginUser } from "../../services/projectServices";
+import { loginUser } from "../services/projectServices";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
 import { ref } from 'vue'
@@ -158,4 +158,4 @@ export default {
     width: 100%; 
     /* не рабоатет */
 }
-</style>../components/UiInput.vue../components/UiButton.vue
+</style>../components/UiInput.vue../components/UiButton.vue../services/projectServices

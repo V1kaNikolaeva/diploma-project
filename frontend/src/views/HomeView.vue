@@ -45,14 +45,14 @@
 </template>
 
 <script setup>
-import TheCards from '../components/TheCards.vue';
-import SettingsBar from '../components/SettingsBar.vue';
-import ReplenishBalanceForm from '../components/ReplenishBalanceForm.vue'
-import CreateCardForm from '../components/CreateCardForm.vue'
-import BalanceHistory from '../components/BalanceHistory.vue'
-import UIModalWindow from '../components/UiModalWindow.vue';
-import UIButton from '../components/UIButton.vue';
-import UIIcon from '../components/UIIcon.vue';
+import TheCards from '../components/common/TheCards.vue';
+import SettingsBar from '../components/common/SettingsBar.vue';
+import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue'
+import CreateCardForm from '../components/forms/CardForm.vue'
+import BalanceHistory from '../components/common/BalanceHistory.vue'
+import UIModalWindow from '../components/ui/UiModalWindow.vue';
+import UIButton from '../components/ui/UiButton.vue';
+import UIIcon from '../components/ui/UiIcon.vue';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';

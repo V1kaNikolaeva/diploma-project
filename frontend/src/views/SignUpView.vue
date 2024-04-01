@@ -64,10 +64,10 @@
 </template>
 
 <script>
-import UIInput from "../components/UIInput.vue";
-import UIButton from "../components/UiButton.vue";
-import TheToaster from "../components/TheToaster.vue";
-import { signupUser } from "../../services/projectServices";
+import UIInput from "../components/ui/UiInput.vue";
+import UIButton from "../components/ui/UiButton.vue";
+import TheToaster from "../components/common/TheToaster.vue";
+import { signupUser } from "../services/projectServices";
 import { useRouter } from "vue-router";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
@@ -173,4 +173,4 @@ export default {
     /* не рабоатет */
 }
 </style>
-../components/UiInput.vue../components/UiButton.vue
+../components/UiInput.vue../components/UiButton.vue../services/projectServices
