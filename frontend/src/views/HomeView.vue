@@ -5,18 +5,18 @@
         Мой баланс: <strong>{{ amount }}</strong>
       </p>
 
-        <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
-          <p>Пополнить</p>
-          <template #right-icon>
-            <UIIcon icon="add" />
-          </template>
-        </UIButton>
-        <UIButton @click="balanceHistory" :border="false" :buttonType="'default'">
-          <p>История пополнений</p>
-          <template #right-icon>
-            <UIIcon icon="archive" />
-          </template>
-        </UIButton>
+      <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
+        <p>Пополнить</p>
+        <template #right-icon>
+          <UIIcon icon="add" />
+        </template>
+      </UIButton>
+      <UIButton @click="balanceHistory" :border="false" :buttonType="'default'">
+        <p>История пополнений</p>
+        <template #right-icon>
+          <UIIcon icon="archive" />
+        </template>
+      </UIButton>
     </div>
   </div>
 
@@ -31,115 +31,99 @@
       />
     </div>
     <div class="cards__wrapper">
-      <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
+      <TheCards v-if="cards" :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
+      <p v-else-if="!cards">Добавьте траты</p>
     </div>
   </div>
-  <UIModalWindow ref="innerModal" v-if="isModalVisible" v-model:isModalVisible="isModalVisible" >
-    <ReplenishBalanceForm v-if="modalFormType === 'replenishBalance'" v-model:isModalVisible="isModalVisible" v-model:balances="balances"/>
-    <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible"/>
-    <BalanceHistory v-else-if="modalFormType === 'balanceHistory'" v-model:isModalVisible="isModalVisible" v-model:balances="balances"/>
+  <UIModalWindow ref="innerModal" v-if="isModalVisible" v-model:isModalVisible="isModalVisible">
+    <ReplenishBalanceForm
+      v-if="modalFormType === 'replenishBalance'"
+      v-model:isModalVisible="isModalVisible"
+      v-model:balances="balances"
+    />
+    <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible" />
+    <BalanceHistory
+      v-else-if="modalFormType === 'balanceHistory'"
+      v-model:isModalVisible="isModalVisible"
+      v-model:balances="balances"
+    />
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
   </UIButton>
 </template>
 
-<script setup>
+<script>
 import TheCards from '../components/common/TheCards.vue';
 import SettingsBar from '../components/common/SettingsBar.vue';
-import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue'
-import CreateCardForm from '../components/forms/CardForm.vue'
-import BalanceHistory from '../components/common/BalanceHistory.vue'
+import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue';
+import CreateCardForm from '../components/forms/CardForm.vue';
+import BalanceHistory from '../components/common/BalanceHistory.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
 import UIIcon from '../components/ui/UiIcon.vue';
-import { computed, onMounted, ref } from 'vue';
-import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { computed, ref } from 'vue';
+import { useBalanceAxios } from '../composables/useBalanceAxios';
 
-let isModalVisible = ref(false);
-
-
-let sortQuantityType = ref('common');
-let sortCategoryType = ref('all');
-
-
-let modalFormType = ref();
-const replenishBalance = () => {
-  isModalVisible.value = true;
-  modalFormType.value = 'replenishBalance'
-}
-const balanceHistory = () => {
-  isModalVisible.value = true;
-  modalFormType.value = 'balanceHistory'
-}
-
-let cards = ref([
-  {
-    id: 1,
-    currencyCodeISO: 'RUB',
-    quantity: 2000,
-    category: 'products',
-    reason: 'Продукты на неделю',
-    date: '2024-03-18',
+export default {
+  components: {
+    TheCards,
+    SettingsBar,
+    ReplenishBalanceForm,
+    CreateCardForm,
+    BalanceHistory,
+    UIModalWindow,
+    UIButton,
+    UIIcon,
   },
-  {
-    id: 2,
-    currencyCodeISO: 'RUB',
-    quantity: 800,
-    category: 'entertainment',
-    reason: 'Билет в кино',
-    date: '2024-03-18',
-  },
-  {
-    id: 3,
-    currencyCodeISO: 'RUB',
-    quantity: 25000,
-    category: 'electronics',
-    reason: 'Купил ноутбук',
-    date: '2024-03-18',
-  },
-  {
-    id: 4,
-    currencyCodeISO: 'RUB',
-    quantity: 4500,
-    category: 'products',
-    reason: 'Продукты на неделю',
-    date: '2024-03-18',
-  },
-  {
-    id: 5,
-    currencyCodeISO: 'RUB',
-    quantity: 3000,
-    category: 'products',
-    reason: 'Продукты на неделю',
-    date: '2016-01-01',
-  },
-]);
 
-let balances = ref();
-const route = useRoute()
-const getUserBalance = async () => {
-  await axios
-    .get(`/api/balance/${route.params.id}`)
-    .then((response) => {
-      balances.value = Object.values(response.data).flat()
-      console.log(balances.value)
-    })
-    .catch((error) => {
-      console.log('error', error);
+  async setup() {
+    const { balances } = await useBalanceAxios();
+
+    let isModalVisible = ref(false);
+
+    let sortQuantityType = ref('common');
+    let sortCategoryType = ref('all');
+
+    let modalFormType = ref();
+    const replenishBalance = () => {
+      isModalVisible.value = true;
+      modalFormType.value = 'replenishBalance';
+    };
+
+    const balanceHistory = () => {
+      isModalVisible.value = true;
+      modalFormType.value = 'balanceHistory';
+    };
+
+    const amount = computed(() => {
+      return balances.value ? balances.value.reduce((acc, num) => acc + num.amount, 0) : 0;
     });
+
+
+    let cards = ref([
+      {
+        id: 1,
+        currencyCodeISO: "RUB",
+        quantity: 2000,
+        category: "products",
+        reason: "Продукты на неделю",
+      },
+    ])
+
+    return {
+      balances,
+      isModalVisible,
+      modalFormType,
+      sortQuantityType,
+      sortCategoryType,
+      replenishBalance,
+      balanceHistory,
+      amount,
+      cards
+    };
+  },
 };
-
-onMounted(() => {
-  getUserBalance()
-})
-
-const amount = computed(() => {
-  return balances.value ? balances.value.reduce((acc, num) => acc + num.amount,  0) : 0
-})
-
-
 </script>
 
 <style scoped>

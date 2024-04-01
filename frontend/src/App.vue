@@ -77,7 +77,9 @@ export default {
 <template>
   <NavigationBar :userName="userNameData" />
   <main class="main">
-    <RouterView />
+    <Suspense>
+      <RouterView />
+    </Suspense>
   </main>
 </template>
 
