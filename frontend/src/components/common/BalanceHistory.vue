@@ -7,7 +7,7 @@
         <th>Действия</th>
       </tr>
       <tr class="history-data" v-for="balance in props.balances">
-        <td>{{ balance.amount }}</td>
+        <td>{{ quantityFormatterRUB(balance.amount) }}</td>
         <td>{{ balance.created_at_formated }}</td>
         <td class="actions">
           <UIButton :border="false" :buttonType="'default'">
@@ -34,7 +34,9 @@
 
 <script setup>
 import UIButton from '../ui/UiButton.vue';
-import UiIcon from '../ui/UiIcon.vue';
+import UiIcon from '../ui/UIIcon.vue';
+import { quantityFormatterRUB } from '../../utils/quantityFormatters'
+
 
 const props = defineProps({
   isModalVisible: {

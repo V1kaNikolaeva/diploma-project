@@ -2,7 +2,7 @@
   <div class="balance__wrapper">
     <div class="balance">
       <p>
-        Мой баланс: <strong>{{ amount }}</strong>
+        Мой баланс: <strong>{{ quantityFormatterRUB(amount) }}</strong>
       </p>
 
       <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
@@ -61,8 +61,9 @@ import CreateCardForm from '../components/forms/CardForm.vue';
 import BalanceHistory from '../components/common/BalanceHistory.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
-import UIIcon from '../components/ui/UiIcon.vue';
+import UIIcon from '../components/ui/UIIcon.vue';
 import { computed, ref } from 'vue';
+import { quantityFormatterRUB } from '../utils/quantityFormatters'
 import { useBalanceAxios } from '../composables/useBalanceAxios';
 
 export default {
@@ -120,6 +121,7 @@ export default {
       replenishBalance,
       balanceHistory,
       amount,
+      quantityFormatterRUB,
       cards
     };
   },

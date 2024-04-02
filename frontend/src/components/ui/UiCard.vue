@@ -2,8 +2,8 @@
   <div class="card__wrapper">
     <div class="card">
       <p>{{ card.reason }}</p>
-      <strong>{{ cardQuantityRUBFormat }}{{ card.currency }}</strong>
-      <UIIcon 
+      <strong>{{ quantityFormatterRUB(card.quantity) }}{{ card.currency }}</strong>
+      <UiIcon 
         class="icon-category" 
         :icon="
           category === 'medications' ? 'pulse' : 
@@ -16,7 +16,7 @@
           category === 'other' ? 'search' :
           null
         ">
-      </UIIcon>
+      </UiIcon>
     </div>
   </div>
 </template>
@@ -32,7 +32,8 @@
 // -Подарки
 // -Другое
 import { computed } from 'vue';
-import UIIcon from './UIIcon.vue';
+import UiIcon from './UIIcon.vue';
+import { quantityFormatterRUB } from '../../utils/quantityFormatters'
 
 const props = defineProps({
   card: {
@@ -47,20 +48,11 @@ const props = defineProps({
   }
 });
 
-//Конвертор в рубли
-const RUBCurrency = new Intl.NumberFormat('ru-RU', {
-    currency: 'RUB',
-});
-
 //Конвертор в доллары
 const USDCurrency = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
-let { quantity } = props.card
-const cardQuantityRUBFormat = computed(() => {
-  return RUBCurrency.format(quantity)
-}) 
 
 const cardQuantityUSDFormat = computed(() => {
   return USDCurrency.format(quantity)

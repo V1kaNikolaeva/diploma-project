@@ -5,7 +5,7 @@
         <p>Действия</p>
         <template #left-icon>
           <Transition name="icon">
-            <UIIcon :icon="actions ? 'downArrow' : 'upArrow'" />
+            <UiIcon :icon="actions ? 'downArrow' : 'upArrow'" />
           </Transition>
         </template>
       </UIButton>
@@ -14,19 +14,19 @@
           <UIButton @click="createCard(true)" :border="false">
             <p>Добавить</p>
             <template #right-icon>
-              <UIIcon icon="add" />
+              <UiIcon icon="add" />
             </template>
           </UIButton>
           <UIButton :border="false">
             <p>Удалить</p>
             <template #right-icon>
-              <UIIcon icon="delete" />
+              <UiIcon icon="delete" />
             </template>
           </UIButton>
           <UIButton :border="false">
             <p>Изменить</p>
             <template #right-icon>
-              <UIIcon icon="change" />
+              <UiIcon icon="change" />
             </template>
           </UIButton>
         </div>
@@ -37,7 +37,7 @@
       <UIButton @click="categories = !categories" :border="false">
         <p>Категории</p>
         <template #left-icon>
-          <UIIcon :icon="categories ? 'downArrow' : 'upArrow'" />
+          <UiIcon :icon="categories ? 'downArrow' : 'upArrow'" />
         </template>
       </UIButton>
       <Transition name="list">
@@ -48,7 +48,7 @@
           >
             <p>Продукты</p>
             <template #right-icon>
-              <UIIcon icon="cart" />
+              <UiIcon icon="cart" />
             </template>
           </UIButton>
           <UIButton
@@ -57,7 +57,7 @@
           >
             <p>Электроника</p>
             <template #right-icon>
-              <UIIcon icon="smartwatch" />
+              <UiIcon icon="smartwatch" />
             </template>
           </UIButton>
           <UIButton
@@ -66,7 +66,7 @@
           >
             <p>Медицина</p>
             <template #right-icon>
-              <UIIcon icon="pulse" />
+              <UiIcon icon="pulse" />
             </template>
           </UIButton>
           <UIButton
@@ -75,7 +75,7 @@
           >
             <p>Развлечения</p>
             <template #right-icon>
-              <UIIcon icon="acousticGuitar" />
+              <UiIcon icon="acousticGuitar" />
             </template>
           </UIButton>
           <UIButton
@@ -84,7 +84,7 @@
           >
             <p>Путешествия</p>
             <template #right-icon>
-              <UIIcon icon="plane" />
+              <UiIcon icon="plane" />
             </template>
           </UIButton>
           <UIButton
@@ -93,7 +93,7 @@
           >
             <p>Одежда</p>
             <template #right-icon>
-              <UIIcon icon="tShirt" />
+              <UiIcon icon="tShirt" />
             </template>
           </UIButton>
           <UIButton
@@ -102,7 +102,7 @@
           >
             <p>Подарки</p>
             <template #right-icon>
-              <UIIcon icon="gift" />
+              <UiIcon icon="gift" />
             </template>
           </UIButton>
           <UIButton
@@ -111,7 +111,7 @@
           >
             <p>Другое</p>
             <template #right-icon>
-              <UIIcon icon="search" />
+              <UiIcon icon="search" />
             </template>
           </UIButton>
           <UIButton
@@ -120,7 +120,7 @@
           >
             <p>Все</p>
             <template #right-icon>
-              <UIIcon icon="search" />
+              <UiIcon icon="search" />
             </template>
           </UIButton>
         </div>
@@ -131,7 +131,7 @@
       <UIButton @click="sorting = !sorting" :border="false">
         <p>Сортировки</p>
         <template #left-icon>
-          <UIIcon :icon="sorting ? 'downArrow' : 'upArrow'" />
+          <UiIcon :icon="sorting ? 'downArrow' : 'upArrow'" />
         </template>
       </UIButton>
       <Transition name="list">
@@ -142,7 +142,7 @@
           >
             <p>По сумме</p>
             <template #right-icon>
-              <UIIcon
+              <UiIcon
                 :icon="
                   sortQuantityType === 'up'
                     ? 'sortUp'
@@ -164,15 +164,11 @@
 <script setup>
 import { ref } from "vue";
 import UIButton from "../ui/UiButton.vue";
-import UIIcon from "../ui/UiIcon.vue";
+import UiIcon from "../ui/UiIcon.vue";
 
 const props = defineProps({
   isModalVisible: {
     type: Boolean,
-    required: true,
-  },
-  balance: {
-    type: [Number, null],
     required: true,
   },
   sortQuantityType: {
