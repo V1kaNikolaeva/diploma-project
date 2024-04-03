@@ -32,87 +32,86 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
+import { computed, ref } from 'vue';
 import TheCharts from '../components/common/TheCharts.vue';
 import UiSelect from '../components/ui/UiSelect.vue';
+import { useBalanceAxios } from '@/composables/useBalanceAxios';
 
-const selectItems = [
-  { name: 'Круговая', value: 'doughnutChart' },
-  { name: 'Столбцами', value: 'barChart' },
-  { name: 'График', value: 'lineChart' },
-  { name: 'Пузырьком', value: 'polarAreaChart' },
-];
+export default {
+  components: { TheCharts, UiSelect },
+  async setup() {
+    const { balances } = await useBalanceAxios();
+    const selectItems = [
+      { name: 'Круговая', value: 'doughnutChart' },
+      { name: 'Столбцами', value: 'barChart' },
+      { name: 'График', value: 'lineChart' },
+      { name: 'Пузырьком', value: 'polarAreaChart' },
+    ];
 
-let categoriesChart = ref('doughnutChart');
-let spentChart = ref('doughnutChart');
-let balanceChart = ref('doughnutChart');
+    let categoriesChart = ref('doughnutChart');
+    let spentChart = ref('doughnutChart');
+    let balanceChart = ref('doughnutChart');
 
-const categories = {
-  labels: ['Здоровье', 'Продукты', 'Развлечения', 'Электроника', 'Путешествия', 'Одежда', 'Подарки', 'Другое'],
-  datasets: [
-    {
-      data: [30, 50, 30, 30, 30, 70, 30, 30],
-      backgroundColor: ['#FF6666', '#B2FF66', '#66FFB2', '#C0C0C0', '#66FFFF', '#FFB266', '#FFFF66', '#606060'],
-    },
-  ],
+    const categories = {
+      labels: ['Здоровье', 'Продукты', 'Развлечения', 'Электроника', 'Путешествия', 'Одежда', 'Подарки', 'Другое'],
+      datasets: [
+        {
+          data: [30, 50, 30, 30, 30, 70, 30, 30],
+          backgroundColor: ['#FF6666', '#B2FF66', '#66FFB2', '#C0C0C0', '#66FFFF', '#FFB266', '#FFFF66', '#606060'],
+        },
+      ],
+    };
+    const spent = {
+      labels: [ 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
+      ],
+      datasets: [
+        {
+          data: [30, 50, 40, 30, 30, 70, 77, 37, 45, 70, 50, 30],
+          backgroundColor: [ '#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875',
+          ],
+        },
+      ],
+    };
+
+    const balanceDatasets = computed(() => {
+      let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      for (let i = 0; i < balances.value.length; i++) {
+        if (balances.value[i].created_at_formated.slice(3, 5).indexOf('0') === 0) {
+          data[Number(balances.value[i].created_at_formated.slice(3, 5).replace('0', '')) - 1] += balances.value[i].amount
+        } else {
+          data[Number(balances.value[i].created_at_formated.slice(3, 5)) - 1] += balances.value[i].amount
+        }
+      }
+      return data
+    })
+
+    const balance = {
+      labels: [ 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
+      ],
+      datasets: [
+        {
+          data: balanceDatasets.value,
+          backgroundColor: [ '#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875',
+          ],
+        },
+      ],
+    };
+
+    return {
+      balances,
+      selectItems,
+      categoriesChart,
+      spentChart,
+      balanceChart,
+      categories,
+      spent,
+      balanceDatasets,
+      balance,
+
+    };
+  },
 };
-const spent = {
-  labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-  datasets: [
-    {
-      data: [30, 50, 40, 30, 30, 70, 77, 37, 45, 70, 50, 30],
-      backgroundColor: ['#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875'],
-    },
-  ],
-};
-const balance = {
-  labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-  datasets: [
-    {
-      data: [30, 50, 40, 30, 30, 70, 77, 37, 45, 70, 50, 30],
-      backgroundColor: ['#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875'],
-    },
-  ],
-};
-
-let cards = ref([
-  {
-    id: 1,
-    currencyCodeISO: 'RUB',
-    quantity: 2000,
-    category: 'products',
-    reason: 'Продукты на неделю',
-  },
-  {
-    id: 2,
-    currencyCodeISO: 'RUB',
-    quantity: 800,
-    category: 'entertainment',
-    reason: 'Билет в кино',
-  },
-  {
-    id: 3,
-    currencyCodeISO: 'RUB',
-    quantity: 25000,
-    category: 'electronics',
-    reason: 'Купил ноутбук',
-  },
-  {
-    id: 4,
-    currencyCodeISO: 'RUB',
-    quantity: 4500,
-    category: 'products',
-    reason: 'Продукты на неделю',
-  },
-  {
-    id: 5,
-    currencyCodeISO: 'RUB',
-    quantity: 3000,
-    category: 'products',
-    reason: 'Продукты на неделю',
-  },
-]);
 </script>
 
 <style scoped>
