@@ -53,14 +53,9 @@ const USDCurrency = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
-
 const cardQuantityUSDFormat = computed(() => {
   return USDCurrency.format(quantity)
 }) 
-    
-//currency лучше убрать  
-
-
 </script>
 
 <style scoped>

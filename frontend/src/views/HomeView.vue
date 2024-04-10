@@ -1,10 +1,9 @@
 <template>
   <div class="balance__wrapper">
     <div class="balance">
-      <p>
+        <p>
         Мой баланс: <strong>{{ quantityFormatterRUB(amount) }}</strong>
-      </p>
-
+        </p>
       <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
         <p>Пополнить</p>
         <template #right-icon>
@@ -31,8 +30,7 @@
       />
     </div>
     <div class="cards__wrapper">
-      <TheCards v-if="cards" :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
-      <p v-else-if="!cards">Добавьте траты</p>
+        <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
     </div>
   </div>
   <UIModalWindow ref="innerModal" v-if="isModalVisible" v-model:isModalVisible="isModalVisible">
@@ -40,6 +38,7 @@
       v-if="modalFormType === 'replenishBalance'"
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
+      labelName="Ведите сумму, которую хотите положить"
     />
     <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible" />
     <BalanceHistory
@@ -122,7 +121,7 @@ export default {
       balanceHistory,
       amount,
       quantityFormatterRUB,
-      cards
+      cards,
     };
   },
 };
@@ -158,9 +157,4 @@ export default {
   flex: none;
 }
 
-.user-bank__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 </style>

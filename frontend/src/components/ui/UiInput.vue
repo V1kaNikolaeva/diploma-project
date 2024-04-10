@@ -39,6 +39,14 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  fontSize: {
+    type: String,
+    default: '20px',
+  },
+  textAlign: {
+    type: String,
+    default: 'start',
+  },
   invalid: {
     type: Boolean,
   },
@@ -54,7 +62,8 @@ input {
   background-color: transparent;
   border: none;
   outline: 1px solid var(--main-line);
-  font-size: 20px;
+  font-size: v-bind(fontSize);
+  text-align: v-bind(textAlign);
   padding: 10px;
 }
 

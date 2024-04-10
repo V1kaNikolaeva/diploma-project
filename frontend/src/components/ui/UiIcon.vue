@@ -26,6 +26,8 @@ import Bank from '../../assets/icons/icon-bank.svg';
 import DownArrow from '../../assets/icons/icon-down-arrow.svg';
 import UpArrow from '../../assets/icons/icon-up-arrow.svg';
 import Archive from '../../assets/icons/icon-archive.svg';
+import Cancel from '../../assets/icons/icon-cancel.svg';
+import Submit from '../../assets/icons/icon-submit.svg';
 
 const icons = {
   'close': Close,
@@ -51,6 +53,8 @@ const icons = {
   'downArrow': DownArrow,
   'upArrow': UpArrow,
   'archive': Archive,
+  'cancel': Cancel,
+  'submit': Submit,
 };
 
 export default {

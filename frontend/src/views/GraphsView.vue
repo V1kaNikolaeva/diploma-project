@@ -41,7 +41,7 @@ import { useBalanceAxios } from '@/composables/useBalanceAxios';
 export default {
   components: { TheCharts, UiSelect },
   async setup() {
-    const { balances } = await useBalanceAxios();
+    
     const selectItems = [
       { name: 'Круговая', value: 'doughnutChart' },
       { name: 'Столбцами', value: 'barChart' },
@@ -74,16 +74,17 @@ export default {
       ],
     };
 
+    const { balances } = await useBalanceAxios();
     const balanceDatasets = computed(() => {
-      let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       for (let i = 0; i < balances.value.length; i++) {
         if (balances.value[i].created_at_formated.slice(3, 5).indexOf('0') === 0) {
-          data[Number(balances.value[i].created_at_formated.slice(3, 5).replace('0', '')) - 1] += balances.value[i].amount
+          data[Number(balances.value[i].created_at_formated.slice(3, 5).replace('0', '')) - 1] += balances.value[i].amount;
         } else {
-          data[Number(balances.value[i].created_at_formated.slice(3, 5)) - 1] += balances.value[i].amount
+          data[Number(balances.value[i].created_at_formated.slice(3, 5)) - 1] += balances.value[i].amount;
         }
       }
-      return data
+      return data;
     })
 
     const balance = {
@@ -108,7 +109,6 @@ export default {
       spent,
       balanceDatasets,
       balance,
-
     };
   },
 };

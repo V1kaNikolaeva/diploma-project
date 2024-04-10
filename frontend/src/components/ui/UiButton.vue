@@ -46,6 +46,7 @@ export default {
       type: Boolean,
     },
   },
+
 };
 </script>
 
@@ -109,6 +110,9 @@ export default {
 }
 .cash-vault {
   position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   bottom: 30px;
   right: 30px;

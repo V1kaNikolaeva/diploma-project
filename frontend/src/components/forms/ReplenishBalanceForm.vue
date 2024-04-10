@@ -3,7 +3,7 @@
     <UIInput
       v-model="localBalance.balance"
       :invalid="$v.balance.$error"
-      label="Ведите сумму, которую хотите положить"
+      :label="labelName"
       placeholeder="Сумма"
     />
     <UiErrorContanier>
@@ -47,6 +47,10 @@ const props = defineProps({
   balances: {
     type: Array,
   },
+  labelName: {
+    type: String,
+    required: true,
+  }
 });
 const emits = defineEmits(['update:isModalVisible', 'update:balances']);
 const route = useRoute();

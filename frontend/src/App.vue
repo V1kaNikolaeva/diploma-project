@@ -15,7 +15,7 @@ export default {
       return userStore.getUserInfo().name;
     });
 
-
+    
 
     return {
       userNameData,
@@ -33,6 +33,7 @@ export default {
       axios.defaults.headers.common["Authorization"] = "";
     }
   },
+
 
   //Сделать глобальный тостер
 };

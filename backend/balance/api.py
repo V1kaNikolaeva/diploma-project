@@ -26,3 +26,19 @@ def create_balance(request):
     else:
         message = form.errors.as_json() 
         return JsonResponse({'message': message})
+    
+@api_view(['UPDATE'])
+def update_balance(request):
+    form = BalanceForm(request.data)
+
+    if form.is_valid():
+        balance = form.save(commit=False)
+        balance.created_by = request.user
+        balance.save()
+
+        serializer = BalanceSerializer(balance)
+
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        message = form.errors.as_json() 
+        return JsonResponse({'message': message})

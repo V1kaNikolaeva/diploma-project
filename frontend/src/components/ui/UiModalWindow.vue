@@ -48,7 +48,7 @@ const outsideClose = () => {
 
 .modal__content {
   position: relative;
-  max-width: 500px;
+  max-width: 700px;
   max-height: 400px;
   margin: auto;
   padding: 40px;
