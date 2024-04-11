@@ -7,15 +7,15 @@
         <th>{{ action }}</th>
       </tr>
       <tr class="history-data" v-for="(balance, index) in props.balances" :key="balance.id">
-        <td class="balance" v-if="props.balances[index].id !== currentIndex || !showInput">
+        <td class="balance" v-if="balance.id !== currentIndex || !showInput">
           {{ quantityFormatterRUB(balance.amount) }}
         </td>
-        <td class="balance" v-else-if="showInput && props.balances[index].id === currentIndex">
+        <td class="balance" v-else-if="showInput && balance.id === currentIndex">
           <UiInput v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
         </td>
         <td class="data">{{ balance.created_at_formated }}</td>
 
-        <td class="actions" v-if="props.balances[index].id !== currentIndex || !showInput">
+        <td class="actions" v-if="balance.id !== currentIndex || !showInput">
           <UIButton :border="false" :buttonType="'default'">
             <template #right-icon>
               <UiIcon icon="delete" />
@@ -32,7 +32,7 @@
           </UIButton>
         </td>
 
-        <td class="actions" v-else-if="showInput && props.balances[index].id === currentIndex">
+        <td class="actions" v-else-if="showInput && balance.id === currentIndex">
           <UIButton
             @click="changeVisibility(balance.id)"
             :border="false"
@@ -101,6 +101,8 @@ const changeVisibility = (index, currentBalance, pickedAction) => {
 
 
 const updateBalance = (currentChange) => {
+  showInput.value = false;
+  action.value = 'Действия'
   console.log(currentChange);
 };
 </script>
