@@ -10,7 +10,7 @@ python -m venv venv
 ```
 .\.venv\scripts\activate   
 ```
-После активации установить зависимости
+После активации установить зависимости в директории backend
 ```
 pip install -r requirements.txt
 ```
