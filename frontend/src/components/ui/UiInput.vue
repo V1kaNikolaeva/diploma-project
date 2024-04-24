@@ -61,7 +61,7 @@ input {
   color: var(--main-text);
   background-color: transparent;
   border: none;
-  outline: 1px solid var(--main-line);
+  outline: 1px solid var(--input-color-line);
   font-size: v-bind(fontSize);
   text-align: v-bind(textAlign);
   padding: 10px;

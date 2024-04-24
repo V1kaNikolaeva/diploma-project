@@ -2,30 +2,26 @@
 import { RouterView } from "vue-router";
 import NavigationBar from "./components/common/NavigationBar.vue";
 import { useUserStore } from "./stores/user";
+import { useStatsStore } from "./stores/stats";
 import axios from "axios";
-import { computed, ref } from "vue";
 
 export default {
   components: { NavigationBar },
 
   setup() {
     const userStore = useUserStore();
+    const statsStore = useStatsStore();
 
-    const userNameData = computed(() => {
-      return userStore.getUserInfo().name;
-    });
-
-    
 
     return {
-      userNameData,
       userStore,
+      statsStore
     };
   },
 
   beforeCreate() {
     this.userStore.initStore();
-
+    this.statsStore.initStore()
     const token = this.userStore.user.access;
     if (token) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
@@ -40,7 +36,7 @@ export default {
 </script>
 
 <template>
-  <NavigationBar :userName="userNameData" />
+  <NavigationBar :userName="userStore.user.name" />
   <main class="main">
     <Suspense>
       <RouterView />

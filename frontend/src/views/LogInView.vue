@@ -35,7 +35,7 @@
           />
         </div>
         <div class="sign-up-labels__wrapper">
-            <UIButton class="signUp-button" type="submit">
+            <UIButton class="signUp-button" type="submit" buttonType="success" successMargin="0px">
                 <p>Войти</p>
             </UIButton>
         </div>
@@ -92,11 +92,8 @@ export default {
           .get('/api/home/')
           .then(response => {
             userStore.setUserInfo(response.data);
-            //Можно сделать подстановку ника по кнопку войти, убрать регистрацию
-            //На кнопке войти будет ссылка на регистрацию
-            //нажав на ник перейдете в вкладку профиль
             toaster.value.success('Вы авторизировались!'); //починить Je89cC2ThV3y
-            router.push({ name: 'profile' })
+            router.push({ name: 'home', params: { 'id': userStore.user.id } })
           })
           .catch(error => {
             console.log('error', error);

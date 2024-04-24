@@ -39,7 +39,7 @@
             </RouterLink>
           </li>
 
-          <li>
+          <li v-if="!userStore.user.isAuthenticated">
             <RouterLink 
               :to="{ name: 'signup' }" 
               class="link" 

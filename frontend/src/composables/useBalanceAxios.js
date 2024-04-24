@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { getBalance } from '../api/getBalance'
+import { getBalance } from '../api/balance'
 
 export async function useBalanceAxios() {
     const balances = ref(null);

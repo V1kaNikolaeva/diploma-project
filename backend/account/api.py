@@ -9,6 +9,7 @@ def home(request):
         'id': request.user.id,
         'name': request.user.name,
         'email': request.user.email,
+        'date': request.user.date_joined,
     })
 
 @api_view(['POST'])

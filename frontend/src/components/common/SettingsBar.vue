@@ -224,6 +224,7 @@ const sortCategory = (value) => {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 700px;
   padding: 0px 30px 0px 30px;
 }
 

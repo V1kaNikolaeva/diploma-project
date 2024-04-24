@@ -10,6 +10,7 @@ export const useUserStore = defineStore({
       id: null,
       name: null,
       email: null,
+      date: null,
       access: null,
       refresh: null,
     },
@@ -27,6 +28,7 @@ export const useUserStore = defineStore({
         this.user.id = localStorage.getItem("user.id");
         this.user.name = localStorage.getItem("user.name");
         this.user.email = localStorage.getItem("user.email");
+        this.user.date = localStorage.getItem("user.date");
         this.user.isAuthenticated = true;
 
         this.refreshToken();
@@ -71,10 +73,12 @@ export const useUserStore = defineStore({
       this.user.id = user.id;
       this.user.name = user.name;
       this.user.email = user.email;
+      this.user.date = user.date;
 
       localStorage.setItem("user.id", this.user.id);
       localStorage.setItem("user.name", this.user.name);
       localStorage.setItem("user.email", this.user.email);
+      localStorage.setItem("user.date", this.user.date);
 
       console.log("User", this.user);
     },

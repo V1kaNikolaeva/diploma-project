@@ -45,6 +45,10 @@ export default {
     openSelect: {
       type: Boolean,
     },
+    successMargin: {
+      type: String,
+      default: '10px'
+    }
   },
 
 };
@@ -92,7 +96,7 @@ export default {
 
 .success-button {
   width: 100%;
-  margin-left: 10px;
+  margin-left: v-bind(successMargin);
   border: 1px solid var(--light-green);
 }
 

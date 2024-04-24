@@ -1,9 +1,9 @@
 <template>
   <div class="balance__wrapper">
     <div class="balance">
-        <p>
+      <p>
         Мой баланс: <strong>{{ quantityFormatterRUB(amount) }}</strong>
-        </p>
+      </p>
       <UIButton @click="replenishBalance" :border="false" :buttonType="'default'">
         <p>Пополнить</p>
         <template #right-icon>
@@ -29,8 +29,14 @@
         v-model:modalFormType="modalFormType"
       />
     </div>
-    <div class="cards__wrapper">
-        <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
+    <div v-if="cards.length" class="cards__wrapper">
+      <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
+    </div>
+    <div v-else-if="!cards.length" class="no-spendings-contanier">
+      <div class="no-spendings">
+        <strong><p class="p-no-spendings">Тут ничего нет</p></strong>
+        <p class="p-no-spendings">Создайте трату</p>
+      </div>
     </div>
   </div>
   <UIModalWindow ref="innerModal" v-if="isModalVisible" v-model:isModalVisible="isModalVisible">
@@ -61,9 +67,11 @@ import BalanceHistory from '../components/common/BalanceHistory.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
 import UIIcon from '../components/ui/UIIcon.vue';
-import { computed, ref } from 'vue';
-import { quantityFormatterRUB } from '../utils/quantityFormatters'
+import { computed, ref, watchEffect } from 'vue';
+import { quantityFormatterRUB } from '../utils/quantityFormatters';
 import { useBalanceAxios } from '../composables/useBalanceAxios';
+import { useSpendingAxios } from '../composables/useSpendingAxios';
+import { useStatsStore } from '../stores/stats';
 
 export default {
   components: {
@@ -78,7 +86,8 @@ export default {
   },
 
   async setup() {
-    const { balances } = await useBalanceAxios();
+    const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
+    const statsStore = useStatsStore();
 
     let isModalVisible = ref(false);
 
@@ -100,19 +109,18 @@ export default {
       return balances.value ? balances.value.reduce((acc, num) => acc + num.amount, 0) : 0;
     });
 
+    watchEffect(() => {
+      statsStore.setStats({
+        spending: balances.value.length,
+        balance: balances.value.length,
+      });
+    });
 
-    let cards = ref([
-      {
-        id: 1,
-        currencyCodeISO: "RUB",
-        quantity: 2000,
-        category: "products",
-        reason: "Продукты на неделю",
-      },
-    ])
+    let cards = ref([]);
 
     return {
       balances,
+      spendings,
       isModalVisible,
       modalFormType,
       sortQuantityType,
@@ -157,4 +165,21 @@ export default {
   flex: none;
 }
 
+.no-spendings-contanier {
+  width: 1200px;
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-spendings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  outline: 1px solid var(--main-line);
+  border-radius: 10px
+}
 </style>

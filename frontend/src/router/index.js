@@ -11,6 +11,7 @@ const router = createRouter({
         requireGuest: false,
         requireAuth: true,
       },
+
       component: () => import("../views/HomeView.vue"),
     },
     {

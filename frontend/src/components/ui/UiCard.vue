@@ -93,6 +93,8 @@ strong:nth-child(2) {
 }
 
 .icon-category {
+  height: 20px;
+  width: 20px;
   margin-left: 5px;
 }
 </style>

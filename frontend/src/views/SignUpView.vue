@@ -3,7 +3,9 @@
     <div class="have-account__contanier">
       <h2>Регистрация</h2>
       <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum exercitationem labore magnam, ipsum nihil, at tempora ea sint amet, delectus distinctio ex consequuntur. Explicabo, hic eaque aperiam repudiandae sapiente ipsa.
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum exercitationem labore magnam, ipsum nihil, at
+        tempora ea sint amet, delectus distinctio ex consequuntur. Explicabo, hic eaque aperiam repudiandae sapiente
+        ipsa.
       </p>
       <p>
         Уже есть аккаунт?
@@ -13,22 +15,10 @@
     <div class="sign-up__contanier">
       <form action="" @submit.prevent="signup">
         <div class="sign-up-labels__wrapper">
-          <UIInput
-            type="text"
-            placeholder="Имя"
-            label="Имя"
-            :fullWidth="true"
-            v-model="localSignupUser.name"
-          />
+          <UIInput type="text" placeholder="Имя" label="Имя" :fullWidth="true" v-model="localSignupUser.name" />
         </div>
         <div class="sign-up-labels__wrapper">
-          <UIInput
-            type="text"
-            placeholder="Почта"
-            label="Почта"
-            :fullWidth="true"
-            v-model="localSignupUser.email"
-          />
+          <UIInput type="text" placeholder="Почта" label="Почта" :fullWidth="true" v-model="localSignupUser.email" />
         </div>
         <div class="sign-up-labels__wrapper">
           <UIInput
@@ -53,9 +43,9 @@
           />
         </div>
         <div class="sign-up-labels__wrapper">
-            <UIButton class="signUp-button" type="submit">
-                <p>Зарегистрироваться</p>
-            </UIButton>
+          <UIButton class="signUp-button" type="submit" buttonType="success" successMargin="0px">
+            <p>Зарегистрироваться</p>
+          </UIButton>
         </div>
       </form>
     </div>
@@ -64,14 +54,14 @@
 </template>
 
 <script>
-import UIInput from "../components/ui/UiInput.vue";
-import UIButton from "../components/ui/UiButton.vue";
-import TheToaster from "../components/common/TheToaster.vue";
-import { signupUser } from "../services/projectServices";
-import { useRouter } from "vue-router";
-import { RouterLink } from "vue-router";
-import { ref } from "vue";
-import axios from 'axios'
+import UIInput from '../components/ui/UiInput.vue';
+import UIButton from '../components/ui/UiButton.vue';
+import TheToaster from '../components/common/TheToaster.vue';
+import { signupUser } from '../services/projectServices';
+import { useRouter } from 'vue-router';
+import { RouterLink } from 'vue-router';
+import { ref } from 'vue';
+import axios from 'axios';
 
 export default {
   name: 'SignUpView',
@@ -81,54 +71,47 @@ export default {
   setup() {
     const toaster = ref(null);
     const router = useRouter();
-    
+
     //простой конструктор для User
     const userSignup = signupUser();
 
-    const localSignupUser = ref({...userSignup});
-
+    const localSignupUser = ref({ ...userSignup });
 
     const signup = () => {
       if (localSignupUser.value.name === '') {
         toaster.value.error('Проверьте имя');
-
       } else if (localSignupUser.value.email === '') {
         toaster.value.error('Проверьте e-mail');
-
       } else if (localSignupUser.value.password === '') {
         toaster.value.error('Проверьте пароль');
-
       } else if (localSignupUser.value.repeatPassword === '') {
         toaster.value.error('Проверьте пароль');
-
       } else {
         //axios and api
         axios
           .post('/api/signup/', localSignupUser.value)
-          .then(response => {
+          .then((response) => {
             if (response.data.message === 'success') {
               toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
-              router.push('/login')
+              router.push('/login');
             } else {
               toaster.value.error('Что-то пошло не так...');
             }
-            
-          }).catch(error => {
-            console.log(error)
           })
+          .catch((error) => {
+            console.log(error);
+          });
       }
-      
-    }
+    };
 
     return {
       userSignup,
       localSignupUser,
       signup,
       toaster,
-    }
-  }
-}
-
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -151,26 +134,25 @@ export default {
 }
 
 .have-account__contanier > * {
-    margin: 20px;
-    color: var(--main-text);
+  margin: 20px;
+  color: var(--main-text);
 }
 
 .sign-up-labels__wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  margin: 20px;
 }
 
 .sign-up__label {
-    width: 100%;
-    margin-bottom: 5px;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
 .signUp-button {
-    width: 100%; 
-    /* не рабоатет */
+  width: 100%;
+  /* не рабоатет */
 }
 </style>
-../components/UiInput.vue../components/UiButton.vue../services/projectServices
