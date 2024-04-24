@@ -6,23 +6,28 @@
         <th>Дата</th>
         <th>{{ action }}</th>
       </tr>
-      <tr class="history-data" v-for="(balance, index) in props.balances" :key="balance.id">
-        <td class="balance" v-if="balance.id !== currentIndex || !showInput">
+      <tr class="history-data" v-for="balance in props.balances" :key="balance.id">
+        <td class="balance" v-if="balance.id !== currentIndex || !showInput || actionType === 'delete'">
           {{ quantityFormatterRUB(balance.amount) }}
         </td>
-        <td class="balance" v-else-if="showInput && balance.id === currentIndex">
+        <td class="balance" v-else-if="showInput && balance.id === currentIndex && actionType === 'change'">
           <UiInput v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
         </td>
+        
         <td class="data">{{ balance.created_at_formated }}</td>
 
         <td class="actions" v-if="balance.id !== currentIndex || !showInput">
-          <UIButton :border="false" :buttonType="'default'">
+          <UIButton
+            @click="changeVisibility(balance.id, balance.amount, 'Удалить', 'delete')"
+            :border="false"
+            :buttonType="'default'"
+          >
             <template #right-icon>
               <UiIcon icon="delete" />
             </template>
           </UIButton>
           <UIButton
-            @click="changeVisibility(balance.id, balance.amount, 'Изменить')"
+            @click="changeVisibility(balance.id, balance.amount, 'Изменить', 'change')"
             :border="false"
             :buttonType="'default'"
           >
@@ -33,17 +38,13 @@
         </td>
 
         <td class="actions" v-else-if="showInput && balance.id === currentIndex">
-          <UIButton
-            @click="changeVisibility(balance.id)"
-            :border="false"
-            :buttonType="'default'"
-          >
+          <UIButton @click="changeVisibility(balance.id)" :border="false" :buttonType="'default'">
             <template #right-icon>
               <UiIcon icon="cancel" />
             </template>
           </UIButton>
           <UIButton
-            @click="updateBalance(currentChange)"
+            @click="actionType === 'change' ? updateBalance(currentChange) : deleteBalance(balance.id)"
             :border="false"
             :buttonType="'default'"
           >
@@ -83,11 +84,12 @@ const closeHistory = (value) => {
   emits('update:isModalVisible', value);
 };
 
+let actionType = ref('');
 let showInput = ref(false);
 let currentIndex = ref();
 let currentChange = ref();
 let action = ref('Действия');
-const changeVisibility = (index, currentBalance, pickedAction) => {
+const changeVisibility = (index, currentBalance, pickedAction, actionTypeParam) => {
   if (currentIndex.value !== index && showInput.value === true) {
     showInput.value = true;
   } else {
@@ -95,15 +97,21 @@ const changeVisibility = (index, currentBalance, pickedAction) => {
     action.value = showInput.value ? pickedAction : 'Действия';
   }
 
+  actionType.value = actionTypeParam;
   currentIndex.value = index;
   currentChange.value = currentBalance;
 };
 
-
 const updateBalance = (currentChange) => {
   showInput.value = false;
-  action.value = 'Действия'
+  action.value = 'Действия';
   console.log(currentChange);
+};
+const deleteBalance = (id) => {
+  action.value = 'Действия';
+  actionType.value = '';
+  showInput.value = false;
+  console.log(id);
 };
 </script>
 
