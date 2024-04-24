@@ -48,8 +48,18 @@ export default {
     successMargin: {
       type: String,
       default: '10px'
+    },
+    light: {
+      type: Boolean,
+      required: false
     }
   },
+
+  computed: {
+    lightColor() {
+      return this.light ? '#7f7f7f' : '#3e3e3e'
+    }
+  }
 
 };
 </script>
@@ -89,9 +99,13 @@ export default {
   border-radius: 10px;
 }
 
-.default__button,
-.select__button {
+.default__button
+ {
   border: 1px solid var(--button-color);
+}
+
+.select__button {
+  border: 1px solid v-bind(lightColor);
 }
 
 .success-button {

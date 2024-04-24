@@ -67,7 +67,24 @@ input {
   padding: 10px;
 }
 
+textarea {
+  font-family: 'Nunito Sans', sans-serif;
+  color: var(--main-text);
+  resize: none;
+  height: 100px;
+  background-color: transparent;
+  border: none;
+  outline: 1px solid var(--input-color-line);
+  font-size: v-bind(fontSize);
+  text-align: v-bind(textAlign);
+  padding: 10px;
+}
+
 input:focus {
+  transition: 0.2s;
+  outline: 1px solid var(--input-color);
+}
+textarea:focus {
   transition: 0.2s;
   outline: 1px solid var(--input-color);
 }
