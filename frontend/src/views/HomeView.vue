@@ -51,6 +51,7 @@
       v-else-if="modalFormType === 'balanceHistory'"
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
+      @updateBalances="updateBalances"
     />
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
@@ -109,6 +110,13 @@ export default {
       return balances.value ? balances.value.reduce((acc, num) => acc + num.amount, 0) : 0;
     });
 
+    //Обновляем 1 элемент массива
+    const updateBalances = (updatedItem) => {
+      const itemIndex = balances.value.findIndex(item => item.id === updatedItem.data.id)
+      balances.value[itemIndex] = updatedItem.data
+    }
+
+    //Следим за состоянием (количество расходов и доходов для статы в профиле)
     watchEffect(() => {
       statsStore.setStats({
         spending: balances.value.length,
@@ -127,6 +135,7 @@ export default {
       sortCategoryType,
       replenishBalance,
       balanceHistory,
+      updateBalances,
       amount,
       quantityFormatterRUB,
       cards,

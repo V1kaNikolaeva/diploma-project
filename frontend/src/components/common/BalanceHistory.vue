@@ -7,13 +7,25 @@
         <th>{{ action }}</th>
       </tr>
       <tr class="history-data" v-for="balance in props.balances" :key="balance.id">
-        <td class="balance" v-if="balance.id !== currentIndex || !showInput || actionType === 'delete'">
+        <td
+          class="balance"
+          v-if="
+            (balance.id !== currentIndex || !showInput || actionType === 'delete') &&
+            (!showSkeleton || balance.id !== currentIndex)
+          "
+        >
           {{ quantityFormatterRUB(balance.amount) }}
+        </td>
+        <td
+          class="balance"
+          v-else-if="(balance.id !== currentIndex || !showInput || actionType === 'delete') && (showSkeleton || balance.id === currentIndex)"
+        >
+          <BalanceHistoryItem></BalanceHistoryItem>
         </td>
         <td class="balance" v-else-if="showInput && balance.id === currentIndex && actionType === 'change'">
           <UiInput v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
         </td>
-        
+
         <td class="data">{{ balance.created_at_formated }}</td>
 
         <td class="actions" v-if="balance.id !== currentIndex || !showInput">
@@ -44,7 +56,7 @@
             </template>
           </UIButton>
           <UIButton
-            @click="actionType === 'change' ? updateBalance(currentChange) : deleteBalance(balance.id)"
+            @click="actionType === 'change' ? updateBalance(currentChange, balance.id, balance.amount) : deleteBalance(balance.id)"
             :border="false"
             :buttonType="'default'"
           >
@@ -62,14 +74,19 @@
       <p>Выйти</p>
     </UIButton>
   </div>
+  <TheToaster ref="toaster"></TheToaster>
 </template>
 
 <script setup>
 import UIButton from '../ui/UiButton.vue';
 import UiIcon from '../ui/UIIcon.vue';
+import BalanceHistoryItem from '../skeletons/BalanceHistoryItem.vue';
+import TheToaster from './TheToaster.vue';
+import { putBalance } from '../../api/balance';
 import { quantityFormatterRUB } from '../../utils/quantityFormatters';
 import UiInput from '../ui/UiInput.vue';
 import { ref } from 'vue';
+
 const props = defineProps({
   isModalVisible: {
     type: Boolean,
@@ -78,17 +95,30 @@ const props = defineProps({
     type: Array,
   },
 });
-const emits = defineEmits(['update:isModalVisible']);
+const emits = defineEmits(['update:isModalVisible', 'updateBalances']);
 
 const closeHistory = (value) => {
   emits('update:isModalVisible', value);
 };
 
+//Ссфлка на тостер
+const toaster = ref(null)
+
+//Удалаяем или изменяем
 let actionType = ref('');
+
+//Показать инпут или нет
 let showInput = ref(false);
+
+//Индекс элемента на который кликаем чтобы совершить действие
 let currentIndex = ref();
+
+//Для текущего нового введенного баланса
 let currentChange = ref();
+
+//Для заголовка столбца
 let action = ref('Действия');
+
 const changeVisibility = (index, currentBalance, pickedAction, actionTypeParam) => {
   if (currentIndex.value !== index && showInput.value === true) {
     showInput.value = true;
@@ -102,10 +132,25 @@ const changeVisibility = (index, currentBalance, pickedAction, actionTypeParam) 
   currentChange.value = currentBalance;
 };
 
-const updateBalance = (currentChange) => {
+//Показать скелеон или нет
+//Так как при обновлении есть маленькая задержка
+let showSkeleton = ref(false);
+
+const updateBalance = async (currentChange, id, oldValue) => {
   showInput.value = false;
   action.value = 'Действия';
-  console.log(currentChange);
+  if (Number(currentChange) === oldValue) {
+    return;
+  }
+  
+  showSkeleton.value = true;
+
+  setTimeout(() => {
+    showSkeleton.value = false;
+  }, 1000);
+
+  toaster.value.success('Баланс изменен!')
+  emits('updateBalances', await putBalance(id, Number(currentChange)));
 };
 const deleteBalance = (id) => {
   action.value = 'Действия';

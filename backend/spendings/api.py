@@ -26,3 +26,19 @@ def create_spending(request):
     else:
         message = form.errors.as_json() 
         return JsonResponse({'message': message})
+    
+@api_view(['POST'])
+def update_spending(request):
+    form = SpendingForm(request.data)
+
+    if form.is_valid():
+        balance = form.save(commit=False)
+        balance.created_by = request.user
+        balance.save()
+
+        serializer = SpendingSerializer(balance)
+
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        message = form.errors.as_json() 
+        return JsonResponse({'message': message})

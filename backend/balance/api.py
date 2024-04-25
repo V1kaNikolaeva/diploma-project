@@ -27,18 +27,19 @@ def create_balance(request):
         message = form.errors.as_json() 
         return JsonResponse({'message': message})
     
-@api_view(['UPDATE'])
-def update_balance(request):
-    form = BalanceForm(request.data)
+@api_view(['PUT'])
+def update_balance(request, pk):
+    balance = Balance.objects.get(pk=pk)
+    serializer = BalanceSerializer(balance, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse({ "data": serializer.data })
+    return JsonResponse({'message': 'message'})
 
-    if form.is_valid():
-        balance = form.save(commit=False)
-        balance.created_by = request.user
-        balance.save()
+    
+@api_view(['DELETE'])
+def delete_balance(request, pk):
+    balance = Balance.objects.filter(created_by=request.user).get(pk=pk)
+    balance.delete()
 
-        serializer = BalanceSerializer(balance)
-
-        return JsonResponse(serializer.data, safe=False)
-    else:
-        message = form.errors.as_json() 
-        return JsonResponse({'message': message})
+    return JsonResponse({'message': 'message'})
