@@ -63,10 +63,11 @@ const toaster = ref(null);
 
 let validation = ref();
 validation.value = validateBalance(localBalance.value.balance)
+
 watch( 
   () => localBalance.value.balance,
   (balance) => {
-  validation.value = validateBalance(Number(balance))
+  validation.value = validateBalance(balance)
   if (validation.value.invalid) {
     validation.value.validate()
   }

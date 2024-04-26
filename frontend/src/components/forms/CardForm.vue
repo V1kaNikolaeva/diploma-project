@@ -1,19 +1,24 @@
 <template>
   <form action="" @click.prevent="handler">
-    <UIInput label="Введите сумму траты" v-model="localSpending.spending" placeholder="Трата" />
+    <UIInput label="Введите сумму траты" :invalid="validation.invalidSpending" v-model="localSpending.spending" placeholder="Трата" />
     <UiErrorContanier>
       <ErrorMessage
-        :messageType="$v.spending.required.$invalid ? 'required' : $v.spending.numeric.$invalid ? 'numeric' : false"
+        :messageType="
+          validation.errors.spending.required ? 'required' : 
+          validation.errors.spending.numeric ? 'numeric' :
+          validation.errors.spending.maxLength ? 'long' :
+          validation.errors.spending.minValue ? 'zero' 
+          : false"
         labelName="трата"
-        v-show="$v.spending.$error"
+        v-show="validation.invalidSpending"
       ></ErrorMessage>
     </UiErrorContanier>
-    <UIInput label="Опишите причину траты" multiline v-model="localSpending.reason" placeholder="Причина" />
+    <UIInput label="Опишите причину траты" :invalid="validation.invalidReason" multiline v-model="localSpending.reason" placeholder="Причина" />
     <UiErrorContanier>
       <ErrorMessage
-        :messageType="$v.reason.required.$invalid ? 'required' : false"
+        :messageType="validation.errors.reason.required ? 'required' : false"
         labelName="причина"
-        v-show="$v.reason.$error"
+        v-show="validation.invalidReason"
       ></ErrorMessage>
     </UiErrorContanier>
     <UiSelect labelText="Выберите тип" :items="selectItems" :showItemFirst="showItemFirst" v-model:modelValue="currentItem"></UiSelect>
@@ -38,9 +43,8 @@ import TheToaster from '../common/TheToaster.vue';
 import ErrorMessage from '../common/ErrorMessage.vue';
 import UiErrorContanier from '../ui/UiErrorContanier.vue';
 import { spending } from '../../services/spendingService';
-import { useVuelidate } from '@vuelidate/core';
-import { required, numeric } from '@vuelidate/validators';
-import { ref } from 'vue';
+import { validateSpending } from '../../validations/spending'
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const selectItems = [
@@ -58,7 +62,6 @@ const showItemFirst = ref('Другое')
 let localSpending = ref(spending());
 const route = useRoute();
 const toaster = ref(null);
-
 const props = defineProps({
   isModalVisible: {
     type: Boolean,
@@ -66,21 +69,23 @@ const props = defineProps({
 });
 const emits = defineEmits(['update:isModalVisible']);
 
-const rules = {
-  spending: { required, numeric },
-  reason: { required },
-};
-const $v = useVuelidate(rules, localSpending);
-
+let validation = ref(validateSpending(localSpending.value))
+watch( localSpending.value, 
+  (newValue, oldValue) => {
+  validation.value = validateSpending(newValue)
+  if (validation.value.invalid) {
+    validation.value.validate()
+  }
+})
 
 const createSpending = (data, choose) => {
+  validation.value = validateSpending(localSpending.value)
   if (data === false) {
     return emits('update:isModalVisible', data);
-  } else if ($v.value.$invalid) {
-    $v.value.$touch();
+  } else if (validation.value.invalid) {
+    validation.value.validate();
   } else {
     localSpending.value.spendingType = choose;
-    console.log(localSpending.value)
     toaster.value.success('Трата создана!')
   }
 };
