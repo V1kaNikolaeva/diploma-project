@@ -26,7 +26,7 @@
           <BalanceHistoryItem></BalanceHistoryItem>
         </td>
         <td class="balance" v-else-if="showInput && balance.id === currentIndex && actionType === 'change'">
-          <UiInput :invalid="$v.balance.$error" v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
+          <UiInput :invalid="validation.invalid" v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
         </td>
 
         <td class="data">{{ balance.created_at_formated }}</td>
@@ -92,9 +92,8 @@ import TheToaster from './TheToaster.vue';
 import { putBalance, deleteBalance } from '../../api/balance';
 import { quantityFormatterRUB } from '../../utils/quantityFormatters';
 import UiInput from '../ui/UiInput.vue';
-import { ref } from 'vue';
-import { useVuelidate } from '@vuelidate/core';
-import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
+import { ref, watch } from 'vue';
+import { validateBalance } from '../../validations/balance'
 
 const props = defineProps({
   isModalVisible: {
@@ -145,19 +144,21 @@ const changeVisibility = (index, currentBalance, pickedAction, actionTypeParam) 
 //Так как при обновлении есть маленькая задержка
 let showSkeleton = ref(false);
 
-//Валидация
-const rules = {
-  balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
-};
-const $v = useVuelidate(rules, { balance: currentChange });
+let validation = ref();
+watch( currentChange, () => {
+  validation.value = validateBalance(Number(currentChange.value))
+  if (validation.value.invalid) {
+    validation.value.validate()
+  }
+})
 
 const updateBalance = async (currentChange, id, oldValue) => {
   if (Number(currentChange) === oldValue) {
     showInput.value = false;
     action.value = 'Действия';
     return;
-  } else if ($v.value.$invalid) {
-    $v.value.$touch();
+  } else if (validation.value.invalid) {
+    validation.value.validate()
     toaster.value.error('Неправильный формат!')
     return;
   }
@@ -172,7 +173,8 @@ const updateBalance = async (currentChange, id, oldValue) => {
   toaster.value.success('Баланс изменен!');
   emits('updateBalances', await putBalance(id, Number(currentChange)));
 };
-let res = ref();
+
+
 const deleteBalanceFromHistory = async (id) => {
   toaster.value.success('Баланс удален!');
   emits('deleteBalances', await deleteBalance(id));

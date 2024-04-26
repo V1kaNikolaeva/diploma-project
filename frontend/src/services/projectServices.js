@@ -34,6 +34,6 @@ export function loginUser() {
 
 export function balance() {
   return {
-    balance: null,
+    balance: 100,
   }
 }
