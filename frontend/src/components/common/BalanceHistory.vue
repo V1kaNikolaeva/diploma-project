@@ -18,12 +18,15 @@
         </td>
         <td
           class="balance"
-          v-else-if="(balance.id !== currentIndex || !showInput || actionType === 'delete') && (showSkeleton || balance.id === currentIndex)"
+          v-else-if="
+            (balance.id !== currentIndex || !showInput || actionType === 'delete') &&
+            (showSkeleton || balance.id === currentIndex)
+          "
         >
           <BalanceHistoryItem></BalanceHistoryItem>
         </td>
         <td class="balance" v-else-if="showInput && balance.id === currentIndex && actionType === 'change'">
-          <UiInput v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
+          <UiInput :invalid="$v.balance.$error" v-model="currentChange" fontSize="16px" textAlign="center"></UiInput>
         </td>
 
         <td class="data">{{ balance.created_at_formated }}</td>
@@ -56,7 +59,11 @@
             </template>
           </UIButton>
           <UIButton
-            @click="actionType === 'change' ? updateBalance(currentChange, balance.id, balance.amount) : deleteBalance(balance.id)"
+            @click="
+              actionType === 'change'
+                ? updateBalance(currentChange, balance.id, balance.amount)
+                : deleteBalanceFromHistory(balance.id)
+            "
             :border="false"
             :buttonType="'default'"
           >
@@ -82,10 +89,12 @@ import UIButton from '../ui/UiButton.vue';
 import UiIcon from '../ui/UIIcon.vue';
 import BalanceHistoryItem from '../skeletons/BalanceHistoryItem.vue';
 import TheToaster from './TheToaster.vue';
-import { putBalance } from '../../api/balance';
+import { putBalance, deleteBalance } from '../../api/balance';
 import { quantityFormatterRUB } from '../../utils/quantityFormatters';
 import UiInput from '../ui/UiInput.vue';
 import { ref } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
 
 const props = defineProps({
   isModalVisible: {
@@ -95,14 +104,14 @@ const props = defineProps({
     type: Array,
   },
 });
-const emits = defineEmits(['update:isModalVisible', 'updateBalances']);
+const emits = defineEmits(['update:isModalVisible', 'updateBalances', 'deleteBalances']);
 
 const closeHistory = (value) => {
   emits('update:isModalVisible', value);
 };
 
-//Ссфлка на тостер
-const toaster = ref(null)
+//Ссылка на тостер
+const toaster = ref(null);
 
 //Удалаяем или изменяем
 let actionType = ref('');
@@ -132,27 +141,41 @@ const changeVisibility = (index, currentBalance, pickedAction, actionTypeParam) 
   currentChange.value = currentBalance;
 };
 
-//Показать скелеон или нет
+//Показать скелетон или нет
 //Так как при обновлении есть маленькая задержка
 let showSkeleton = ref(false);
 
+//Валидация
+const rules = {
+  balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
+};
+const $v = useVuelidate(rules, { balance: currentChange });
+
 const updateBalance = async (currentChange, id, oldValue) => {
-  showInput.value = false;
-  action.value = 'Действия';
   if (Number(currentChange) === oldValue) {
+    showInput.value = false;
+    action.value = 'Действия';
+    return;
+  } else if ($v.value.$invalid) {
+    $v.value.$touch();
+    toaster.value.error('Неправильный формат!')
     return;
   }
-  
+  showInput.value = false;
+  action.value = 'Действия';
   showSkeleton.value = true;
 
   setTimeout(() => {
     showSkeleton.value = false;
   }, 1000);
 
-  toaster.value.success('Баланс изменен!')
+  toaster.value.success('Баланс изменен!');
   emits('updateBalances', await putBalance(id, Number(currentChange)));
 };
-const deleteBalance = (id) => {
+let res = ref();
+const deleteBalanceFromHistory = async (id) => {
+  toaster.value.success('Баланс удален!');
+  emits('deleteBalances', await deleteBalance(id));
   action.value = 'Действия';
   actionType.value = '';
   showInput.value = false;

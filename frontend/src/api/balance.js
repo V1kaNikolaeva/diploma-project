@@ -25,3 +25,16 @@ export async function putBalance(id, amount) {
       return console.log('error', error);
     });
 }
+
+export async function deleteBalance(id) {
+  return await axios
+    .delete(`/api/balance/delete/${id}/`)
+    .then((response) => {
+      //Почему тут именно response.data, а не как сверху, не знает никто
+      return response.data;
+    })
+    .catch((error) => {
+      return console.log('error', error);
+    });
+}
+

@@ -52,6 +52,7 @@
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
       @updateBalances="updateBalances"
+      @deleteBalances="deleteBalances"
     />
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
@@ -112,9 +113,15 @@ export default {
 
     //Обновляем 1 элемент массива
     const updateBalances = (updatedItem) => {
-      const itemIndex = balances.value.findIndex(item => item.id === updatedItem.data.id)
-      balances.value[itemIndex] = updatedItem.data
-    }
+      const itemIndex = balances.value.findIndex((item) => item.id === updatedItem.data.id);
+      balances.value[itemIndex] = updatedItem.data;
+    };
+
+    //Удаляем 1 элемент массива
+    const deleteBalances = (deletedItem) => {
+      const itemIndex = balances.value.findIndex((item) => item.id === deletedItem.deletedBalance);
+      balances.value.splice(itemIndex, 1)
+    };
 
     //Следим за состоянием (количество расходов и доходов для статы в профиле)
     watchEffect(() => {
@@ -136,6 +143,7 @@ export default {
       replenishBalance,
       balanceHistory,
       updateBalances,
+      deleteBalances,
       amount,
       quantityFormatterRUB,
       cards,
@@ -189,6 +197,6 @@ export default {
   align-items: center;
   padding: 30px;
   outline: 1px solid var(--main-line);
-  border-radius: 10px
+  border-radius: 10px;
 }
 </style>

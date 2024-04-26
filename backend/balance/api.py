@@ -39,7 +39,7 @@ def update_balance(request, pk):
     
 @api_view(['DELETE'])
 def delete_balance(request, pk):
-    balance = Balance.objects.filter(created_by=request.user).get(pk=pk)
+    balance = Balance.objects.get(pk=pk)
     balance.delete()
 
-    return JsonResponse({'message': 'message'})
+    return JsonResponse({'deletedBalance': pk})

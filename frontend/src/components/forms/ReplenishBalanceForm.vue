@@ -1,14 +1,19 @@
 <template>
   <form action="" @click.prevent="handler">
-    <UIInput
-      v-model="localBalance.balance"
-      :invalid="$v.balance.$error"
-      :label="labelName"
-      placeholeder="Сумма"
-    />
+    <UIInput v-model="localBalance.balance" :invalid="$v.balance.$error" :label="labelName" placeholeder="Сумма" />
     <UiErrorContanier>
       <ErrorMessage
-        :messageType="$v.balance.required.$invalid ? 'required' : $v.balance.numeric.$invalid ? 'numeric' : false"
+        :messageType="
+          $v.balance.required.$invalid
+            ? 'required'
+            : $v.balance.numeric.$invalid
+              ? 'numeric'
+              : $v.balance.maxLength.$invalid
+                ? 'long'
+                : $v.balance.minValue.$invalid
+                  ? 'zero'
+                  : false
+        "
         labelName="баланс"
         v-show="$v.balance.$error"
       ></ErrorMessage>
@@ -36,7 +41,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, numeric } from '@vuelidate/validators';
+import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
 
 let localBalance = ref(balance());
 
@@ -50,14 +55,14 @@ const props = defineProps({
   labelName: {
     type: String,
     required: true,
-  }
+  },
 });
 const emits = defineEmits(['update:isModalVisible', 'update:balances']);
 const route = useRoute();
 const toaster = ref(null);
 
 const rules = {
-  balance: { required, numeric },
+  balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
 };
 const $v = useVuelidate(rules, localBalance);
 
@@ -67,12 +72,10 @@ const replenishBalance = async (value) => {
   } else if ($v.value.$invalid) {
     $v.value.$touch();
   } else {
-
     await axios
       .post('/api/balance/create/', { amount: Number(localBalance.value.balance) })
       .then((response) => {
-        toaster.value.success('Пополнено!')
-        console.log(response.data);
+        toaster.value.success('Пополнено!');
         console.log(response);
       })
       .catch((error) => {
@@ -83,7 +86,6 @@ const replenishBalance = async (value) => {
       .get(`/api/balance/${route.params.id}`)
       .then((response) => {
         emits('update:balances', Object.values(response.data).flat());
-        console.log(props.balances);
       })
       .catch((error) => {
         console.log('error', error);
