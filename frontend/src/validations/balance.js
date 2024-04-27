@@ -10,14 +10,14 @@ export function validateBalance(validateField) {
 
     return {
         errors: {
-            required: $v.value.balance.required.$invalid,
-            numeric: $v.value.balance.numeric.$invalid,
-            maxLength: $v.value.balance.maxLength.$invalid,
-            minValue: $v.value.balance.minValue.$invalid,
+            required: validateField !== null ? $v.value.balance.required.$invalid : false,
+            numeric: validateField !== null ? $v.value.balance.numeric.$invalid : false,
+            maxLength: validateField !== null ? $v.value.balance.maxLength.$invalid : false,
+            minValue: validateField !== null ? $v.value.balance.minValue.$invalid : false,
         },
         validate: function() {
             return $v.value.balance.$touch() 
         },
-        invalid: $v.value.balance.$invalid,
+        invalid: validateField !== null ? $v.value.balance.$invalid : false,
     }
 }

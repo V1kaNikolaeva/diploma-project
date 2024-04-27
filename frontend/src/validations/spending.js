@@ -12,21 +12,20 @@ export function validateSpending(validateObject) {
     return {
         errors: {
             spending: {
-                required: $v.value.spending.required.$invalid || $v.value.spending === "",
-                numeric: $v.value.spending.numeric.$invalid,
-                maxLength: $v.value.spending.maxLength.$invalid,
-                minValue: $v.value.spending.minValue.$invalid,
+                required: validateObject.spending !== null ? $v.value.spending.required.$invalid : false,
+                numeric: validateObject.spending !== null ? $v.value.spending.numeric.$invalid : false,
+                maxLength: validateObject.spending !== null ? $v.value.spending.maxLength.$invalid : false,
+                minValue: validateObject.spending !== null ? $v.value.spending.minValue.$invalid : false,
             },
             reason: {
-                required: $v.value.reason.required.$invalid,
+                required: validateObject.reason !== null ? $v.value.reason.required.$invalid : false,
             }
-            
         },
         validate: function() {
             return $v.value.$touch()
         },
-        invalid: $v.value.$invalid,
-        invalidSpending: $v.value.spending.$invalid,
-        invalidReason: $v.value.reason.$invalid,
+        invalid: validateObject.spending !== null && validateObject.reason !== null ? $v.value.$invalid : false,
+        invalidSpending: validateObject.spending !== null ? $v.value.spending.$invalid : false,
+        invalidReason: validateObject.reason !== null ? $v.value.reason.$invalid : false,
     }
 }
