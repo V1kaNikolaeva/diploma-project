@@ -2,7 +2,6 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
 
 export function validateSpending(validateObject) {
-    console.log(validateObject)
     const rules = {
         spending: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
         reason: { required },
@@ -12,20 +11,20 @@ export function validateSpending(validateObject) {
     return {
         errors: {
             spending: {
-                required: validateObject.spending !== null ? $v.value.spending.required.$invalid : false,
-                numeric: validateObject.spending !== null ? $v.value.spending.numeric.$invalid : false,
-                maxLength: validateObject.spending !== null ? $v.value.spending.maxLength.$invalid : false,
-                minValue: validateObject.spending !== null ? $v.value.spending.minValue.$invalid : false,
+                required: $v.value.spending.required.$invalid,
+                numeric: $v.value.spending.numeric.$invalid,
+                maxLength: $v.value.spending.maxLength.$invalid,
+                minValue: $v.value.spending.minValue.$invalid,
             },
             reason: {
-                required: validateObject.reason !== null ? $v.value.reason.required.$invalid : false,
+                required: $v.value.reason.required.$invalid,
             }
         },
         validate: function() {
             return $v.value.$touch()
         },
-        invalid: validateObject.spending !== null && validateObject.reason !== null ? $v.value.$invalid : false,
-        invalidSpending: validateObject.spending !== null ? $v.value.spending.$invalid : false,
-        invalidReason: validateObject.reason !== null ? $v.value.reason.$invalid : false,
+        invalid: $v.value.$invalid,
+        invalidSpending: $v.value.spending.$invalid,
+        invalidReason: $v.value.reason.$invalid,
     }
 }
