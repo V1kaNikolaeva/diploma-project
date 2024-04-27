@@ -1,7 +1,7 @@
 export function spending() {
   return {
-    spending: 1000,
-    reason: 'Причина',
+    spending: null,
+    reason: null,
     spendingType: null,
   };
 }

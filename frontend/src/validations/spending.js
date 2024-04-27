@@ -20,11 +20,10 @@ export function validateSpending(validateObject) {
                 required: $v.value.reason.required.$invalid,
             }
         },
-        validate: function() {
-            return $v.value.$touch()
-        },
         invalid: $v.value.$invalid,
         invalidSpending: $v.value.spending.$invalid,
         invalidReason: $v.value.reason.$invalid,
     }
+
+
 }
