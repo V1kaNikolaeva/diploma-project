@@ -104,8 +104,8 @@ strong:nth-child(2) {
   display: grid;
   justify-content: center;
   grid-template-columns:
-    minmax(auto, 400px)
-    minmax(auto, 400px)
-    minmax(auto, 400px);
+  repeat(auto-fill,
+    minmax(auto, 400px))
+    ;
 }
 </style>

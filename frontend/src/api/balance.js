@@ -30,7 +30,6 @@ export async function putBalance(id, amount) {
   return await axios
     .put(`/api/balance/update/${id}/`, { amount: amount })
     .then((response) => {
-      //Почему тут именно response.data, а не как сверху, не знает никто
       return response.data;
     })
     .catch((error) => {
@@ -42,7 +41,6 @@ export async function deleteBalance(id) {
   return await axios
     .delete(`/api/balance/delete/${id}/`)
     .then((response) => {
-      //Почему тут именно response.data, а не как сверху, не знает никто
       return response.data;
     })
     .catch((error) => {

@@ -29,7 +29,6 @@ export async function putSpending(id, spending) {
   return await axios
     .put(`/api/spending/update/${id}/`, spending)
     .then((response) => {
-      //Почему тут именно response.data, а не как сверху, не знает никто
       return response.data;
     })
     .catch((error) => {
@@ -41,7 +40,6 @@ export async function deleteSpending(id) {
   return await axios
     .delete(`/api/spending/delete/${id}/`)
     .then((response) => {
-      //Почему тут именно response.data, а не как сверху, не знает никто
       return response.data;
     })
     .catch((error) => {

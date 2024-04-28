@@ -119,7 +119,6 @@ export default {
       balances.value.unshift(newItem)
     };
     const postSpending = (newItem) => {
-      console.log(newItem)
       spendings.value.unshift(newItem)
     };
     //Обновляем 1 элемент массива
