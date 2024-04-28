@@ -1,21 +1,21 @@
 <template>
   <form action="" @click.prevent="handler">
-    <UIInput v-model="localBalance.balance" :invalid="validation.invalid" :label="labelName" placeholeder="Сумма" />
+    <UIInput v-model="localBalance.balance" :invalid="$v.balance.$error" :label="labelName" placeholeder="Сумма" />
     <UiErrorContanier>
       <ErrorMessage
         :messageType="
-          validation.errors.required
+          $v.balance.required.$invalid
             ? 'required'
-            : validation.errors.numeric
+            : $v.balance.numeric.$invalid
               ? 'numeric'
-              : validation.errors.maxLength
+              : $v.balance.maxLength.$invalid
                 ? 'long'
-                : validation.errors.minValue
+                : $v.balance.minValue.$invalid
                   ? 'zero'
                   : false
         "
         labelName="баланс"
-        v-show="validation.invalid"
+        v-show="$v.balance.$error"
       ></ErrorMessage>
     </UiErrorContanier>
     <div class="buttons-contanier">
@@ -39,9 +39,9 @@ import UiErrorContanier from '../ui/UiErrorContanier.vue';
 import { balance } from '../../services/projectServices';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { onMounted, ref, watch } from 'vue';
-import { validateBalance } from '../../validations/balance'
-
+import { ref } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
 
 let localBalance = ref(balance());
 
@@ -57,41 +57,27 @@ const props = defineProps({
     required: true,
   },
 });
-const emits = defineEmits(['update:isModalVisible', 'update:balances']);
+const emits = defineEmits(['update:isModalVisible', 'postBalance']);
 const route = useRoute();
 const toaster = ref(null);
 
-let validation = ref();
-validation.value = validateBalance(localBalance.value.balance)
-watch( 
-  () => localBalance.value.balance,
-  (balance) => {
-  validation.value = validateBalance(Number(balance))
-  if (validation.value.invalid) {
-    validation.value.validate()
-  }
-})
+const rules = {
+  balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
+};
+const $v = useVuelidate(rules, localBalance);
+
 
 const replenishBalance = async (value) => {
   if (value === false) {
     return emits('update:isModalVisible', value);
-  } else if (validation.value.invalid) {
-    validation.value.validate();
+  } else if ($v.value.$invalid) {
+    $v.value.$touch();
   } else {
     await axios
       .post('/api/balance/create/', { amount: Number(localBalance.value.balance) })
       .then((response) => {
+        emits('postBalance', response.data)
         toaster.value.success('Пополнено!');
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
-
-    await axios
-      .get(`/api/balance/${route.params.id}`)
-      .then((response) => {
-        emits('update:balances', Object.values(response.data).flat());
       })
       .catch((error) => {
         console.log('error', error);

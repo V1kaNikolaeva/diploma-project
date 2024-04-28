@@ -26,13 +26,14 @@
         v-model:sortQuantityType="sortQuantityType"
         :balance="amount"
         v-model:sortCategoryType="sortCategoryType"
+        v-model:sortQuantityByDate="sortQuantityByDate"
         v-model:modalFormType="modalFormType"
       />
     </div>
-    <div v-if="cards.length" class="cards__wrapper">
-      <TheCards :cards="cards" :sortQuantityType="sortQuantityType" :sortCategoryType="sortCategoryType" />
+    <div v-if="spendings.length" class="cards__wrapper">
+      <TheCards  v-model:spendings="spendings" :sortQuantityType="sortQuantityType" :sortQuantityByDate="sortQuantityByDate" :sortCategoryType="sortCategoryType" />
     </div>
-    <div v-else-if="!cards.length" class="no-spendings-contanier">
+    <div v-else-if="!spendings.length" class="no-spendings-contanier">
       <div class="no-spendings">
         <strong><p class="p-no-spendings">Тут ничего нет</p></strong>
         <p class="p-no-spendings">Создайте трату</p>
@@ -45,14 +46,15 @@
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
       labelName="Ведите сумму, которую хотите положить"
+      @postBalance="postBalance"
     />
-    <CreateCardForm v-else-if="modalFormType === 'createCard'" v-model:isModalVisible="isModalVisible" />
+    <CreateCardForm v-else-if="modalFormType === 'createCard'" @postSpending="postSpending" v-model:isModalVisible="isModalVisible" />
     <BalanceHistory
       v-else-if="modalFormType === 'balanceHistory'"
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
-      @updateBalances="updateBalances"
-      @deleteBalances="deleteBalances"
+      @updateBalance="updateBalance"
+      @deleteBalance="deleteBalance"
     />
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
@@ -64,7 +66,7 @@
 import TheCards from '../components/common/TheCards.vue';
 import SettingsBar from '../components/common/SettingsBar.vue';
 import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue';
-import CreateCardForm from '../components/forms/CardForm.vue';
+import CreateCardForm from '../components/forms/CreateCardForm.vue';
 import BalanceHistory from '../components/common/BalanceHistory.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
@@ -90,10 +92,11 @@ export default {
   async setup() {
     const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
     const statsStore = useStatsStore();
-
+    console.log(spendings.value)
     let isModalVisible = ref(false);
 
     let sortQuantityType = ref('common');
+    let sortQuantityByDate = ref('common')
     let sortCategoryType = ref('all');
 
     let modalFormType = ref();
@@ -112,15 +115,30 @@ export default {
     });
 
     //Обновляем 1 элемент массива
-    const updateBalances = (updatedItem) => {
+    const postBalance = (newItem) => {
+      balances.value.unshift(newItem)
+    };
+    const postSpending = (newItem) => {
+      console.log(newItem)
+      spendings.value.unshift(newItem)
+    };
+    //Обновляем 1 элемент массива
+    const updateBalance = (updatedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === updatedItem.data.id);
       balances.value[itemIndex] = updatedItem.data;
     };
-
+    const updateSpending = (updatedItem) => {
+      const itemIndex = spendings.value.findIndex((item) => item.id === updatedItem.data.id);
+      spendings.value[itemIndex] = updatedItem.data;
+    };
     //Удаляем 1 элемент массива
-    const deleteBalances = (deletedItem) => {
+    const deleteBalance = (deletedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === deletedItem.deletedBalance);
       balances.value.splice(itemIndex, 1)
+    };
+    const deleteSpending = (deletedItem) => {
+      const itemIndex = spendings.value.findIndex((item) => item.id === deletedItem.deletedBalance);
+      spendings.value.splice(itemIndex, 1)
     };
 
     //Следим за состоянием (количество расходов и доходов для статы в профиле)
@@ -139,11 +157,16 @@ export default {
       isModalVisible,
       modalFormType,
       sortQuantityType,
+      sortQuantityByDate,
       sortCategoryType,
       replenishBalance,
       balanceHistory,
-      updateBalances,
-      deleteBalances,
+      postBalance,
+      updateBalance,
+      deleteBalance,
+      postSpending,
+      updateSpending,
+      deleteSpending,
       amount,
       quantityFormatterRUB,
       cards,
@@ -182,8 +205,11 @@ export default {
   flex: none;
 }
 
+.cards__wrapper {
+  width: 65%;
+}
+
 .no-spendings-contanier {
-  width: 1200px;
   margin-bottom: 100px;
   display: flex;
   flex-direction: column;

@@ -1,14 +1,24 @@
 <template>
   <form action="" @click.prevent="handler">
-    <UIInput label="Введите сумму траты" v-model="localSpending.spending" placeholder="Трата" />
+    <UIInput :invalid="$v.spending.$error" label="Введите сумму траты" v-model="localSpending.spending" placeholder="Трата" />
     <UiErrorContanier>
       <ErrorMessage
-        :messageType="$v.spending.required.$invalid ? 'required' : $v.spending.numeric.$invalid ? 'numeric' : false"
+      :messageType="
+          $v.spending.required.$invalid
+            ? 'required'
+            : $v.spending.numeric.$invalid
+              ? 'numeric'
+              : $v.spending.maxLength.$invalid
+                ? 'long'
+                : $v.spending.minValue.$invalid
+                  ? 'zero'
+                  : false
+        "
         labelName="трата"
         v-show="$v.spending.$error"
       ></ErrorMessage>
     </UiErrorContanier>
-    <UIInput label="Опишите причину траты" multiline v-model="localSpending.reason" placeholder="Причина" />
+    <UIInput :invalid="$v.reason.$error" label="Опишите причину траты" multiline v-model="localSpending.reason" placeholder="Причина" />
     <UiErrorContanier>
       <ErrorMessage
         :messageType="$v.reason.required.$invalid ? 'required' : false"
@@ -37,11 +47,12 @@ import UiSelect from '../ui/UiSelect.vue';
 import TheToaster from '../common/TheToaster.vue';
 import ErrorMessage from '../common/ErrorMessage.vue';
 import UiErrorContanier from '../ui/UiErrorContanier.vue';
-import { spending } from '../../services/spendingService';
+import { spending } from '../../services/spendingService'
 import { useVuelidate } from '@vuelidate/core';
-import { required, numeric } from '@vuelidate/validators';
+import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { postSpending } from '@/api/spending';
 
 const selectItems = [
   { name: 'Здоровье', value: 'medications' },
@@ -64,23 +75,28 @@ const props = defineProps({
     type: Boolean,
   },
 });
-const emits = defineEmits(['update:isModalVisible']);
+const emits = defineEmits(['update:isModalVisible', 'postSpending']);
 
 const rules = {
-  spending: { required, numeric },
+  spending: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
   reason: { required },
 };
 const $v = useVuelidate(rules, localSpending);
 
 
-const createSpending = (data, choose) => {
+const createSpending = async (data, choose) => {
   if (data === false) {
     return emits('update:isModalVisible', data);
   } else if ($v.value.$invalid) {
-    $v.value.$touch();
+    return $v.value.$touch();
   } else {
     localSpending.value.spendingType = choose;
-    console.log(localSpending.value)
+    emits('postSpending', await postSpending(
+      { one_spending: localSpending.value.spending, 
+        reason: localSpending.value.reason, spending_type: 
+        localSpending.value.spendingType 
+      })
+    )
     toaster.value.success('Трата создана!')
   }
 };

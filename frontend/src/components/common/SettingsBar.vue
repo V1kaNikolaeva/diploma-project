@@ -155,6 +155,25 @@
               />
             </template>
           </UIButton>
+          <UIButton
+            @click="sortQuantityDate(sortValueByDate[sortIndexByDate])"
+            :border="false"
+          >
+            <p>По сумме в месяцах</p>
+            <template #right-icon>
+              <UiIcon
+                :icon="
+                  sortQuantityByDate === 'up'
+                    ? 'sortUp'
+                    : sortQuantityByDate === 'down'
+                    ? 'sortDown'
+                    : sortQuantityByDate === 'common'
+                    ? 'sortCommon'
+                    : null
+                "
+              />
+            </template>
+          </UIButton>
         </div>
       </Transition>
     </div>
@@ -176,6 +195,11 @@ const props = defineProps({
     required: true,
     default: "commmon",
   },
+  sortQuantityByDate: {
+    type: String,
+    required: true,
+    default: "commmon",
+  },
   sortCategoryType: {
     type: String,
     required: true,
@@ -189,7 +213,7 @@ const emits = defineEmits([
   "update:modalFormType",
   "update:sortQuantityType",
   "update:sortCategoryType",
-  "update:sortDateType",
+  "update:sortQuantityByDate",
 ]);
 
 const createCard = (value) => {
@@ -203,7 +227,6 @@ let sorting = ref(true);
 
 let sortIndex = ref(0);
 let sortValue = ref(["up", "down", "common"]);
-
 const sortQuantity = (value) => {
   if (sortIndex.value >= 2) {
     sortIndex.value = 0;
@@ -211,6 +234,18 @@ const sortQuantity = (value) => {
   } else {
     sortIndex.value++;
     emits("update:sortQuantityType", value);
+  }
+};
+
+let sortIndexByDate = ref(0);
+let sortValueByDate = ref(["up", "down", "common"]);
+const sortQuantityDate = (value) => {
+  if (sortIndexByDate.value >= 2) {
+    sortIndexByDate.value = 0;
+    emits("update:sortQuantityByDate", value);
+  } else {
+    sortIndexByDate.value++;
+    emits("update:sortQuantityByDate", value);
   }
 };
 

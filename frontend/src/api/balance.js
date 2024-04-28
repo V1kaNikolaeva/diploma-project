@@ -14,6 +14,18 @@ const route = useRoute();
     });
 }
 
+export async function postBalance(balance) {
+  return await axios
+    .post('/api/spending/create/', balance)
+    .then((response) => {
+      return response.data
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
+}
+
+
 export async function putBalance(id, amount) {
   return await axios
     .put(`/api/balance/update/${id}/`, { amount: amount })

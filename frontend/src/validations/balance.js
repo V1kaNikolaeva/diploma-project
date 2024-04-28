@@ -2,7 +2,6 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
 
 export function validateBalance(validateField) {
-    console.log(validateField)
     const rules = {
         balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
       };

@@ -1,61 +1,63 @@
 <template>
-  <div class="card__wrapper">
-    <div class="card">
-      <p>{{ card.reason }}</p>
-      <strong>{{ quantityFormatterRUB(card.quantity) }}{{ card.currency }}</strong>
-      <UiIcon 
-        class="icon-category" 
-        :icon="
-          category === 'medications' ? 'pulse' : 
-          category === 'products' ? 'cart' :
-          category === 'entertainment' ? 'acousticGuitar' :
-          category === 'electronics' ? 'smartwatch' :
-          category === 'trips' ? 'plane' :
-          category === 'cloth' ? 'tShirt' :
-          category === 'present' ? 'gift' :
-          category === 'other' ? 'search' :
-          null
-        ">
-      </UiIcon>
+  <div class="cards__wrapper" >
+    <div class="card__wrapper" v-for="item in sortedSpendingsWithDate">
+      <div class="card">
+        <p>{{ item.reason }}</p>
+        <strong>{{ quantityFormatterRUB(item.one_spending) }}</strong>
+        <UiIcon
+          class="icon-category"
+          :icon="
+            item.spending_type === 'medications'
+              ? 'pulse'
+              : item.spending_type === 'products'
+                ? 'cart'
+                : item.spending_type === 'entertainment'
+                  ? 'acousticGuitar'
+                  : item.spending_type === 'electronics'
+                    ? 'smartwatch'
+                    : item.spending_type === 'trips'
+                      ? 'plane'
+                      : item.spending_type === 'cloth'
+                        ? 'tShirt'
+                        : item.spending_type === 'present'
+                          ? 'gift'
+                          : item.spending_type === 'other'
+                            ? 'search'
+                            : null
+          "
+        >
+        </UiIcon>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// Категории карточки:
-// -Медицина 
-// -Продукты (корзина)
-// -Развлечения
-// -Электроника
-// -Путешествия
-// -Одежда
-// -Подарки
-// -Другое
-import { computed } from 'vue';
 import UiIcon from './UIIcon.vue';
-import { quantityFormatterRUB } from '../../utils/quantityFormatters'
+import { quantityFormatterRUB } from '../../utils/quantityFormatters';
+import { computed } from 'vue';
 
 const props = defineProps({
-  card: {
-    type: Object,
+  spendingsWithDates: {
+    type: Array,
     required: true,
   },
-  category: {
+  sortQuantityByDate: {
     type: String,
-  },
-  currencyType: {
-    type: String,
+    required: true,
+    validator: (value) => ['up', 'down', 'common'].includes(value),
   }
 });
 
-//Конвертор в доллары
-const USDCurrency = new Intl.NumberFormat('en-US', {
-    currency: 'USD',
-});
-
-const cardQuantityUSDFormat = computed(() => {
-  return USDCurrency.format(quantity)
-}) 
+const sortedSpendingsWithDate = computed(() => {
+  if (props.sortQuantityByDate === 'up') {
+    return props.spendingsWithDates.sort((a, b) => a.one_spending - b.one_spending);
+  } else if (props.sortQuantityByDate === 'down') {
+    return props.spendingsWithDates.sort((a, b) => b.one_spending - a.one_spending);
+  } else if (props.sortQuantityByDate === 'common') {
+    return props.spendingsWithDates;
+  }
+})
 </script>
 
 <style scoped>
@@ -96,5 +98,14 @@ strong:nth-child(2) {
   height: 20px;
   width: 20px;
   margin-left: 5px;
+}
+
+.cards__wrapper {
+  display: grid;
+  justify-content: center;
+  grid-template-columns:
+    minmax(auto, 400px)
+    minmax(auto, 400px)
+    minmax(auto, 400px);
 }
 </style>
