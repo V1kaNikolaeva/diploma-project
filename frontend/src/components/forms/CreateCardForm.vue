@@ -91,12 +91,15 @@ const createSpending = async (data, choose) => {
     return $v.value.$touch();
   } else {
     localSpending.value.spendingType = choose;
+<<<<<<< HEAD:frontend/src/components/forms/CreateCardForm.vue
     emits('postSpending', await postSpending(
       { one_spending: localSpending.value.spending, 
         reason: localSpending.value.reason, spending_type: 
         localSpending.value.spendingType 
       })
     )
+=======
+>>>>>>> acb88bc38d44fa7bf8e76068ff8515b9dac90e12:frontend/src/components/forms/CardForm.vue
     toaster.value.success('Трата создана!')
   }
 };
