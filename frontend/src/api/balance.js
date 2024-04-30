@@ -16,7 +16,7 @@ const route = useRoute();
 
 export async function postBalance(balance) {
   return await axios
-    .post('/api/spending/create/', balance)
+    .post('/api/balance/create/', balance)
     .then((response) => {
       return response.data
     })

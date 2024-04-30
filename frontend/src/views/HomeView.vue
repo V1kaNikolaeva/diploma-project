@@ -33,7 +33,7 @@
     </div>
     <div v-if="spendings.length" class="cards__wrapper">
       <TheCards
-        v-model:spendings="spendings"
+        :spendings="spendings"
         :sortQuantityType="sortQuantityType"
         :sortQuantityByDate="sortQuantityByDate"
         :sortCategoryType="sortCategoryType"
