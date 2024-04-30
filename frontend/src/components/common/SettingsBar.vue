@@ -17,8 +17,8 @@
               <UiIcon icon="add" />
             </template>
           </UIButton>
-          <UIButton :border="false">
-            <p>Удалить</p>
+          <UIButton @click="deleteSpendingActivateOrNot" :border="false">
+            <p class="active-delete">Удалить</p>
             <template #right-icon>
               <UiIcon icon="delete" />
             </template>
@@ -181,7 +181,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import UIButton from "../ui/UiButton.vue";
 import UiIcon from "../ui/UIIcon.vue";
 
@@ -206,6 +206,10 @@ const props = defineProps({
     default: "all",
     // validator: (value) => ['up', 'down', 'common'].includes(value)
   },
+  deleteSpendingMode: {
+    type: Boolean,
+    required: true,
+  }
 });
 
 const emits = defineEmits([
@@ -214,11 +218,17 @@ const emits = defineEmits([
   "update:sortQuantityType",
   "update:sortCategoryType",
   "update:sortQuantityByDate",
+  "update:deleteSpendingMode",
 ]);
 
 const createCard = (value) => {
   emits("update:isModalVisible", value);
   emits("update:modalFormType", 'createCard');
+};
+
+
+const deleteSpendingActivateOrNot = () => {
+  emits("update:deleteSpendingMode", !props.deleteSpendingMode);
 };
 
 let actions = ref(true);
@@ -252,15 +262,26 @@ const sortQuantityDate = (value) => {
 const sortCategory = (value) => {
   emits("update:sortCategoryType", value);
 };
+
+const activeColor = computed(() => {
+  return props.deleteSpendingMode ? '#fddda2' : '#ffffff';
+})
 </script>
 
 <style scoped>
+.active-delete {
+  color: v-bind(activeColor);
+}
+
 .settings__contanier {
+  position: sticky;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 700px;
-  padding: 0px 30px 0px 30px;
+  padding: 80px 30px 0px 30px;
 }
 
 .contanier {

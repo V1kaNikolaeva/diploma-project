@@ -3,18 +3,24 @@
     <div class="line">
       <p class="date-name">{{ item.date }}</p>
     </div>
-    <UICard :sortQuantityByDate="props.sortQuantityByDate" :spendingsWithDates="item.cards" />
+    <CardGroup
+      :deleteSpendingMode="deleteSpendingMode"
+      :sortQuantityByDate="props.sortQuantityByDate"
+      :spendingsWithDates="item.cards"
+      @deleteCard="deleteCard"
+    />
   </div>
   <div v-else-if="!spendingsSortedWithDates.length" class="no-spendings-contanier">
-      <div class="no-spendings">
-        <strong><p class="p-no-spendings">Тут ничего нет</p></strong>
-        <p class="p-no-spendings">Создайте трату</p>
-      </div>
+    <div class="no-spendings">
+      <strong><p class="p-no-spendings">Тут ничего нет</p></strong>
+      <p class="p-no-spendings">Создайте трату</p>
     </div>
+  </div>
 </template>
 
 <script setup>
-import UICard from '../ui/UiCard.vue';
+import { deleteSpending } from '@/api/spending';
+import CardGroup from '../common/CardGroup.vue';
 import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -37,8 +43,18 @@ const props = defineProps({
     type: String,
     required: true,
     validator: (value) => ['up', 'down', 'common'].includes(value),
-  }
+  },
+  deleteSpendingMode: {
+    type: Boolean,
+    required: true,
+  },
 });
+
+const emits = defineEmits(['deleteSpending']);
+
+const deleteCard = async (id) => {
+  emits('deleteSpending', await deleteSpending(id))
+}
 
 let localSpendings = ref([...props.spendings]);
 
@@ -78,6 +94,8 @@ const spendingsSortedWithDates = computed(() => {
       differentDates.push({ date: allDates[i], newLineIndex: i, cards: [] });
       differentDates.at(-1).cards.push(sortedCards.value[i]);
     } else {
+      // Если дата такая же как прошлая то новая группа cards не генерируется
+      //Просто вставляю расход в последнюю группу
       differentDates.at(-1).cards.push(sortedCards.value[i]);
     }
   }

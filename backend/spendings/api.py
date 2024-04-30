@@ -39,7 +39,7 @@ def update_spending(request, pk):
     
 @api_view(['DELETE'])
 def delete_spending(request, pk):
-    spending = Balance.objects.get(pk=pk)
+    spending = Spending.objects.get(pk=pk)
     spending.delete()
 
     return JsonResponse({'deletedSpending': pk})

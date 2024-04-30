@@ -28,10 +28,18 @@
         v-model:sortCategoryType="sortCategoryType"
         v-model:sortQuantityByDate="sortQuantityByDate"
         v-model:modalFormType="modalFormType"
+        v-model:deleteSpendingMode="deleteSpendingMode"
       />
     </div>
     <div v-if="spendings.length" class="cards__wrapper">
-      <TheCards  v-model:spendings="spendings" :sortQuantityType="sortQuantityType" :sortQuantityByDate="sortQuantityByDate" :sortCategoryType="sortCategoryType" />
+      <TheCards
+        v-model:spendings="spendings"
+        :sortQuantityType="sortQuantityType"
+        :sortQuantityByDate="sortQuantityByDate"
+        :sortCategoryType="sortCategoryType"
+        @deleteSpending="deleteSpending"
+        :deleteSpendingMode="deleteSpendingMode"
+      />
     </div>
     <div v-else-if="!spendings.length" class="no-spendings-contanier">
       <div class="no-spendings">
@@ -48,7 +56,11 @@
       labelName="Ведите сумму, которую хотите положить"
       @postBalance="postBalance"
     />
-    <CreateCardForm v-else-if="modalFormType === 'createCard'" @postSpending="postSpending" v-model:isModalVisible="isModalVisible" />
+    <CreateCardForm
+      v-else-if="modalFormType === 'createCard'"
+      @postSpending="postSpending"
+      v-model:isModalVisible="isModalVisible"
+    />
     <BalanceHistory
       v-else-if="modalFormType === 'balanceHistory'"
       v-model:isModalVisible="isModalVisible"
@@ -92,11 +104,11 @@ export default {
   async setup() {
     const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
     const statsStore = useStatsStore();
-    console.log(spendings.value)
+    console.log(spendings.value);
     let isModalVisible = ref(false);
 
     let sortQuantityType = ref('common');
-    let sortQuantityByDate = ref('common')
+    let sortQuantityByDate = ref('common');
     let sortCategoryType = ref('all');
 
     let modalFormType = ref();
@@ -116,10 +128,10 @@ export default {
 
     //Обновляем 1 элемент массива
     const postBalance = (newItem) => {
-      balances.value.unshift(newItem)
+      balances.value.unshift(newItem);
     };
     const postSpending = (newItem) => {
-      spendings.value.unshift(newItem)
+      spendings.value.unshift(newItem);
     };
     //Обновляем 1 элемент массива
     const updateBalance = (updatedItem) => {
@@ -133,22 +145,22 @@ export default {
     //Удаляем 1 элемент массива
     const deleteBalance = (deletedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === deletedItem.deletedBalance);
-      balances.value.splice(itemIndex, 1)
+      balances.value.splice(itemIndex, 1);
     };
+
+    let deleteSpendingMode = ref(false);
     const deleteSpending = (deletedItem) => {
-      const itemIndex = spendings.value.findIndex((item) => item.id === deletedItem.deletedBalance);
-      spendings.value.splice(itemIndex, 1)
+      const itemIndex = spendings.value.findIndex((item) => item.id === deletedItem.deletedSpending);
+      spendings.value.splice(itemIndex, 1);
     };
 
     //Следим за состоянием (количество расходов и доходов для статы в профиле)
     watchEffect(() => {
       statsStore.setStats({
-        spending: balances.value.length,
+        spending: spendings.value.length,
         balance: balances.value.length,
       });
     });
-
-    let cards = ref([]);
 
     return {
       balances,
@@ -168,7 +180,7 @@ export default {
       deleteSpending,
       amount,
       quantityFormatterRUB,
-      cards,
+      deleteSpendingMode,
     };
   },
 };
@@ -210,12 +222,13 @@ export default {
 
 .no-spendings-contanier {
   margin-bottom: 100px;
+  width: 65%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
+/* RmTmHr5J */
 .no-spendings {
   display: flex;
   flex-direction: column;

@@ -77,6 +77,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import { computed } from 'vue';
 
 const props = defineProps({
   userName: {
@@ -85,6 +86,10 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
+
+const userNameExist = computed(() => {
+  return userStore.user.name ? userStore.user.name : 'Войти'
+})
 
 </script>
 

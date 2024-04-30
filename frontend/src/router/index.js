@@ -74,7 +74,7 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   if (isAuthenticated()) {
-    if (to.name === 'login') {
+    if (to.name === 'login' || to.name === 'signup') {
       router.push('/profile')
     }
 

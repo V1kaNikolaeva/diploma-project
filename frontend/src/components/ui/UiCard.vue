@@ -1,70 +1,78 @@
 <template>
-  <div class="cards__wrapper" >
-    <div class="card__wrapper" v-for="item in sortedSpendingsWithDate">
-      <div class="card">
-        <p>{{ item.reason }}</p>
-        <strong>{{ quantityFormatterRUB(item.one_spending) }}</strong>
-        <UiIcon
-          class="icon-category"
-          :icon="
-            item.spending_type === 'medications'
-              ? 'pulse'
-              : item.spending_type === 'products'
-                ? 'cart'
-                : item.spending_type === 'entertainment'
-                  ? 'acousticGuitar'
-                  : item.spending_type === 'electronics'
-                    ? 'smartwatch'
-                    : item.spending_type === 'trips'
-                      ? 'plane'
-                      : item.spending_type === 'cloth'
-                        ? 'tShirt'
-                        : item.spending_type === 'present'
-                          ? 'gift'
-                          : item.spending_type === 'other'
-                            ? 'search'
-                            : null
-          "
-        >
-        </UiIcon>
-      </div>
-    </div>
+  <div
+    :class="{
+      'card': lightCard === null,
+      'card active': lightCard === id,
+    }"
+    @click="deleteSpendingMode ? deleteCardFromUi(id) : null"
+    @mouseover="changeColor(id)"
+    @mouseleave="originalColor"
+  >
+    <p>{{ reason }}</p>
+    <strong>{{ quantityFormatterRUB(one_spending) }}</strong>
+    <UiIcon
+      class="icon-category"
+      :icon="
+        spending_type === 'medications'
+          ? 'pulse'
+          : spending_type === 'products'
+            ? 'cart'
+            : spending_type === 'entertainment'
+              ? 'acousticGuitar'
+              : spending_type === 'electronics'
+                ? 'smartwatch'
+                : spending_type === 'trips'
+                  ? 'plane'
+                  : spending_type === 'cloth'
+                    ? 'tShirt'
+                    : spending_type === 'present'
+                      ? 'gift'
+                      : spending_type === 'other'
+                        ? 'search'
+                        : null
+      "
+    >
+    </UiIcon>
   </div>
 </template>
 
 <script setup>
-import UiIcon from './UIIcon.vue';
 import { quantityFormatterRUB } from '../../utils/quantityFormatters';
-import { computed } from 'vue';
+import UiIcon from './UIIcon.vue';
+import { ref, computed } from 'vue';
+
 
 const props = defineProps({
-  spendingsWithDates: {
-    type: Array,
-    required: true,
-  },
-  sortQuantityByDate: {
-    type: String,
-    required: true,
-    validator: (value) => ['up', 'down', 'common'].includes(value),
-  }
+  id: {},
+  reason: {},
+  spending_type: {},
+  one_spending: {},
+  deleteSpendingMode: {}
 });
+const emits = defineEmits(['deleteCardFromGroup']);
 
-const sortedSpendingsWithDate = computed(() => {
-  if (props.sortQuantityByDate === 'up') {
-    return props.spendingsWithDates.sort((a, b) => a.one_spending - b.one_spending);
-  } else if (props.sortQuantityByDate === 'down') {
-    return props.spendingsWithDates.sort((a, b) => b.one_spending - a.one_spending);
-  } else if (props.sortQuantityByDate === 'common') {
-    return props.spendingsWithDates;
+const deleteCardFromUi = (id) => {
+  lightCard.value = null;
+  emits('deleteCardFromGroup', id);
+};
+
+let lightCard = ref(null)
+const changeColor = (id) => {
+  if (props.deleteSpendingMode) {
+    lightCard.value = id
   }
-})
+}
+
+const originalColor = () => {
+  lightCard.value = null
+}
+
+const cursor = computed(() => {
+  return props.deleteSpendingMode ? 'pointer' : 'auto';
+});
 </script>
 
 <style scoped>
-.card__wrapper {
-  min-width: 200px;
-  margin: 10px;
-}
 .card {
   display: flex;
   flex-direction: row;
@@ -74,6 +82,10 @@ const sortedSpendingsWithDate = computed(() => {
   height: 100%;
   padding: 10px;
   border: 1px solid var(--main-line);
+  cursor: v-bind(cursor);
+}
+.active {
+  border: 1px solid var(--light-orange);
 }
 
 p:first-child {
@@ -98,14 +110,5 @@ strong:nth-child(2) {
   height: 20px;
   width: 20px;
   margin-left: 5px;
-}
-
-.cards__wrapper {
-  display: grid;
-  justify-content: center;
-  grid-template-columns:
-  repeat(auto-fill,
-    minmax(auto, 400px))
-    ;
 }
 </style>
