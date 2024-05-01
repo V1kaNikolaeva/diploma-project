@@ -60,4 +60,4 @@ const outsideClose = () => {
     height: 35px;
     background-image: url(../assets/icons/icons8-close.svg)
 } */
-</style>./UiModalWindow.vue./UiButton.vue
+</style>

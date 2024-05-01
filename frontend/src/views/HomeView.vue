@@ -39,6 +39,8 @@
         :sortCategoryType="sortCategoryType"
         @deleteSpending="deleteSpending"
         :deleteSpendingMode="deleteSpendingMode"
+        v-model:isModalVisible="isModalVisible"
+        v-model:modalFormType="modalFormType"
       />
     </div>
     <div v-else-if="!spendings.length" class="no-spendings-contanier">
@@ -68,6 +70,14 @@
       @updateBalance="updateBalance"
       @deleteBalance="deleteBalance"
     />
+    <TheWarning
+      v-else-if="modalFormType === 'deleteSpending'"
+      v-model:isModalVisible="isModalVisible"
+      v-model:deleteSpendingCheckboxes="deleteSpendingCheckboxes"
+      @storeSettings="storeSettings"
+      warningText="Вы действительно хотите удалить эту затрату?"
+    />
+
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
@@ -80,6 +90,7 @@ import SettingsBar from '../components/common/SettingsBar.vue';
 import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue';
 import CreateCardForm from '../components/forms/CreateCardForm.vue';
 import BalanceHistory from '../components/common/BalanceHistory.vue';
+import TheWarning from '../components/common/TheWarning.vue'
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
 import UIIcon from '../components/ui/UIIcon.vue';
@@ -88,6 +99,7 @@ import { quantityFormatterRUB } from '../utils/quantityFormatters';
 import { useBalanceAxios } from '../composables/useBalanceAxios';
 import { useSpendingAxios } from '../composables/useSpendingAxios';
 import { useStatsStore } from '../stores/stats';
+import { useModalWindowStore } from '../stores/modalWindow'
 
 export default {
   components: {
@@ -96,6 +108,7 @@ export default {
     ReplenishBalanceForm,
     CreateCardForm,
     BalanceHistory,
+    TheWarning,
     UIModalWindow,
     UIButton,
     UIIcon,
@@ -104,7 +117,6 @@ export default {
   async setup() {
     const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
     const statsStore = useStatsStore();
-    console.log(spendings.value);
     let isModalVisible = ref(false);
 
     let sortQuantityType = ref('common');
@@ -123,7 +135,10 @@ export default {
     };
 
     const amount = computed(() => {
-      return balances.value ? balances.value.reduce((acc, num) => acc + num.amount, 0) : 0;
+      return balances.value
+        ? balances.value.reduce((acc, num) => acc + num.amount, 0) -
+            spendings.value.reduce((acc, num) => acc + num.one_spending, 0)
+        : 0;
     });
 
     //Обновляем 1 элемент массива
@@ -162,6 +177,23 @@ export default {
       });
     });
 
+    const modalWindowStore = useModalWindowStore()
+    
+    const deleteSpendingCheckboxes = ref([
+      { text: 'Больше не показывать', checked: modalWindowStore.settings.showDeleteSpending, id: 'showDeleteSpending', },
+      { text: 'Удалять без переключения', checked: modalWindowStore.settings.switchDeleteSpending, id: 'switchDeleteSpending', },
+    ]);
+
+    const storeSettings = (selected) => {
+      if (selected) {
+        modalWindowStore.setSettings({
+          showDeleteSpending: selected[0].checked,
+          switchDeleteSpending: selected[1].checked,
+        })
+      }
+
+    }
+
     return {
       balances,
       spendings,
@@ -181,6 +213,9 @@ export default {
       amount,
       quantityFormatterRUB,
       deleteSpendingMode,
+      deleteSpendingCheckboxes,
+      modalWindowStore,
+      storeSettings,
     };
   },
 };

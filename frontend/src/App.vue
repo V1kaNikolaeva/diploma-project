@@ -3,6 +3,7 @@ import { RouterView } from "vue-router";
 import NavigationBar from "./components/common/NavigationBar.vue";
 import { useUserStore } from "./stores/user";
 import { useStatsStore } from "./stores/stats";
+import { useModalWindowStore } from './stores/modalWindow'
 import axios from "axios";
 
 export default {
@@ -11,17 +12,19 @@ export default {
   setup() {
     const userStore = useUserStore();
     const statsStore = useStatsStore();
-
+    const modalWindowStore = useModalWindowStore()
 
     return {
       userStore,
-      statsStore
+      statsStore,
+      modalWindowStore,
     };
   },
 
   beforeCreate() {
     this.userStore.initStore();
-    this.statsStore.initStore()
+    this.statsStore.initStore();
+    this.modalWindowStore.initStore();
     const token = this.userStore.user.access;
     if (token) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;

@@ -48,11 +48,23 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  modalFormType: {
+    type: String
+  },
+  isModalVisible: {
+      type: Boolean,
+      required: true,
+    },
 });
 
-const emits = defineEmits(['deleteSpending']);
+const emits = defineEmits(['deleteSpending', 'update:modalFormType', 'update:isModalVisible']);
 
 const deleteCard = async (id) => {
+  emits('update:modalFormType', 'deleteSpending')
+  emits('update:isModalVisible', true)
+  // if (warningReturn) {
+    
+  // }
   emits('deleteSpending', await deleteSpending(id))
 }
 
