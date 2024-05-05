@@ -17,13 +17,13 @@
               <UiIcon icon="add" />
             </template>
           </UIButton>
-          <UIButton @click="deleteSpendingActivateOrNot" :border="false">
-            <p class="active-delete">Удалить</p>
+          <UIButton class="active-delete" @click="deleteSpendingActivateOrNot" :border="false">
+            <p>Удалить</p>
             <template #right-icon>
               <UiIcon icon="delete" />
             </template>
           </UIButton>
-          <UIButton :border="false">
+          <UIButton class="active-change" :border="false" @click="changeSpending">
             <p>Изменить</p>
             <template #right-icon>
               <UiIcon icon="change" />
@@ -156,6 +156,7 @@
             </template>
           </UIButton>
           <UIButton
+            v-if="props.oneMounth === false"
             @click="sortQuantityDate(sortValueByDate[sortIndexByDate])"
             :border="false"
           >
@@ -190,6 +191,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  oneMounth: {
+    type: Boolean,
+    required: true,
+  },
   sortQuantityType: {
     type: String,
     required: true,
@@ -209,6 +214,10 @@ const props = defineProps({
   deleteSpendingMode: {
     type: Boolean,
     required: true,
+  },
+  spendingMode: {
+    type: String,
+    required: true,
   }
 });
 
@@ -219,6 +228,7 @@ const emits = defineEmits([
   "update:sortCategoryType",
   "update:sortQuantityByDate",
   "update:deleteSpendingMode",
+  "update:spendingMode",
 ]);
 
 const createCard = (value) => {
@@ -229,6 +239,19 @@ const createCard = (value) => {
 
 const deleteSpendingActivateOrNot = () => {
   emits("update:deleteSpendingMode", !props.deleteSpendingMode);
+  if (props.spendingMode === 'change' || props.spendingMode === '') {
+    emits("update:spendingMode", 'delete');
+  } else {
+    emits("update:spendingMode", '');
+  }
+};
+const changeSpending = () => {
+  if (props.spendingMode === 'delete' || props.spendingMode === '') {
+    emits("update:deleteSpendingMode", false);
+    emits("update:spendingMode", 'change');
+  } else {
+    emits("update:spendingMode", '');
+  }
 };
 
 let actions = ref(true);
@@ -263,14 +286,22 @@ const sortCategory = (value) => {
   emits("update:sortCategoryType", value);
 };
 
-const activeColor = computed(() => {
-  return props.deleteSpendingMode ? '#fddda2' : '#ffffff';
+const activeColorDelete = computed(() => {
+  return props.deleteSpendingMode ? '#313131' : '#191919';
 })
+const activeColorChange = computed(() => {
+  return props.spendingMode === 'change' ? '#313131' : '#191919';
+})
+
 </script>
 
 <style scoped>
 .active-delete {
-  color: v-bind(activeColor);
+  background-color: v-bind(activeColorDelete);
+}
+
+.active-change {
+  background-color: v-bind(activeColorChange);
 }
 
 .settings__contanier {

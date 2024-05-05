@@ -23,12 +23,14 @@
     <div class="settings__wrapper">
       <SettingsBar
         v-model:isModalVisible="isModalVisible"
+        :oneMounth="oneMounth"
         v-model:sortQuantityType="sortQuantityType"
         :balance="amount"
         v-model:sortCategoryType="sortCategoryType"
         v-model:sortQuantityByDate="sortQuantityByDate"
         v-model:modalFormType="modalFormType"
         v-model:deleteSpendingMode="deleteSpendingMode"
+        v-model:spendingMode="spendingMode"
       />
     </div>
     <div v-if="spendings.length" class="cards__wrapper">
@@ -37,10 +39,14 @@
         :sortQuantityType="sortQuantityType"
         :sortQuantityByDate="sortQuantityByDate"
         :sortCategoryType="sortCategoryType"
-        @deleteSpending="deleteSpending"
-        :deleteSpendingMode="deleteSpendingMode"
+        v-model:deleteSpendingMode="deleteSpendingMode"
+        v-model:spendingMode="spendingMode"
+        v-model:updatedData="updatedData"
+        v-model:oneMounth="oneMounth"
+        v-model:deleteSpendingId="deleteSpendingId"
         v-model:isModalVisible="isModalVisible"
         v-model:modalFormType="modalFormType"
+        @deleteSpending="deleteSpending"
       />
     </div>
     <div v-else-if="!spendings.length" class="no-spendings-contanier">
@@ -63,6 +69,12 @@
       @postSpending="postSpending"
       v-model:isModalVisible="isModalVisible"
     />
+    <CreateCardForm
+      v-else-if="modalFormType === 'updateCard'"
+      :updatedData="updatedData"
+      @updateSpending="updateSpending"
+      v-model:isModalVisible="isModalVisible"
+    />
     <BalanceHistory
       v-else-if="modalFormType === 'balanceHistory'"
       v-model:isModalVisible="isModalVisible"
@@ -71,13 +83,13 @@
       @deleteBalance="deleteBalance"
     />
     <TheWarning
-      v-else-if="modalFormType === 'deleteSpending'"
+      v-else-if="modalFormType === 'deleteSpending' && JSON.parse(modalWindowStore.settings.showDeleteSpending) == false"
       v-model:isModalVisible="isModalVisible"
       v-model:deleteSpendingCheckboxes="deleteSpendingCheckboxes"
+      @deleteSpending="deleteSpending"
       @storeSettings="storeSettings"
       warningText="Вы действительно хотите удалить эту затрату?"
     />
-
   </UIModalWindow>
   <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
@@ -90,7 +102,7 @@ import SettingsBar from '../components/common/SettingsBar.vue';
 import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue';
 import CreateCardForm from '../components/forms/CreateCardForm.vue';
 import BalanceHistory from '../components/common/BalanceHistory.vue';
-import TheWarning from '../components/common/TheWarning.vue'
+import TheWarning from '../components/common/TheWarning.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
 import UIIcon from '../components/ui/UIIcon.vue';
@@ -99,7 +111,8 @@ import { quantityFormatterRUB } from '../utils/quantityFormatters';
 import { useBalanceAxios } from '../composables/useBalanceAxios';
 import { useSpendingAxios } from '../composables/useSpendingAxios';
 import { useStatsStore } from '../stores/stats';
-import { useModalWindowStore } from '../stores/modalWindow'
+import { useModalWindowStore } from '../stores/modalWindow';
+import { deleteSpendingAPI } from '@/api/spending';
 
 export default {
   components: {
@@ -122,8 +135,10 @@ export default {
     let sortQuantityType = ref('common');
     let sortQuantityByDate = ref('common');
     let sortCategoryType = ref('all');
+    let oneMounth = ref(true);
 
     let modalFormType = ref();
+    
     const replenishBalance = () => {
       isModalVisible.value = true;
       modalFormType.value = 'replenishBalance';
@@ -153,7 +168,11 @@ export default {
       const itemIndex = balances.value.findIndex((item) => item.id === updatedItem.data.id);
       balances.value[itemIndex] = updatedItem.data;
     };
+
+    const spendingMode = ref('');
+    const updatedData = ref()
     const updateSpending = (updatedItem) => {
+      spendingMode.value = ''
       const itemIndex = spendings.value.findIndex((item) => item.id === updatedItem.data.id);
       spendings.value[itemIndex] = updatedItem.data;
     };
@@ -163,10 +182,23 @@ export default {
       balances.value.splice(itemIndex, 1);
     };
 
+
     let deleteSpendingMode = ref(false);
-    const deleteSpending = (deletedItem) => {
-      const itemIndex = spendings.value.findIndex((item) => item.id === deletedItem.deletedSpending);
+    const modalWindowStore = useModalWindowStore();
+    watchEffect(() => {
+      if (JSON.parse(modalWindowStore.settings.switchDeleteSpending) == false) {
+        deleteSpendingMode.value = false
+      }
+    });
+
+    const deleteSpendingId = ref();
+    const deleteSpending = async () => {
+      const answer = await deleteSpendingAPI(deleteSpendingId.value);
+      const itemIndex = spendings.value.findIndex((item) => item.id === answer.deletedSpending);
       spendings.value.splice(itemIndex, 1);
+      if (JSON.parse(modalWindowStore.settings.switchDeleteSpending) == false) {
+        deleteSpendingMode.value = false
+      }
     };
 
     //Следим за состоянием (количество расходов и доходов для статы в профиле)
@@ -177,11 +209,13 @@ export default {
       });
     });
 
-    const modalWindowStore = useModalWindowStore()
-    
     const deleteSpendingCheckboxes = ref([
-      { text: 'Больше не показывать', checked: modalWindowStore.settings.showDeleteSpending, id: 'showDeleteSpending', },
-      { text: 'Удалять без переключения', checked: modalWindowStore.settings.switchDeleteSpending, id: 'switchDeleteSpending', },
+      { text: 'Больше не показывать', checked: modalWindowStore.settings.showDeleteSpending, id: 'showDeleteSpending' },
+      {
+        text: 'Удалять без переключения',
+        checked: modalWindowStore.settings.switchDeleteSpending,
+        id: 'switchDeleteSpending',
+      },
     ]);
 
     const storeSettings = (selected) => {
@@ -189,11 +223,14 @@ export default {
         modalWindowStore.setSettings({
           showDeleteSpending: selected[0].checked,
           switchDeleteSpending: selected[1].checked,
-        })
+        });
       }
-
-    }
-
+    };
+    //твои таски bla
+    /* 
+1. сделать карточку удаления в варнинге
+1. учитывать флаг показать или нет
+*/
     return {
       balances,
       spendings,
@@ -202,20 +239,25 @@ export default {
       sortQuantityType,
       sortQuantityByDate,
       sortCategoryType,
+      oneMounth,
       replenishBalance,
       balanceHistory,
       postBalance,
       updateBalance,
       deleteBalance,
       postSpending,
+      updatedData,
       updateSpending,
       deleteSpending,
       amount,
       quantityFormatterRUB,
       deleteSpendingMode,
+      spendingMode,
       deleteSpendingCheckboxes,
       modalWindowStore,
       storeSettings,
+      deleteSpendingId,
+      deleteSpendingAPI,
     };
   },
 };

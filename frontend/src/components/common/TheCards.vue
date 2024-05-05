@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div v-if="spendingsSortedWithDates.length" v-for="item in spendingsSortedWithDates">
     <div class="line">
       <p class="date-name">{{ item.date }}</p>
@@ -7,7 +8,10 @@
       :deleteSpendingMode="deleteSpendingMode"
       :sortQuantityByDate="props.sortQuantityByDate"
       :spendingsWithDates="item.cards"
+      :oneMounth="oneMounth"
+      :spendingMode="props.spendingMode"
       @deleteCard="deleteCard"
+      @changeCard="changeCard"
     />
   </div>
   <div v-else-if="!spendingsSortedWithDates.length" class="no-spendings-contanier">
@@ -16,12 +20,13 @@
       <p class="p-no-spendings">Создайте трату</p>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup>
-import { deleteSpending } from '@/api/spending';
 import CardGroup from '../common/CardGroup.vue';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
+import { useModalWindowStore } from '@/stores/modalWindow';
 
 const props = defineProps({
   spendings: {
@@ -44,28 +49,55 @@ const props = defineProps({
     required: true,
     validator: (value) => ['up', 'down', 'common'].includes(value),
   },
+  oneMounth: {
+    type: Boolean,
+    required: true,
+  },
   deleteSpendingMode: {
     type: Boolean,
     required: true,
   },
+  deleteSpendingId: {},
   modalFormType: {
     type: String
   },
-  isModalVisible: {
-      type: Boolean,
-      required: true,
-    },
+  isModalVisible: {	
+      type: Boolean,		
+      required: true,		
+    },	
+    spendingMode: {
+    type: String,
+    required: true,
+  },
+  updatedData: {},
 });
 
-const emits = defineEmits(['deleteSpending', 'update:modalFormType', 'update:isModalVisible']);
+const emits = defineEmits([
+  'update:modalFormType', 
+  'update:isModalVisible', 
+  'update:deleteSpendingMode', 
+  'update:deleteSpendingId', 
+  'update:oneMounth', 
+  'deleteSpending',
+  'update:updatedData',
+]);
+const modalWindowStore = useModalWindowStore()
 
-const deleteCard = async (id) => {
-  emits('update:modalFormType', 'deleteSpending')
-  emits('update:isModalVisible', true)
-  // if (warningReturn) {
-    
-  // }
-  emits('deleteSpending', await deleteSpending(id))
+
+const deleteCard = (id) => {
+	if (JSON.parse(modalWindowStore.settings.showDeleteSpending) == true) {
+		emits('update:deleteSpendingId', id)
+		emits('deleteSpending')
+	} else {
+		emits('update:isModalVisible', true)
+  	emits('update:modalFormType', 'deleteSpending')
+  	emits('update:deleteSpendingId', id)	
+	}
+}
+const changeCard = (id, updatedData) => {
+  emits('update:updatedData', updatedData)
+	emits('update:isModalVisible', true)
+  emits('update:modalFormType', 'updateCard')
 }
 
 let localSpendings = ref([...props.spendings]);
@@ -106,6 +138,7 @@ const spendingsSortedWithDates = computed(() => {
       differentDates.push({ date: allDates[i], newLineIndex: i, cards: [] });
       differentDates.at(-1).cards.push(sortedCards.value[i]);
     } else {
+      console.log(differentDates)
       // Если дата такая же как прошлая то новая группа cards не генерируется
       //Просто вставляю расход в последнюю группу
       differentDates.at(-1).cards.push(sortedCards.value[i]);
@@ -126,7 +159,17 @@ const sortedCards = computed(() => {
   } else if (props.sortQuantityType === 'common') {
     return currentSort;
   }
+  
 });
+
+watchEffect(() => {
+  if (spendingsSortedWithDates.value.length >= 2) {
+    emits('update:oneMounth', false)
+  } else {
+    emits('update:oneMounth', true)
+  }
+})
+
 </script>
 
 <style scoped>

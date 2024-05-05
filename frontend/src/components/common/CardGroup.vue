@@ -7,7 +7,8 @@
         :reason="item.reason"
         :spending_type="item.spending_type"
         :deleteSpendingMode="deleteSpendingMode"
-        @deleteCardFromGroup="deleteCardFromGroup"
+        :spendingMode="props.spendingMode"
+        @cardFromGroup="cardFromGroup"
       />
     </div>
   </div>
@@ -31,22 +32,40 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  oneMounth: {
+    type: Boolean,
+    required: true,
+  },
+  spendingMode: {
+    type: String,
+    required: true,
+  },
 });
-const emits = defineEmits(['deleteCard']);
+const emits = defineEmits(['deleteCard', 'changeCard']);
 
-const deleteCardFromGroup = (id) => {
-  emits('deleteCard', id);
+const cardFromGroup = (id, updatedData) => {
+  if (props.spendingMode === 'delete') {
+    emits('deleteCard', id);
+  } else if (props.spendingMode === 'change') {
+    emits('changeCard', id, updatedData);
+  }
 };
 
+
 const sortedSpendingsWithDate = computed(() => {
+  if (props.oneMounth === true) {
+    return props.spendingsWithDates
+  }
   if (props.sortQuantityByDate === 'up') {
     return props.spendingsWithDates.sort((a, b) => a.one_spending - b.one_spending);
   } else if (props.sortQuantityByDate === 'down') {
     return props.spendingsWithDates.sort((a, b) => b.one_spending - a.one_spending);
   } else if (props.sortQuantityByDate === 'common') {
-    return props.spendingsWithDates;
+    return props.spendingsWithDates.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }
 });
+
+// изменение затраты , переопределить сервисы
 </script>
 
 <style scoped>

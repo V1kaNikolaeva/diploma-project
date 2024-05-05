@@ -4,7 +4,7 @@
       'card': lightCard === null,
       'card active': lightCard === id,
     }"
-    @click="deleteSpendingMode ? deleteCardFromUi(id) : null"
+    @click="deleteSpendingMode || spendingMode === 'change' ? cardFromUi(id, {reason: reason, spending_type: spending_type, one_spending: one_spending, id: id}) : null"
     @mouseover="changeColor(id)"
     @mouseleave="originalColor"
   >
@@ -47,18 +47,22 @@ const props = defineProps({
   reason: {},
   spending_type: {},
   one_spending: {},
-  deleteSpendingMode: {}
+  deleteSpendingMode: {},
+  spendingMode: {
+    type: String,
+    required: true,
+  },
 });
-const emits = defineEmits(['deleteCardFromGroup']);
+const emits = defineEmits(['cardFromGroup']);
 
-const deleteCardFromUi = (id) => {
+const cardFromUi = (id, updatedData) => {
   lightCard.value = null;
-  emits('deleteCardFromGroup', id);
+  emits('cardFromGroup', id, updatedData);
 };
 
 let lightCard = ref(null)
 const changeColor = (id) => {
-  if (props.deleteSpendingMode) {
+  if (props.deleteSpendingMode || props.spendingMode === 'change') {
     lightCard.value = id
   }
 }
@@ -68,7 +72,7 @@ const originalColor = () => {
 }
 
 const cursor = computed(() => {
-  return props.deleteSpendingMode ? 'pointer' : 'auto';
+  return props.deleteSpendingMode || props.spendingMode === 'change' ? 'pointer' : 'auto';
 });
 </script>
 

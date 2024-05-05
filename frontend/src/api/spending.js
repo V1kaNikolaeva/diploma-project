@@ -36,7 +36,7 @@ export async function putSpending(id, spending) {
     });
 }
 
-export async function deleteSpending(id) {
+export async function deleteSpendingAPI(id) {
   return await axios
     .delete(`/api/spending/delete/${id}/`)
     .then((response) => {

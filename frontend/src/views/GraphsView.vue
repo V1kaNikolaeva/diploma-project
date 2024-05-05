@@ -37,6 +37,7 @@ import { computed, ref } from 'vue';
 import TheCharts from '../components/common/TheCharts.vue';
 import UiSelect from '../components/ui/UiSelect.vue';
 import { useBalanceAxios } from '@/composables/useBalanceAxios';
+import { useSpendingAxios } from '@/composables/useSpendingAxios';
 
 export default {
   components: { TheCharts, UiSelect },
@@ -52,29 +53,67 @@ export default {
     let categoriesChart = ref('doughnutChart');
     let spentChart = ref('doughnutChart');
     let balanceChart = ref('doughnutChart');
+    const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
 
+    const categoriesDatasets = computed(() => {
+      let data = [];
+      const total = spendings.value.reduce((totals, spending) => {
+        const category = spending.spending_type
+
+        totals[category] = totals[category] || 0
+        totals[category] += spending.one_spending
+        return totals
+      }, {
+        medications: 0,
+        products: 0,
+        entertainment: 0,
+        electronics: 0,
+        trips: 0,
+        cloth: 0,
+        present: 0,
+        other: 0,
+      })
+
+      for (let i in total) {
+        data.push(total[i])
+      }
+      return data
+    })
+    
     const categories = {
       labels: ['Здоровье', 'Продукты', 'Развлечения', 'Электроника', 'Путешествия', 'Одежда', 'Подарки', 'Другое'],
       datasets: [
         {
-          data: [30, 50, 30, 30, 30, 70, 30, 30],
+          data: categoriesDatasets.value,
           backgroundColor: ['#FF6666', '#B2FF66', '#66FFB2', '#C0C0C0', '#66FFFF', '#FFB266', '#FFFF66', '#606060'],
         },
       ],
     };
+
+    const spentDatasets = computed(() => {
+      let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      for (let i = 0; i < spendings.value.length; i++) {
+        if (spendings.value[i].created_at_formated.slice(3, 5).indexOf('0') === 0) {
+          data[Number(spendings.value[i].created_at_formated.slice(3, 5).replace('0', '')) - 1] += spendings.value[i].one_spending;
+        } else {
+          data[Number(spendings.value[i].created_at_formated.slice(3, 5)) - 1] += spendings.value[i].one_spending;
+        }
+      }
+      return data;
+    })
     const spent = {
       labels: [ 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
       ],
       datasets: [
         {
-          data: [30, 50, 40, 30, 30, 70, 77, 37, 45, 70, 50, 30],
+          data: spentDatasets.value,
           backgroundColor: [ '#A6F6FC', '#8BD4DA', '#55B98E', '#2CE293', '#07FF94', '#DBF965', '#EAFF94', '#FFF994', '#B494FF', '#9F94FF', '#447692', '#285875',
           ],
         },
       ],
     };
 
-    const { balances } = await useBalanceAxios();
+    
     const balanceDatasets = computed(() => {
       let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       for (let i = 0; i < balances.value.length; i++) {
@@ -101,6 +140,7 @@ export default {
 
     return {
       balances,
+      spendings,
       selectItems,
       categoriesChart,
       spentChart,
@@ -108,6 +148,7 @@ export default {
       categories,
       spent,
       balanceDatasets,
+      spentDatasets,
       balance,
     };
   },

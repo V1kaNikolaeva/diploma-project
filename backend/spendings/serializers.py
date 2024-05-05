@@ -8,4 +8,4 @@ class SpendingSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     class Meta:
         model = Spending
-        fields = ('id', 'one_spending', 'created_by', 'created_at_formated', 'reason', 'spending_type')
+        fields = ('id', 'one_spending', 'created_by', 'created_at_formated', 'created_at', 'reason', 'spending_type')

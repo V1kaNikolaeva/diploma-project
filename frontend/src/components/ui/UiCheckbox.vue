@@ -25,7 +25,6 @@ const props = defineProps({
   },
 });
 const emits = defineEmits(['update:checked']);
-
 const model = computed({
   get() {
     return props.checked;

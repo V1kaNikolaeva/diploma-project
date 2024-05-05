@@ -3,6 +3,9 @@
     <div class="warning">
       <p>{{ props.warningText }}</p>
     </div>
+    <!-- <div v-if="card" class="delete-card">
+
+    </div> -->
     <div class="checkboxes-contanier">
       <div class="solution-checkbox" v-for="checkbox in deleteSpendingCheckboxes">
         <UiCheckbox v-model:checked="checkbox.checked" :checkboxText="checkbox.text" :id="checkbox.id" :value="checkbox.checked"/>
@@ -34,9 +37,10 @@ const props = defineProps({
     },
 });
 
-const emits = defineEmits(['update:isModalVisible', 'storeSettings', 'update:deleteSpendingCheckboxes']);
+const emits = defineEmits(['update:isModalVisible', 'storeSettings', 'update:deleteSpendingCheckboxes', 'deleteSpending']);
 const submit = () => {
   emits('storeSettings', props.deleteSpendingCheckboxes);
+  emits('deleteSpending');
   emits('update:deleteSpendingCheckboxes', props.deleteSpendingCheckboxes);
   emits('update:isModalVisible', false);
 };

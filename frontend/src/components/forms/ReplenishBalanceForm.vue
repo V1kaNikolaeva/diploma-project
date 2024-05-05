@@ -42,6 +42,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
+import { postBalance } from '@/api/balance';
 
 let localBalance = ref(balance());
 
@@ -73,15 +74,13 @@ const replenishBalance = async (value) => {
   } else if ($v.value.$invalid) {
     $v.value.$touch();
   } else {
-    await axios
-      .post('/api/balance/create/', { amount: Number(localBalance.value.balance) })
-      .then((response) => {
-        emits('postBalance', response.data)
-        toaster.value.success('Пополнено!');
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
+    try {
+      const response = await postBalance({ amount: Number(localBalance.value.balance) })
+      emits('postBalance', response)
+      toaster.value.success('Пополнено!');
+    } catch(error) {
+      console.log(error)
+    }
   }
 };
 </script>
