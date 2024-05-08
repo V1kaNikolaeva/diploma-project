@@ -350,4 +350,19 @@ const activeColorChange = computed(() => {
 .icon-leave-to {
   transform: rotate(90deg);
 }
+
+@media (max-width: 768px) {
+  .settings__contanier {
+    position: relative;
+    height: auto;
+    width: 200px;
+    padding: 0;
+  }
+  .contanier {
+    align-items: normal;
+  }
+  .button__wrapper {
+    margin: 10px 0px 10px 0px;
+  }
+}
 </style>

@@ -239,4 +239,5 @@ td {
 .date {
   width: 40%;
 }
+
 </style>

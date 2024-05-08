@@ -1,6 +1,8 @@
 <template>
-  <input type="checkbox" :id="id" v-model="model" :value="props.value"/>
-  <label :for="id">{{ props.checkboxText }}</label>
+  <div class="checkbox__wrapper">
+    <input class="input-checkbox" type="checkbox" :id="id" v-model="model" :value="props.value"/>
+    <label class="checkbox-label" :for="id">{{ props.checkboxText }}</label>
+  </div>
 </template>
 
 <script setup>
@@ -35,4 +37,17 @@ const model = computed({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.checkbox__wrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0px 10px 0px;
+}
+.input-checkbox {
+  width: 20px;
+  height: 20px;
+}
+.checkbox-label {
+  margin-left: 10px;
+}
+</style>

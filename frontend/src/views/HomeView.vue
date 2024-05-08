@@ -91,9 +91,9 @@
       warningText="Вы действительно хотите удалить эту затрату?"
     />
   </UIModalWindow>
-  <UIButton class="user-bank__button" :buttonType="'cashVault'">
+  <!-- <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
-  </UIButton>
+  </UIButton> -->
 </template>
 
 <script>
@@ -159,14 +159,17 @@ export default {
     //Обновляем 1 элемент массива
     const postBalance = (newItem) => {
       balances.value.unshift(newItem);
+      setProfileStats()
     };
     const postSpending = (newItem) => {
       spendings.value.unshift(newItem);
+      setProfileStats()
     };
     //Обновляем 1 элемент массива
     const updateBalance = (updatedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === updatedItem.data.id);
       balances.value[itemIndex] = updatedItem.data;
+      setProfileStats()
     };
 
     const spendingMode = ref('');
@@ -175,11 +178,13 @@ export default {
       spendingMode.value = ''
       const itemIndex = spendings.value.findIndex((item) => item.id === updatedItem.data.id);
       spendings.value[itemIndex] = updatedItem.data;
+      setProfileStats()
     };
     //Удаляем 1 элемент массива
     const deleteBalance = (deletedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === deletedItem.deletedBalance);
       balances.value.splice(itemIndex, 1);
+      setProfileStats()
     };
 
 
@@ -199,15 +204,16 @@ export default {
       if (JSON.parse(modalWindowStore.settings.switchDeleteSpending) == false) {
         deleteSpendingMode.value = false
       }
+      setProfileStats()
     };
 
-    //Следим за состоянием (количество расходов и доходов для статы в профиле)
-    watchEffect(() => {
+    //Функция для установки статы для профиля
+     const setProfileStats = () => {
       statsStore.setStats({
         spending: spendings.value.length,
         balance: balances.value.length,
       });
-    });
+    };
 
     const deleteSpendingCheckboxes = ref([
       { text: 'Больше не показывать', checked: modalWindowStore.settings.showDeleteSpending, id: 'showDeleteSpending' },
@@ -229,7 +235,6 @@ export default {
     //твои таски bla
     /* 
 1. сделать карточку удаления в варнинге
-1. учитывать флаг показать или нет
 */
     return {
       balances,
@@ -258,6 +263,7 @@ export default {
       storeSettings,
       deleteSpendingId,
       deleteSpendingAPI,
+      setProfileStats,
     };
   },
 };
@@ -313,5 +319,18 @@ export default {
   padding: 30px;
   outline: 1px solid var(--main-line);
   border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .wrapper__home {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cards__wrapper {
+    width: auto;
+  }
+  .settings__wrapper {
+    width: auto;
+  }
 }
 </style>

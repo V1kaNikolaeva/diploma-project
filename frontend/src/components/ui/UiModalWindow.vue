@@ -55,9 +55,9 @@ const outsideClose = () => {
   border-radius: 10px;
 }
 
-/* .close__modal {
-    width: 35px;
-    height: 35px;
-    background-image: url(../assets/icons/icons8-close.svg)
-} */
+@media(max-width: 768px) {
+ .modal__content {
+  padding: 30px 10px 30px 10px;
+ } 
+}
 </style>

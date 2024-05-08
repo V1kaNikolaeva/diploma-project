@@ -1,96 +1,113 @@
 <template>
   <header class="nav__header">
-    <div class="logoWrapper">
-      <div class="logo">
-        <h1>Incomes</h1>
+    <div class="navWrapper" ref="navWrapper">
+      <div class="logoWrapper">
+        <div class="logo">
+          <h1>Incomes</h1>
+        </div>
       </div>
-    </div>
-
-    <div class="navWrapper">
       <nav class="nav-contanier">
-        <ul class="navigation">
-          <li>
-            <RouterLink 
-              :to="{ name: 'tips' }" 
-              class="link" 
-              exactActiveClass="active-link"
-            >
-                Советы
+        <ul class="navigation" ref="navigation">
+          <li class="nav-item">
+            <RouterLink @click="closeMenu($event)" :to="{ name: 'tips' }" class="link" exactActiveClass="active-link">
+              Советы
             </RouterLink>
           </li>
 
-          <li>
-            <RouterLink 
-              :to="{ name: 'home', params: { 'id': userStore.user.id } }" 
-              class="link" 
+          <li class="nav-item">
+            <RouterLink
+              @click="closeMenu($event)"
+              :to="{ name: 'home', params: { id: userStore.user.id } }"
+              class="link"
               exactActiveClass="active-link"
             >
-                Главная
+              Главная
             </RouterLink>
           </li>
 
-          <li>
-            <RouterLink 
-              :to="{ name: 'graphs', params: { 'id': userStore.user.id } }" 
-              class="link" 
+          <li class="nav-item">
+            <RouterLink
+              @click="closeMenu($event)"
+              :to="{ name: 'graphs', params: { id: userStore.user.id } }"
+              class="link"
               exactActiveClass="active-link"
             >
               Графики
             </RouterLink>
           </li>
 
-          <li v-if="!userStore.user.isAuthenticated">
-            <RouterLink 
-              :to="{ name: 'signup' }" 
-              class="link" 
-              exactActiveClass="active-link"
-            >
+          <li class="nav-item" v-if="!userStore.user.isAuthenticated">
+            <RouterLink @click="closeMenu($event)" :to="{ name: 'signup' }" class="link" exactActiveClass="active-link">
               Регистрация
             </RouterLink>
           </li>
 
-          <li>
-            <RouterLink 
-              :to="{ name: 'login' }" 
-              class="link" 
+          <li class="nav-item">
+            <RouterLink
+              @click="closeMenu($event)"
+              :to="{ name: 'login' }"
+              class="link"
               exactActiveClass="active-link"
               v-if="!userName"
             >
-                Войти
+              Войти
             </RouterLink>
-            <RouterLink 
-              :to="{ name: 'profile' }" 
-              class="link" 
+            <RouterLink
+              @click="closeMenu($event)"
+              :to="{ name: 'profile' }"
+              class="link"
               exactActiveClass="active-link"
               v-else="userName"
             >
-                {{ userName }}
+              {{ userName }}
             </RouterLink>
           </li>
         </ul>
+        <div class="hamburger" ref="hamburger" @click="menu()">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
       </nav>
     </div>
-
   </header>
 </template>
 
 <script setup>
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/stores/user';
-import { computed } from 'vue';
+import { onClickOutside } from '@vueuse/core';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   userName: {
     required: true,
-  }
-})
+  },
+});
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 
 const userNameExist = computed(() => {
-  return userStore.user.name ? userStore.user.name : 'Войти'
-})
+  return userStore.user.name ? userStore.user.name : 'Войти';
+});
 
+const hamburger = ref(null);
+const navigation = ref(null);
+const navWrapper = ref(null);
+
+onClickOutside(navWrapper, (event) => closeMenu(event));
+
+const closeMenu = (e) => {
+  const withinBoundaries = e.composedPath().includes(hamburger) || e.composedPath().includes(navigation);
+  if (!withinBoundaries) {
+    hamburger.value.classList.remove('active');
+    navigation.value.classList.remove('active');
+  }
+};
+const menu = () => {
+  hamburger.value.classList.toggle('active');
+  navigation.value.classList.toggle('active');
+};
 </script>
 
 <style scoped>
@@ -109,19 +126,22 @@ const userNameExist = computed(() => {
   z-index: 4;
   border-bottom: 1px solid var(--main-line);
 }
-.logoWrapper{ 
+.logoWrapper {
   height: 100%;
   align-items: center;
   display: inline-flex;
 }
 .navWrapper {
-  width: 700px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 1100px;
 }
 
 .nav-contanier {
   height: 100%;
 }
-.navigation { 
+.navigation {
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -135,29 +155,93 @@ const userNameExist = computed(() => {
   font-size: 20px;
 }
 .link::after {
-    content: '';
-    display: block;
-    width: 0;
-    height: 1px;
-    background: var(--light-green);
-    transition: width .3s;
+  content: '';
+  display: block;
+  width: 0;
+  height: 1px;
+  background: var(--light-green);
+  transition: width 0.3s;
 }
 .link:hover::after {
-    width: 100%;
-    transition: width .3s;
+  width: 100%;
+  transition: width 0.3s;
 }
 .link:hover {
   color: var(--light-green);
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .active-link {
   color: var(--light-green);
   border-bottom: 1px var(--light-green) solid;
 }
+.nav-item {
+  margin-right: 60px;
+}
+.nav-item:last-child {
+  margin-right: 0;
+}
 
 .nav__active {
-  color: var(--light-green)
-}  
-  
+  color: var(--light-green);
+}
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.bar {
+  display: block;
+  width: 35px;
+  height: 3px;
+  margin: 10px;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: var(--light-green);
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    margin-right: 20px;
+  }
+
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(14px) rotate(46deg);
+  }
+
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-12px) rotate(-46deg);
+  }
+  .navWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .navigation {
+    display: flex;
+    position: fixed;
+    left: -100%;
+    top: 80px;
+    flex-direction: column;
+    background-color: var(--main-bg);
+    width: 100%;
+    height: 250px;
+    align-items: center;
+    transition: 0.3s;
+  }
+
+  .nav-item {
+    margin: 16px 0;
+  }
+
+  .navigation.active {
+    left: 0;
+  }
+}
 </style>

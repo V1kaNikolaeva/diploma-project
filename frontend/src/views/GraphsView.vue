@@ -58,11 +58,11 @@ export default {
     const categoriesDatasets = computed(() => {
       let data = [];
       const total = spendings.value.reduce((totals, spending) => {
-        const category = spending.spending_type
+        const category = spending.spending_type;
 
-        totals[category] = totals[category] || 0
-        totals[category] += spending.one_spending
-        return totals
+        // totals[category] = totals[category] || 0;
+        totals[category] += spending.one_spending;
+        return totals;
       }, {
         medications: 0,
         products: 0,
@@ -127,8 +127,7 @@ export default {
     })
 
     const balance = {
-      labels: [ 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
-      ],
+      labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
       datasets: [
         {
           data: balanceDatasets.value,
@@ -172,5 +171,20 @@ export default {
   justify-content: space-between;
   width: 100%;
   margin: 30px;
+}
+
+@media screen and (max-width: 770px) {
+  .chart__wrapper {
+    padding: 20px;
+    flex-direction: column;
+  }
+  
+  .select-contanier {
+    margin: 20px 0px 20px 0px;
+  }
+
+  .chart-contanier {
+    margin: 20px 0px 20px 0px;
+  }
 }
 </style>

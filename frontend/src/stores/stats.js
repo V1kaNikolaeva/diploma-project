@@ -26,5 +26,13 @@ export const useStatsStore = defineStore({
       localStorage.setItem("stats.spending", this.stats.spending);
       localStorage.setItem("stats.balance", this.stats.balance);
     },
+
+    removeStats() {
+      this.stats.spending = null;
+      this.stats.balance = null;
+
+      localStorage.setItem("stats.spending", '');
+      localStorage.setItem("stats.balance", '');
+    }
   },
 });

@@ -42,7 +42,7 @@ const props = defineProps({
     type: String,
     required: true,
     default: 'all',
-    // validator: (value) => ['up', 'down', 'common'].includes(value)
+    validator: (value) => ['medications', 'products', 'entertainment', 'electronics', 'trips', 'cloth', 'present', 'other', 'all'].includes(value)
   },
   sortQuantityByDate: {
     type: String,
@@ -138,7 +138,6 @@ const spendingsSortedWithDates = computed(() => {
       differentDates.push({ date: allDates[i], newLineIndex: i, cards: [] });
       differentDates.at(-1).cards.push(sortedCards.value[i]);
     } else {
-      console.log(differentDates)
       // Если дата такая же как прошлая то новая группа cards не генерируется
       //Просто вставляю расход в последнюю группу
       differentDates.at(-1).cards.push(sortedCards.value[i]);

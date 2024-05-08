@@ -18,10 +18,24 @@
           <p class="account-p">За все время вы {{ statsStore.stats.balance }} заработали деньги</p>
         </div>
       </div>
+      <div class="settings">
+        <strong><p class="account-p">Настройки</p></strong>
+        <div class="checkboxes-contanier" v-for="checkbox in checkboxes">
+          <UiCheckbox
+            v-model:checked="checkbox.checked"
+            :checkboxText="checkbox.text"
+            :id="checkbox.id"
+            :value="checkbox.checked"
+          />
+        </div>
+      </div>
       <div class="quit-change-contanier">
-        <UiButton @click="change" class="button-default" :withoutIcon="true" buttonType="default"><p>Изменить данные</p></UiButton>
+        <UiButton @click="" class="button-default" :withoutIcon="true" buttonType="default"
+          ><p>Изменить данные</p></UiButton
+        >
         <UiButton @click="quit" class="button-cancel" :withoutIcon="true" buttonType="cancel"><p>Выйти</p></UiButton>
       </div>
+
     </div>
   </div>
 </template>
@@ -31,10 +45,36 @@ import { useUserStore } from '@/stores/user';
 import { dateFormatterISO } from '../utils/dateFormatter';
 import { useStatsStore } from '@/stores/stats';
 import UiButton from '@/components/ui/UiButton.vue';
+import UiCheckbox from '@/components/ui/UiCheckbox.vue';
 import { useRouter } from 'vue-router';
+import { useModalWindowStore } from '@/stores/modalWindow';
+import { ref, watch } from 'vue';
 //выйти из акка
 const userStore = useUserStore();
 const statsStore = useStatsStore();
+const modalWindowStore = useModalWindowStore();
+
+const checkboxes = ref([
+  { 
+    text: 'Больше не показывать окно при удалении', 
+    checked: modalWindowStore.settings.showDeleteSpending, 
+    id: 'showDeleteSpending' 
+  },
+  {
+    text: 'Удалять без переключения',
+    checked: modalWindowStore.settings.switchDeleteSpending,
+    id: 'switchDeleteSpending',
+  },
+]);
+
+watch(() => {
+  console.log('imherre', checkboxes.value)
+  modalWindowStore.setSettings({
+    showDeleteSpending: checkboxes.value[0].checked,
+    switchDeleteSpending: checkboxes.value[1].checked,
+  })
+})
+
 const router = useRouter();
 const quit = () => {
   router.push({ name: 'login' });
@@ -57,7 +97,8 @@ const quit = () => {
 }
 
 .register-date-contanier,
-.stats-contanier {
+.stats-contanier,
+.settings {
   margin-top: 40px;
 }
 
@@ -98,7 +139,8 @@ const quit = () => {
   .quit-change-contanier {
     flex-direction: column;
     justify-content: space-between;
-    height: 150px
+    height: 150px;
+    width: auto;
   }
 }
 </style>
