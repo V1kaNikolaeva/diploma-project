@@ -44,8 +44,8 @@ const props = defineProps({
 const emits = defineEmits(['deleteCard', 'changeCard']);
 
 const cardFromGroup = (id, updatedData) => {
-  if (props.spendingMode === 'delete') {
-    emits('deleteCard', id);
+  if (props.spendingMode === 'delete' || props.deleteSpendingMode === true) {
+    emits('deleteCard', id, updatedData);
   } else if (props.spendingMode === 'change') {
     emits('changeCard', id, updatedData);
   }

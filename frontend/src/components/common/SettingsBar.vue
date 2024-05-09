@@ -1,11 +1,11 @@
 <template>
-  <div class="settings__contanier">
+  <div class="settings__contanier" v-on-click-outside="changeVisibility">
     <div class="button__wrapper">
-      <UIButton @click="actions = !actions" :border="false">
+      <UIButton class="setting-button" @click="changeVisibility(0)" :border="false">
         <p v-if="!isMobile()">Действия</p>
         <template v-if="!isMobile()" #left-icon>
           <Transition name="icon">
-            <UiIcon :icon="actions ? 'downArrow' : 'upArrow'" />
+            <UiIcon :icon="list[0].value ? 'downArrow' : 'upArrow'" />
           </Transition>
         </template>
         <template #right-icon v-if="isMobile()">
@@ -13,7 +13,7 @@
         </template>
       </UIButton>
       <Transition name="list">
-        <div v-show="actions" class="contanier list-active-actions">
+        <div v-show="list[0].value" class="contanier list-active-actions">
           <UIButton class="actions-item" @click="createCard(true)" :border="false">
             <p>Добавить</p>
             <template #right-icon>
@@ -37,17 +37,17 @@
     </div>
 
     <div class="button__wrapper">
-      <UIButton @click="categories = !categories" :border="false">
+      <UIButton class="setting-button" @click="changeVisibility(1)" :border="false">
         <p v-if="!isMobile()">Категории</p>
         <template v-if="!isMobile()" #left-icon>
-          <UiIcon :icon="categories ? 'downArrow' : 'upArrow'" />
+          <UiIcon :icon="list[1].value ? 'downArrow' : 'upArrow'" />
         </template>
         <template #right-icon v-if="isMobile()">
           <UiIcon icon="categories"></UiIcon>
         </template>
       </UIButton>
       <Transition name="list">
-        <div v-show="categories" class="contanier list-active-categories">
+        <div v-show="list[1].value" class="contanier list-active-categories">
           <UIButton class="category-item" @click="sortCategory('products')" :border="false">
             <p>Продукты</p>
             <template #right-icon>
@@ -107,17 +107,17 @@
     </div>
 
     <div class="button__wrapper">
-      <UIButton @click="sorting = !sorting" :border="false">
+      <UIButton class="setting-button" @click="changeVisibility(2)" :border="false">
         <p v-if="!isMobile()">Сортировки</p>
         <template v-if="!isMobile()" #left-icon>
-          <UiIcon :icon="sorting ? 'downArrow' : 'upArrow'" />
+          <UiIcon :icon="list[2].value ? 'downArrow' : 'upArrow'" />
         </template>
         <template #right-icon v-if="isMobile()">
           <UiIcon icon="sorting"></UiIcon>
         </template>
       </UIButton>
       <Transition name="list">
-        <div v-show="sorting" class="contanier list-active-sorting">
+        <div v-show="list[2].value" class="contanier list-active-sorting">
           <UIButton class="sort-item" @click="sortQuantity(sortValue[sortIndex])" :border="false">
             <p>По сумме</p>
             <template #right-icon>
@@ -162,8 +162,9 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { isMobile } from '@/utils/isMobile';
+import { vOnClickOutside } from '@vueuse/components';
 import UIButton from '../ui/UiButton.vue';
 import UiIcon from '../ui/UIIcon.vue';
 
@@ -234,17 +235,35 @@ const changeSpending = () => {
   }
 };
 
-let actions = ref(false);
-let categories = ref(false);
-let sorting = ref(false);
+const list = ref([
+  { name: 'actions', value: false },
+  { name: 'categories', value: false },
+  { name: 'sorting', value: false },
+]);
 
 onMounted(() => {
   if (!isMobile()) {
-    actions.value = true;
-    categories.value = true;
-    sorting.value = true;
+    list.value = [
+      { name: 'actions', value: true },
+      { name: 'categories', value: true },
+      { name: 'sorting', value: true },
+    ];
   }
 });
+
+const changeVisibility = (index) => {
+  if (isMobile()) {
+    for (let i in list.value) {
+      if (i == index) {
+        list.value[i].value = !list.value[i].value;
+      } else {
+        list.value[i].value = false;
+      }
+    }
+  } else {
+    list.value[index].value = !list.value[index].value;
+  }
+};
 
 let sortIndex = ref(0);
 let sortValue = ref(['up', 'down', 'common']);
@@ -279,15 +298,6 @@ const activeColorDelete = computed(() => {
 });
 const activeColorChange = computed(() => {
   return props.spendingMode === 'change' ? '#313131' : '#191919';
-});
-const listActiveActions = computed(() => {
-  return actions.value ? 'visible' : 'hidden';
-});
-const listActiveCategories = computed(() => {
-  return categories.value ? 'visible' : 'hidden';
-});
-const listActiveSorting = computed(() => {
-  return sorting.value ? 'visible' : 'hidden';
 });
 </script>
 
@@ -381,6 +391,8 @@ const listActiveSorting = computed(() => {
     width: auto;
     margin: 10px 0px 10px 0px;
   }
-
+  .setting-button {
+    padding-bottom: 26px;
+  }
 }
 </style>

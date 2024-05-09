@@ -202,6 +202,7 @@ const menu = () => {
   .hamburger {
     display: block;
     margin-right: 20px;
+    z-index: 5;
   }
 
   .hamburger.active .bar:nth-child(2) {
@@ -228,14 +229,16 @@ const menu = () => {
     display: flex;
     position: fixed;
     left: -100%;
-    top: 80px;
+    top: 0;
+    padding-top: 80px;
     flex-direction: column;
     background-color: var(--main-bg);
     border-bottom: 1px solid var(--main-line);
     width: 100%;
-    height: 250px;
+    height: 346px;
     align-items: center;
     transition: 0.3s;
+    z-index: 4;
   }
   .nav-contanier {
     width: 100%;
@@ -245,6 +248,14 @@ const menu = () => {
   }
   .nav-item {
     margin: 16px 0;
+  }
+
+  .nav-item:first-child {
+    width: 100%;
+    text-align: center;
+    padding-top: 16px;
+    margin-top: -5px;
+    border-top: 1px solid var(--main-line);
   }
 
   .navigation.active {

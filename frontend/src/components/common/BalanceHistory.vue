@@ -62,7 +62,7 @@
             @click="
               actionType === 'change'
                 ? updateBalance(currentChange, balance.id, balance.amount)
-                : deleteBalanceFromHistory(balance.id)
+                : deleteBalanceFromHistory(balance.id, balance.amount)
             "
             :border="false"
             :buttonType="'default'"
@@ -103,6 +103,9 @@ const props = defineProps({
   balances: {
     type: Array,
   },
+  balanceAmount: {
+    type: Number
+  }
 });
 const emits = defineEmits(['update:isModalVisible', 'updateBalance', 'deleteBalance']);
 
@@ -160,7 +163,11 @@ const updateBalance = async (currentChange, id, oldValue) => {
     $v.value.$touch();
     toaster.value.error('Неправильный формат!')
     return;
+  } else if (props.balanceAmount < oldValue - Number(currentChange)) {
+    toaster.value.error('Нехватает средств!')
+    return
   }
+
   showInput.value = false;
   action.value = 'Действия';
   showSkeleton.value = true;
@@ -174,7 +181,11 @@ const updateBalance = async (currentChange, id, oldValue) => {
 };
 
 
-const deleteBalanceFromHistory = async (id) => {
+const deleteBalanceFromHistory = async (id, currentChange) => {
+  if (props.balanceAmount < Number(currentChange)) {
+    toaster.value.error('Нехватает средств!')
+    return
+  }
   toaster.value.success('Баланс удален!');
   emits('deleteBalance', await deleteBalance(id));
   action.value = 'Действия';

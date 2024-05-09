@@ -70,6 +70,7 @@ const props = defineProps({
     required: true,
   },
   updatedData: {},
+  deletedData: {},
 });
 
 const emits = defineEmits([
@@ -80,18 +81,20 @@ const emits = defineEmits([
   'update:oneMounth', 
   'deleteSpending',
   'update:updatedData',
+  'update:deletedData',
 ]);
 const modalWindowStore = useModalWindowStore()
 
 
-const deleteCard = (id) => {
+const deleteCard = (id, deletedData) => {
 	if (JSON.parse(modalWindowStore.settings.showDeleteSpending) == true) {
 		emits('update:deleteSpendingId', id)
 		emits('deleteSpending')
 	} else {
-		emits('update:isModalVisible', true)
-  	emits('update:modalFormType', 'deleteSpending')
+    emits('update:deletedData', deletedData)
   	emits('update:deleteSpendingId', id)	
+    emits('update:isModalVisible', true)
+  	emits('update:modalFormType', 'deleteSpending')
 	}
 }
 const changeCard = (id, updatedData) => {

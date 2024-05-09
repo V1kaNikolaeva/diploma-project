@@ -3,9 +3,9 @@
     <div class="warning">
       <p>{{ props.warningText }}</p>
     </div>
-    <!-- <div v-if="card" class="delete-card">
-
-    </div> -->
+    <div class="info">
+      <slot></slot>
+    </div> 
     <div class="checkboxes-contanier">
       <div class="solution-checkbox" v-for="checkbox in deleteSpendingCheckboxes">
         <UiCheckbox v-model:checked="checkbox.checked" :checkboxText="checkbox.text" :id="checkbox.id" :value="checkbox.checked"/>
@@ -54,5 +54,8 @@ const cancel = () => {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+}
+.checkboxes-contanier, .info {
+  margin: 20px 0px 20px 0px;
 }
 </style>

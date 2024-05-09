@@ -82,6 +82,9 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  balanceAmount: {
+    type: Number,
+  }
 });
 const emits = defineEmits(['update:isModalVisible', 'postSpending', 'updateSpending']);
 
@@ -124,11 +127,16 @@ const rules = {
 const $v = useVuelidate(rules, localSpending);
 
 const createSpending = async (data, choose) => {
+  console.log(props.balanceAmount)
   if (data === false) {
     return emits('update:isModalVisible', data);
   } else if ($v.value.$invalid) {
     return $v.value.$touch();
   } else {
+    if (props.balanceAmount < localSpending.value.spending) {
+      toaster.value.error('Недостаточно средств!');
+      return
+    }
     localSpending.value.spendingType = choose;
     emits(
       'postSpending',
@@ -148,7 +156,13 @@ const updateSpending = async (data, choose) => {
   } else if ($v.value.$invalid) {
     return $v.value.$touch();
   } else {
-    console.log(props.updatedData.id)
+    if (localSpending.value.spending === props.updatedData.one_spending) {
+      emits('update:isModalVisible', false);
+    }
+    if (props.balanceAmount < localSpending.value.spending - props.updatedData.one_spending) {
+      toaster.value.error('Недостаточно средств!');
+      return;
+    }
     localSpending.value.spendingType = choose;
     emits(
       'updateSpending',

@@ -18,7 +18,11 @@
       </UIButton>
     </div>
   </div>
+  <!-- <p>
+  {{ spendingAmount }}
+  {{ balanceAmount }}
 
+</p> -->
   <div class="wrapper__home">
     <Teleport to=".nav-contanier" :disabled="userWidth > 768">
       <div class="settings__wrapper">
@@ -44,6 +48,7 @@
         v-model:deleteSpendingMode="deleteSpendingMode"
         v-model:spendingMode="spendingMode"
         v-model:updatedData="updatedData"
+        v-model:deletedData="deletedData"
         v-model:oneMounth="oneMounth"
         v-model:deleteSpendingId="deleteSpendingId"
         v-model:isModalVisible="isModalVisible"
@@ -69,29 +74,42 @@
     <CreateCardForm
       v-else-if="modalFormType === 'createCard'"
       @postSpending="postSpending"
+      :balanceAmount="amount"
       v-model:isModalVisible="isModalVisible"
     />
     <CreateCardForm
       v-else-if="modalFormType === 'updateCard'"
       :updatedData="updatedData"
       @updateSpending="updateSpending"
+      :balanceAmount="amount"
       v-model:isModalVisible="isModalVisible"
     />
     <BalanceHistory
       v-else-if="modalFormType === 'balanceHistory'"
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
+      :balanceAmount="amount"
       @updateBalance="updateBalance"
       @deleteBalance="deleteBalance"
     />
     <TheWarning
-      v-else-if="modalFormType === 'deleteSpending' && JSON.parse(modalWindowStore.settings.showDeleteSpending) == false"
+      v-else-if="
+        modalFormType === 'deleteSpending' && JSON.parse(modalWindowStore.settings.showDeleteSpending) == false
+      "
       v-model:isModalVisible="isModalVisible"
       v-model:deleteSpendingCheckboxes="deleteSpendingCheckboxes"
       @deleteSpending="deleteSpending"
       @storeSettings="storeSettings"
       warningText="Вы действительно хотите удалить эту затрату?"
-    />
+    >
+      <UiCard
+        :one_spending="deletedData.one_spending"
+        :reason="deletedData.reason"
+        :spending_type="deletedData.spending_type"
+        :delete-spending-mode="false"
+        spending-mode=""
+      />
+    </TheWarning>
   </UIModalWindow>
   <!-- <UIButton class="user-bank__button" :buttonType="'cashVault'">
     <UIIcon :icon="'bank'"></UIIcon>
@@ -107,12 +125,13 @@ import BalanceHistory from '../components/common/BalanceHistory.vue';
 import TheWarning from '../components/common/TheWarning.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
+import UiCard from '../components/ui/UiCard.vue';
 import UIIcon from '../components/ui/UIIcon.vue';
 import { computed, ref, watchEffect } from 'vue';
 import { quantityFormatterRUB } from '../utils/quantityFormatters';
 import { useBalanceAxios } from '../composables/useBalanceAxios';
 import { useSpendingAxios } from '../composables/useSpendingAxios';
-import { useUserWidthObserver } from '../composables/useUserWidthObserver'
+import { useUserWidthObserver } from '../composables/useUserWidthObserver';
 import { useStatsStore } from '../stores/stats';
 import { useModalWindowStore } from '../stores/modalWindow';
 import { deleteSpendingAPI } from '@/api/spending';
@@ -128,20 +147,21 @@ export default {
     UIModalWindow,
     UIButton,
     UIIcon,
+    UiCard,
   },
 
   async setup() {
     const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
     const statsStore = useStatsStore();
     let isModalVisible = ref(false);
-    
+
     let sortQuantityType = ref('common');
     let sortQuantityByDate = ref('common');
     let sortCategoryType = ref('all');
     let oneMounth = ref(true);
 
     let modalFormType = ref();
-    
+
     const replenishBalance = () => {
       isModalVisible.value = true;
       modalFormType.value = 'replenishBalance';
@@ -158,60 +178,67 @@ export default {
             spendings.value.reduce((acc, num) => acc + num.one_spending, 0)
         : 0;
     });
+    const balanceAmount = computed(() => {
+      return balances.value ? balances.value.reduce((acc, num) => acc + num.amount, 0) : 0;
+    });
+    const spendingAmount = computed(() => {
+      return spendings.value ? spendings.value.reduce((acc, num) => acc + num.one_spending, 0) : 0;
+    });
 
     //Обновляем 1 элемент массива
     const postBalance = (newItem) => {
       balances.value.unshift(newItem);
-      setProfileStats()
+      setProfileStats();
     };
     const postSpending = (newItem) => {
       spendings.value.unshift(newItem);
-      setProfileStats()
+      setProfileStats();
     };
     //Обновляем 1 элемент массива
     const updateBalance = (updatedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === updatedItem.data.id);
       balances.value[itemIndex] = updatedItem.data;
-      setProfileStats()
+      setProfileStats();
     };
 
     const spendingMode = ref('');
-    const updatedData = ref()
+    const updatedData = ref();
     const updateSpending = (updatedItem) => {
-      spendingMode.value = ''
+      spendingMode.value = '';
       const itemIndex = spendings.value.findIndex((item) => item.id === updatedItem.data.id);
       spendings.value[itemIndex] = updatedItem.data;
-      setProfileStats()
+      setProfileStats();
     };
     //Удаляем 1 элемент массива
     const deleteBalance = (deletedItem) => {
       const itemIndex = balances.value.findIndex((item) => item.id === deletedItem.deletedBalance);
       balances.value.splice(itemIndex, 1);
-      setProfileStats()
+      setProfileStats();
     };
-
 
     let deleteSpendingMode = ref(false);
     const modalWindowStore = useModalWindowStore();
     watchEffect(() => {
       if (JSON.parse(modalWindowStore.settings.switchDeleteSpending) == false) {
-        deleteSpendingMode.value = false
+        deleteSpendingMode.value = false;
       }
     });
 
     const deleteSpendingId = ref();
+    const deletedData = ref();
     const deleteSpending = async () => {
+      deletedData.value = null;
       const answer = await deleteSpendingAPI(deleteSpendingId.value);
       const itemIndex = spendings.value.findIndex((item) => item.id === answer.deletedSpending);
       spendings.value.splice(itemIndex, 1);
       if (JSON.parse(modalWindowStore.settings.switchDeleteSpending) == false) {
-        deleteSpendingMode.value = false
+        deleteSpendingMode.value = false;
       }
-      setProfileStats()
+      setProfileStats();
     };
 
     //Функция для установки статы для профиля
-     const setProfileStats = () => {
+    const setProfileStats = () => {
       statsStore.setStats({
         spending: spendings.value.length,
         balance: balances.value.length,
@@ -236,15 +263,8 @@ export default {
       }
     };
 
-    const { userWidth } = useUserWidthObserver()
+    const { userWidth } = useUserWidthObserver();
 
-    
-    //твои таски bla
-    /* 
-1. сделать карточку удаления в варнинге
-1. отслеживание изменения ширины экрана
-3. сделать настройки
-*/
     return {
       balances,
       spendings,
@@ -261,9 +281,12 @@ export default {
       deleteBalance,
       postSpending,
       updatedData,
+      deletedData,
       updateSpending,
       deleteSpending,
       amount,
+      balanceAmount,
+      spendingAmount,
       quantityFormatterRUB,
       deleteSpendingMode,
       spendingMode,
@@ -273,7 +296,7 @@ export default {
       deleteSpendingId,
       deleteSpendingAPI,
       setProfileStats,
-      userWidth
+      userWidth,
     };
   },
 };

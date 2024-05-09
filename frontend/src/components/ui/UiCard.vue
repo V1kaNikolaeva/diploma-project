@@ -50,7 +50,7 @@ const props = defineProps({
   deleteSpendingMode: {},
   spendingMode: {
     type: String,
-    required: true,
+    required: true
   },
 });
 const emits = defineEmits(['cardFromGroup']);
