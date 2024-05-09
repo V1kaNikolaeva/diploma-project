@@ -20,19 +20,21 @@
   </div>
 
   <div class="wrapper__home">
-    <div class="settings__wrapper">
-      <SettingsBar
-        v-model:isModalVisible="isModalVisible"
-        :oneMounth="oneMounth"
-        v-model:sortQuantityType="sortQuantityType"
-        :balance="amount"
-        v-model:sortCategoryType="sortCategoryType"
-        v-model:sortQuantityByDate="sortQuantityByDate"
-        v-model:modalFormType="modalFormType"
-        v-model:deleteSpendingMode="deleteSpendingMode"
-        v-model:spendingMode="spendingMode"
-      />
-    </div>
+    <Teleport to=".nav-contanier" :disabled="userWidth > 768">
+      <div class="settings__wrapper">
+        <SettingsBar
+          v-model:isModalVisible="isModalVisible"
+          :oneMounth="oneMounth"
+          v-model:sortQuantityType="sortQuantityType"
+          :balance="amount"
+          v-model:sortCategoryType="sortCategoryType"
+          v-model:sortQuantityByDate="sortQuantityByDate"
+          v-model:modalFormType="modalFormType"
+          v-model:deleteSpendingMode="deleteSpendingMode"
+          v-model:spendingMode="spendingMode"
+        />
+      </div>
+    </Teleport>
     <div v-if="spendings.length" class="cards__wrapper">
       <TheCards
         :spendings="spendings"
@@ -110,6 +112,7 @@ import { computed, ref, watchEffect } from 'vue';
 import { quantityFormatterRUB } from '../utils/quantityFormatters';
 import { useBalanceAxios } from '../composables/useBalanceAxios';
 import { useSpendingAxios } from '../composables/useSpendingAxios';
+import { useUserWidthObserver } from '../composables/useUserWidthObserver'
 import { useStatsStore } from '../stores/stats';
 import { useModalWindowStore } from '../stores/modalWindow';
 import { deleteSpendingAPI } from '@/api/spending';
@@ -131,7 +134,7 @@ export default {
     const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
     const statsStore = useStatsStore();
     let isModalVisible = ref(false);
-
+    
     let sortQuantityType = ref('common');
     let sortQuantityByDate = ref('common');
     let sortCategoryType = ref('all');
@@ -232,9 +235,15 @@ export default {
         });
       }
     };
+
+    const { userWidth } = useUserWidthObserver()
+
+    
     //твои таски bla
     /* 
 1. сделать карточку удаления в варнинге
+1. отслеживание изменения ширины экрана
+3. сделать настройки
 */
     return {
       balances,
@@ -264,6 +273,7 @@ export default {
       deleteSpendingId,
       deleteSpendingAPI,
       setProfileStats,
+      userWidth
     };
   },
 };

@@ -1,11 +1,12 @@
 <template>
   <header class="nav__header">
-    <div class="navWrapper" ref="navWrapper">
-      <div class="logoWrapper">
+    <div class="logoWrapper">
         <div class="logo">
           <h1>Incomes</h1>
         </div>
       </div>
+    <div class="navWrapper" ref="navWrapper">
+
       <nav class="nav-contanier">
         <ul class="navigation" ref="navigation">
           <li class="nav-item">
@@ -132,10 +133,7 @@ const menu = () => {
   display: inline-flex;
 }
 .navWrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 1100px;
+  width: 700px;
 }
 
 .nav-contanier {
@@ -194,7 +192,7 @@ const menu = () => {
   display: block;
   width: 35px;
   height: 3px;
-  margin: 10px;
+  margin: 5px;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   background-color: var(--light-green);
@@ -211,11 +209,14 @@ const menu = () => {
   }
 
   .hamburger.active .bar:nth-child(1) {
-    transform: translateY(14px) rotate(46deg);
+    transform: translateY(8px) rotate(45deg);
   }
 
   .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-12px) rotate(-46deg);
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  .logoWrapper {
+    display: none;
   }
   .navWrapper {
     width: 100%;
@@ -230,12 +231,18 @@ const menu = () => {
     top: 80px;
     flex-direction: column;
     background-color: var(--main-bg);
+    border-bottom: 1px solid var(--main-line);
     width: 100%;
     height: 250px;
     align-items: center;
     transition: 0.3s;
   }
-
+  .nav-contanier {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
   .nav-item {
     margin: 16px 0;
   }

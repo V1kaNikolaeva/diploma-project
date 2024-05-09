@@ -38,7 +38,6 @@ import ErrorMessage from '../common/ErrorMessage.vue';
 import UiErrorContanier from '../ui/UiErrorContanier.vue';
 import { balance } from '../../services/projectServices';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, numeric, maxLength, minValue } from '@vuelidate/validators';

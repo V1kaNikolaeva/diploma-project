@@ -28,6 +28,9 @@ import UpArrow from '../../assets/icons/icon-up-arrow.svg';
 import Archive from '../../assets/icons/icon-archive.svg';
 import Cancel from '../../assets/icons/icon-cancel.svg';
 import Submit from '../../assets/icons/icon-submit.svg';
+import Actions from '../../assets/icons/icon-actions.svg';
+import Categories from '../../assets/icons/icon-categories.svg';
+import Sorting from '../../assets/icons/icon-sorting.svg';
 
 const icons = {
   'close': Close,
@@ -55,6 +58,9 @@ const icons = {
   'archive': Archive,
   'cancel': Cancel,
   'submit': Submit,
+  'actions': Actions,
+  'categories': Categories,
+  'sorting': Sorting,
 };
 
 export default {

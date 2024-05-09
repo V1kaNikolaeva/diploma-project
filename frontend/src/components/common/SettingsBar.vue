@@ -2,28 +2,31 @@
   <div class="settings__contanier">
     <div class="button__wrapper">
       <UIButton @click="actions = !actions" :border="false">
-        <p>Действия</p>
-        <template #left-icon>
+        <p v-if="!isMobile()">Действия</p>
+        <template v-if="!isMobile()" #left-icon>
           <Transition name="icon">
             <UiIcon :icon="actions ? 'downArrow' : 'upArrow'" />
           </Transition>
         </template>
+        <template #right-icon v-if="isMobile()">
+          <UiIcon icon="actions"></UiIcon>
+        </template>
       </UIButton>
       <Transition name="list">
-        <div v-show="actions" class="contanier">
-          <UIButton @click="createCard(true)" :border="false">
+        <div v-show="actions" class="contanier list-active-actions">
+          <UIButton class="actions-item" @click="createCard(true)" :border="false">
             <p>Добавить</p>
             <template #right-icon>
               <UiIcon icon="add" />
             </template>
           </UIButton>
-          <UIButton class="active-delete" @click="deleteSpendingActivateOrNot" :border="false">
+          <UIButton class="active-delete actions-item" @click="deleteSpendingActivateOrNot" :border="false">
             <p>Удалить</p>
             <template #right-icon>
               <UiIcon icon="delete" />
             </template>
           </UIButton>
-          <UIButton class="active-change" :border="false" @click="changeSpending">
+          <UIButton class="active-change actions-item" :border="false" @click="changeSpending">
             <p>Изменить</p>
             <template #right-icon>
               <UiIcon icon="change" />
@@ -35,89 +38,65 @@
 
     <div class="button__wrapper">
       <UIButton @click="categories = !categories" :border="false">
-        <p>Категории</p>
-        <template #left-icon>
+        <p v-if="!isMobile()">Категории</p>
+        <template v-if="!isMobile()" #left-icon>
           <UiIcon :icon="categories ? 'downArrow' : 'upArrow'" />
+        </template>
+        <template #right-icon v-if="isMobile()">
+          <UiIcon icon="categories"></UiIcon>
         </template>
       </UIButton>
       <Transition name="list">
-        <div v-show="categories" class="contanier">
-          <UIButton
-            @click="sortCategory('products')"
-            :border="false"
-          >
+        <div v-show="categories" class="contanier list-active-categories">
+          <UIButton class="category-item" @click="sortCategory('products')" :border="false">
             <p>Продукты</p>
             <template #right-icon>
               <UiIcon icon="cart" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('electronics')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('electronics')" :border="false">
             <p>Электроника</p>
             <template #right-icon>
               <UiIcon icon="smartwatch" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('medications')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('medications')" :border="false">
             <p>Медицина</p>
             <template #right-icon>
               <UiIcon icon="pulse" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('entertainment')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('entertainment')" :border="false">
             <p>Развлечения</p>
             <template #right-icon>
               <UiIcon icon="acousticGuitar" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('trips')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('trips')" :border="false">
             <p>Путешествия</p>
             <template #right-icon>
               <UiIcon icon="plane" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('cloth')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('cloth')" :border="false">
             <p>Одежда</p>
             <template #right-icon>
               <UiIcon icon="tShirt" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('present')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('present')" :border="false">
             <p>Подарки</p>
             <template #right-icon>
               <UiIcon icon="gift" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('other')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('other')" :border="false">
             <p>Другое</p>
             <template #right-icon>
               <UiIcon icon="search" />
             </template>
           </UIButton>
-          <UIButton
-            @click="sortCategory('all')"
-            :border="false"
-          >
+          <UIButton class="category-item" @click="sortCategory('all')" :border="false">
             <p>Все</p>
             <template #right-icon>
               <UiIcon icon="search" />
@@ -129,17 +108,17 @@
 
     <div class="button__wrapper">
       <UIButton @click="sorting = !sorting" :border="false">
-        <p>Сортировки</p>
-        <template #left-icon>
+        <p v-if="!isMobile()">Сортировки</p>
+        <template v-if="!isMobile()" #left-icon>
           <UiIcon :icon="sorting ? 'downArrow' : 'upArrow'" />
+        </template>
+        <template #right-icon v-if="isMobile()">
+          <UiIcon icon="sorting"></UiIcon>
         </template>
       </UIButton>
       <Transition name="list">
-        <div v-show="sorting" class="contanier">
-          <UIButton
-            @click="sortQuantity(sortValue[sortIndex])"
-            :border="false"
-          >
+        <div v-show="sorting" class="contanier list-active-sorting">
+          <UIButton class="sort-item" @click="sortQuantity(sortValue[sortIndex])" :border="false">
             <p>По сумме</p>
             <template #right-icon>
               <UiIcon
@@ -147,30 +126,31 @@
                   sortQuantityType === 'up'
                     ? 'sortUp'
                     : sortQuantityType === 'down'
-                    ? 'sortDown'
-                    : sortQuantityType === 'common'
-                    ? 'sortCommon'
-                    : null
+                      ? 'sortDown'
+                      : sortQuantityType === 'common'
+                        ? 'sortCommon'
+                        : null
                 "
               />
             </template>
           </UIButton>
           <UIButton
+            class="sort-item"
             v-if="props.oneMounth === false"
             @click="sortQuantityDate(sortValueByDate[sortIndexByDate])"
             :border="false"
           >
-            <p>По сумме в месяцах</p>
+            <p>По сумме в мес.</p>
             <template #right-icon>
               <UiIcon
                 :icon="
                   sortQuantityByDate === 'up'
                     ? 'sortUp'
                     : sortQuantityByDate === 'down'
-                    ? 'sortDown'
-                    : sortQuantityByDate === 'common'
-                    ? 'sortCommon'
-                    : null
+                      ? 'sortDown'
+                      : sortQuantityByDate === 'common'
+                        ? 'sortCommon'
+                        : null
                 "
               />
             </template>
@@ -182,9 +162,10 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import UIButton from "../ui/UiButton.vue";
-import UiIcon from "../ui/UIIcon.vue";
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { isMobile } from '@/utils/isMobile';
+import UIButton from '../ui/UiButton.vue';
+import UiIcon from '../ui/UIIcon.vue';
 
 const props = defineProps({
   isModalVisible: {
@@ -198,17 +179,17 @@ const props = defineProps({
   sortQuantityType: {
     type: String,
     required: true,
-    default: "commmon",
+    default: 'commmon',
   },
   sortQuantityByDate: {
     type: String,
     required: true,
-    default: "commmon",
+    default: 'commmon',
   },
   sortCategoryType: {
     type: String,
     required: true,
-    default: "all",
+    default: 'all',
     // validator: (value) => ['up', 'down', 'common'].includes(value)
   },
   deleteSpendingMode: {
@@ -218,81 +199,96 @@ const props = defineProps({
   spendingMode: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const emits = defineEmits([
-  "update:isModalVisible",
-  "update:modalFormType",
-  "update:sortQuantityType",
-  "update:sortCategoryType",
-  "update:sortQuantityByDate",
-  "update:deleteSpendingMode",
-  "update:spendingMode",
+  'update:isModalVisible',
+  'update:modalFormType',
+  'update:sortQuantityType',
+  'update:sortCategoryType',
+  'update:sortQuantityByDate',
+  'update:deleteSpendingMode',
+  'update:spendingMode',
 ]);
 
 const createCard = (value) => {
-  emits("update:isModalVisible", value);
-  emits("update:modalFormType", 'createCard');
+  emits('update:isModalVisible', value);
+  emits('update:modalFormType', 'createCard');
 };
 
-
 const deleteSpendingActivateOrNot = () => {
-  emits("update:deleteSpendingMode", !props.deleteSpendingMode);
+  emits('update:deleteSpendingMode', !props.deleteSpendingMode);
   if (props.spendingMode === 'change' || props.spendingMode === '') {
-    emits("update:spendingMode", 'delete');
+    emits('update:spendingMode', 'delete');
   } else {
-    emits("update:spendingMode", '');
+    emits('update:spendingMode', '');
   }
 };
 const changeSpending = () => {
   if (props.spendingMode === 'delete' || props.spendingMode === '') {
-    emits("update:deleteSpendingMode", false);
-    emits("update:spendingMode", 'change');
+    emits('update:deleteSpendingMode', false);
+    emits('update:spendingMode', 'change');
   } else {
-    emits("update:spendingMode", '');
+    emits('update:spendingMode', '');
   }
 };
 
-let actions = ref(true);
-let categories = ref(true);
-let sorting = ref(true);
+let actions = ref(false);
+let categories = ref(false);
+let sorting = ref(false);
+
+onMounted(() => {
+  if (!isMobile()) {
+    actions.value = true;
+    categories.value = true;
+    sorting.value = true;
+  }
+});
 
 let sortIndex = ref(0);
-let sortValue = ref(["up", "down", "common"]);
+let sortValue = ref(['up', 'down', 'common']);
 const sortQuantity = (value) => {
   if (sortIndex.value >= 2) {
     sortIndex.value = 0;
-    emits("update:sortQuantityType", value);
+    emits('update:sortQuantityType', value);
   } else {
     sortIndex.value++;
-    emits("update:sortQuantityType", value);
+    emits('update:sortQuantityType', value);
   }
 };
 
 let sortIndexByDate = ref(0);
-let sortValueByDate = ref(["up", "down", "common"]);
+let sortValueByDate = ref(['up', 'down', 'common']);
 const sortQuantityDate = (value) => {
   if (sortIndexByDate.value >= 2) {
     sortIndexByDate.value = 0;
-    emits("update:sortQuantityByDate", value);
+    emits('update:sortQuantityByDate', value);
   } else {
     sortIndexByDate.value++;
-    emits("update:sortQuantityByDate", value);
+    emits('update:sortQuantityByDate', value);
   }
 };
 
 const sortCategory = (value) => {
-  emits("update:sortCategoryType", value);
+  emits('update:sortCategoryType', value);
 };
 
 const activeColorDelete = computed(() => {
   return props.deleteSpendingMode ? '#313131' : '#191919';
-})
+});
 const activeColorChange = computed(() => {
   return props.spendingMode === 'change' ? '#313131' : '#191919';
-})
-
+});
+const listActiveActions = computed(() => {
+  return actions.value ? 'visible' : 'hidden';
+});
+const listActiveCategories = computed(() => {
+  return categories.value ? 'visible' : 'hidden';
+});
+const listActiveSorting = computed(() => {
+  return sorting.value ? 'visible' : 'hidden';
+});
 </script>
 
 <style scoped>
@@ -352,17 +348,39 @@ const activeColorChange = computed(() => {
 }
 
 @media (max-width: 768px) {
+  .settings__wrapper {
+  }
   .settings__contanier {
+    flex-direction: row-reverse;
     position: relative;
-    height: auto;
-    width: 200px;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
     padding: 0;
   }
   .contanier {
     align-items: normal;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: var(--main-bg);
+    border: 1px solid var(--main-line);
+    border-top: none;
   }
+
+  /* .actions-item {
+
+  }
+  .category-item {
+
+  }
+  .sort-item {
+
+  } */
   .button__wrapper {
+    width: auto;
     margin: 10px 0px 10px 0px;
   }
+
 }
 </style>
