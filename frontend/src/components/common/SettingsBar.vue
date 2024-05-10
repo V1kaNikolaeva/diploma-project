@@ -1,14 +1,14 @@
 <template>
-  <div class="settings__contanier" v-on-click-outside="changeVisibility">
+  <div class="settings__contanier" v-on-click-outside="outside">
     <div class="button__wrapper">
       <UIButton class="setting-button" @click="changeVisibility(0)" :border="false">
-        <p v-if="!isMobile()">Действия</p>
-        <template v-if="!isMobile()" #left-icon>
+        <p v-if="userWidth > 768">Действия</p>
+        <template v-if="userWidth > 768" #left-icon>
           <Transition name="icon">
             <UiIcon :icon="list[0].value ? 'downArrow' : 'upArrow'" />
           </Transition>
         </template>
-        <template #right-icon v-if="isMobile()">
+        <template #right-icon v-if="userWidth < 768">
           <UiIcon icon="actions"></UiIcon>
         </template>
       </UIButton>
@@ -38,11 +38,11 @@
 
     <div class="button__wrapper">
       <UIButton class="setting-button" @click="changeVisibility(1)" :border="false">
-        <p v-if="!isMobile()">Категории</p>
-        <template v-if="!isMobile()" #left-icon>
+        <p v-if="userWidth > 768">Категории</p>
+        <template v-if="userWidth > 768" #left-icon>
           <UiIcon :icon="list[1].value ? 'downArrow' : 'upArrow'" />
         </template>
-        <template #right-icon v-if="isMobile()">
+        <template #right-icon v-if="userWidth < 768">
           <UiIcon icon="categories"></UiIcon>
         </template>
       </UIButton>
@@ -108,11 +108,11 @@
 
     <div class="button__wrapper">
       <UIButton class="setting-button" @click="changeVisibility(2)" :border="false">
-        <p v-if="!isMobile()">Сортировки</p>
-        <template v-if="!isMobile()" #left-icon>
+        <p v-if="userWidth > 768">Сортировки</p>
+        <template v-if="userWidth > 768" #left-icon>
           <UiIcon :icon="list[2].value ? 'downArrow' : 'upArrow'" />
         </template>
-        <template #right-icon v-if="isMobile()">
+        <template #right-icon v-if="userWidth < 768">
           <UiIcon icon="sorting"></UiIcon>
         </template>
       </UIButton>
@@ -162,9 +162,10 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { isMobile } from '@/utils/isMobile';
 import { vOnClickOutside } from '@vueuse/components';
+import { useUserWidthObserver } from '@/composables/useUserWidthObserver';
 import UIButton from '../ui/UiButton.vue';
 import UiIcon from '../ui/UIIcon.vue';
 
@@ -241,18 +242,25 @@ const list = ref([
   { name: 'sorting', value: false },
 ]);
 
-onMounted(() => {
-  if (!isMobile()) {
+const { userWidth } = useUserWidthObserver()
+
+watchEffect(() => {
+  if (userWidth.value > 768) {
     list.value = [
       { name: 'actions', value: true },
       { name: 'categories', value: true },
       { name: 'sorting', value: true },
     ];
+  } else {
+    list.value = [
+      { name: 'actions', value: false },
+      { name: 'categories', value: false },
+      { name: 'sorting', value: false },
+    ];
   }
-});
-
+})
 const changeVisibility = (index) => {
-  if (isMobile()) {
+  if (userWidth.value < 768) {
     for (let i in list.value) {
       if (i == index) {
         list.value[i].value = !list.value[i].value;
@@ -264,6 +272,14 @@ const changeVisibility = (index) => {
     list.value[index].value = !list.value[index].value;
   }
 };
+
+const outside = () => {
+  if (userWidth.value < 768) {
+    for (let i in list.value) {
+      list.value[i].value = false;
+    }
+  }
+}
 
 let sortIndex = ref(0);
 let sortValue = ref(['up', 'down', 'common']);
@@ -358,8 +374,8 @@ const activeColorChange = computed(() => {
 }
 
 @media (max-width: 768px) {
-  .settings__wrapper {
-  }
+  /* .settings__wrapper {
+  } */
   .settings__contanier {
     flex-direction: row-reverse;
     position: relative;
