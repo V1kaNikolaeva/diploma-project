@@ -78,7 +78,7 @@ const pickedItem = (name, value) => {
 
 <style scoped>
 .select {
-  max-width: 130px;
+  width: 130px;
 }
 .list {
   position: absolute;

@@ -8,4 +8,4 @@ class BalanceSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     class Meta:
         model = Balance
-        fields = ('id', 'amount', 'created_by', 'created_at_formated')
+        fields = ('id', 'amount', 'created_by', 'created_at_formated', 'created_at')

@@ -1,10 +1,12 @@
 <template>
-    <BarChart v-if="chartData" :chartData="chartData" :options="chartOptions"  />
+    <BarChart v-if="chartData.datasets[0].data.length" :chartData="chartData" :options="chartOptions"  />
+    <UiNoData v-else-if="!chartData.datasets[0].data.length"></UiNoData>
 </template>
   
 <script setup>
 import { BarChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
+import UiNoData from '../ui/UiNoData.vue'
 
 Chart.register(...registerables);
 

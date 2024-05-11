@@ -156,9 +156,9 @@ const updateSpending = async (data, choose) => {
   } else if ($v.value.$invalid) {
     return $v.value.$touch();
   } else {
-    if (localSpending.value.spending === props.updatedData.one_spending) {
-      emits('update:isModalVisible', false);
-    }
+    // if (localSpending.value.spending === props.updatedData.one_spending) {
+    //   emits('update:isModalVisible', false);
+    // }
     if (props.balanceAmount < localSpending.value.spending - props.updatedData.one_spending) {
       toaster.value.error('Недостаточно средств!');
       return;

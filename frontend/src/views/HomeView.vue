@@ -64,20 +64,20 @@
     </div>
   </div>
   <UIModalWindow ref="innerModal" v-if="isModalVisible" v-model:isModalVisible="isModalVisible">
-    <ReplenishBalanceForm
+    <BalanceForm
       v-if="modalFormType === 'replenishBalance'"
       v-model:isModalVisible="isModalVisible"
       v-model:balances="balances"
       labelName="Ведите сумму, которую хотите положить"
       @postBalance="postBalance"
     />
-    <CreateCardForm
+    <CardForm
       v-else-if="modalFormType === 'createCard'"
       @postSpending="postSpending"
       :balanceAmount="amount"
       v-model:isModalVisible="isModalVisible"
     />
-    <CreateCardForm
+    <CardForm
       v-else-if="modalFormType === 'updateCard'"
       :updatedData="updatedData"
       @updateSpending="updateSpending"
@@ -119,8 +119,8 @@
 <script>
 import TheCards from '../components/common/TheCards.vue';
 import SettingsBar from '../components/common/SettingsBar.vue';
-import ReplenishBalanceForm from '../components/forms/ReplenishBalanceForm.vue';
-import CreateCardForm from '../components/forms/CreateCardForm.vue';
+import BalanceForm from '../components/forms/BalanceForm.vue';
+import CardForm from '../components/forms/CardForm.vue';
 import BalanceHistory from '../components/common/BalanceHistory.vue';
 import TheWarning from '../components/common/TheWarning.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
@@ -140,8 +140,8 @@ export default {
   components: {
     TheCards,
     SettingsBar,
-    ReplenishBalanceForm,
-    CreateCardForm,
+    BalanceForm,
+    CardForm,
     BalanceHistory,
     TheWarning,
     UIModalWindow,

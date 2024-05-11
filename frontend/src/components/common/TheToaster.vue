@@ -6,11 +6,11 @@
       class="toast" 
       :class="{ 'toast_success' : toast.type === 'success', 'toast_error' : toast.type === 'error' }"
     >
-      <UIIcon 
+      <UiIcon 
         :icon="toast.type === 'success' ? 'check' : 
         toast.type === 'error' ? 'error' : null" 
         class="toast__icon">
-      </UIIcon>
+      </UiIcon>
       <UiToast :toast="toast"/>
     </div>
   </div>
@@ -18,13 +18,13 @@
 
 <script>
 import UiToast from '../ui/UiToast.vue'
-import UIIcon from '../ui/UiIcon.vue';
+import UiIcon from '../ui/UIIcon.vue';
 
 
 export default {
   name: 'TheToaster',
 
-  components: { UiToast, UIIcon },
+  components: { UiToast, UiIcon },
 
   data() {
     return {
