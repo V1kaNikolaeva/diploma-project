@@ -15,13 +15,44 @@
     <div class="sign-up__contanier">
       <form action="" @submit.prevent="signup">
         <div class="sign-up-labels__wrapper">
-          <UIInput type="text" placeholder="Имя" label="Имя" :fullWidth="true" v-model="localSignupUser.name" />
-        </div>
-        <div class="sign-up-labels__wrapper">
-          <UIInput type="text" placeholder="Почта" label="Почта" :fullWidth="true" v-model="localSignupUser.email" />
+          <UIInput
+            :invalid="v.name.$error"
+            type="text"
+            placeholder="Имя"
+            label="Имя"
+            :fullWidth="true"
+            v-model="localSignupUser.name"
+          />
+          <UiErrorContanier>
+            <ErrorMessage
+              :messageType="v.name.required.$invalid ? 'required' : false"
+              labelName="имя"
+              v-show="v.name.$error"
+            ></ErrorMessage>
+          </UiErrorContanier>
         </div>
         <div class="sign-up-labels__wrapper">
           <UIInput
+            :invalid="v.email.$error"
+            type="text"
+            placeholder="Почта"
+            label="Почта"
+            :fullWidth="true"
+            v-model="localSignupUser.email"
+          />
+          <UiErrorContanier>
+            <ErrorMessage
+              :messageType="v.email.required.$invalid ? 'required' :
+              v.email.email.$invalid ? 'email'
+              : false"
+              labelName="почта"
+              v-show="v.email.$error"
+            ></ErrorMessage>
+          </UiErrorContanier>
+        </div>
+        <div class="sign-up-labels__wrapper">
+          <UIInput
+            :invalid="v.password.$error"
             type="password"
             name="password"
             autocomplete="off"
@@ -30,9 +61,20 @@
             :fullWidth="true"
             v-model="localSignupUser.password"
           />
+          <UiErrorContanier>
+            <ErrorMessage
+              :messageType="v.password.required.$invalid ? 'required' :
+              v.password.minLength.$invalid ? 'small' 
+              : false"
+              labelName="пароль"
+              v-show="v.password.$error"
+            ></ErrorMessage>
+          </UiErrorContanier>
         </div>
+
         <div class="sign-up-labels__wrapper">
           <UIInput
+            :invalid="v.repeatPassword.$error"
             type="password"
             name="password"
             autocomplete="off"
@@ -41,6 +83,15 @@
             :fullWidth="true"
             v-model="localSignupUser.repeatPassword"
           />
+          <UiErrorContanier>
+            <ErrorMessage
+              :messageType="v.repeatPassword.required.$invalid ? 'required' :
+              v.repeatPassword.minLength.$invalid ? 'small' 
+              : false"
+              labelName="пароль"
+              v-show="v.repeatPassword.$error"
+            ></ErrorMessage>
+          </UiErrorContanier>
         </div>
         <div class="sign-up-labels__wrapper">
           <UIButton class="signUp-button" type="submit" buttonType="success" successMargin="0px">
@@ -57,8 +108,12 @@
 import UIInput from '../components/ui/UiInput.vue';
 import UIButton from '../components/ui/UiButton.vue';
 import TheToaster from '../components/common/TheToaster.vue';
+import ErrorMessage from '../components/common/ErrorMessage.vue';
+import UiErrorContanier from '../components/ui/UiErrorContanier.vue';
 import { signupUser } from '../services/projectServices';
 import { useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
+import { email, minLength, required } from '@vuelidate/validators';
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue';
 import axios from 'axios';
@@ -66,7 +121,7 @@ import axios from 'axios';
 export default {
   name: 'SignUpView',
 
-  components: { UIButton, UIInput, TheToaster },
+  components: { UIButton, UIInput, TheToaster, UiErrorContanier, ErrorMessage },
 
   setup() {
     const toaster = ref(null);
@@ -76,18 +131,18 @@ export default {
     const userSignup = signupUser();
 
     const localSignupUser = ref({ ...userSignup });
+    const rules = {
+      name: { required },
+      email: { required, email },
+      password: { required, minLength: minLength(6) },
+      repeatPassword: { required, minLength: minLength(6) },
+    };
+    const v = useVuelidate(rules, localSignupUser);
 
     const signup = () => {
-      if (localSignupUser.value.name === '') {
-        toaster.value.error('Проверьте имя');
-      } else if (localSignupUser.value.email === '') {
-        toaster.value.error('Проверьте e-mail');
-      } else if (localSignupUser.value.password === '') {
-        toaster.value.error('Проверьте пароль');
-      } else if (localSignupUser.value.repeatPassword === '') {
-        toaster.value.error('Проверьте пароль');
+      if (v.value.$invalid) {
+        v.value.$touch();
       } else {
-        //axios and api
         axios
           .post('/api/signup/', localSignupUser.value)
           .then((response) => {
@@ -95,7 +150,7 @@ export default {
               toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
               router.push('/login');
             } else {
-              toaster.value.error('Что-то пошло не так...');
+              toaster.value.error('Проверьте поля');
             }
           })
           .catch((error) => {
@@ -109,6 +164,8 @@ export default {
       localSignupUser,
       signup,
       toaster,
+      v,
+      rules,
     };
   },
 };
@@ -154,5 +211,17 @@ export default {
 .signUp-button {
   width: 100%;
   /* не рабоатет */
+}
+@media screen and (max-width: 768px) {
+  .sign-up__wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    height: 100%;
+  }
+  .have-account__contanier,
+  .sign-up__contanier {
+    width: 100%;
+  }
 }
 </style>

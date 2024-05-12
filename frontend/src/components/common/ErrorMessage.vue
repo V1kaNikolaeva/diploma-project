@@ -3,6 +3,8 @@
     <small class="error-message" v-else-if="messageType === 'numeric'">Поле {{ labelName }} должно содеражать число без пробелов</small>
     <small class="error-message" v-else-if="messageType === 'zero'">Поле {{ labelName }} не должно быть нулем</small>
     <small class="error-message" v-else-if="messageType === 'long'">Поле {{ labelName }} имеет слишком много символов</small>
+    <small class="error-message" v-else-if="messageType === 'small'">Поле {{ labelName }} должно быть содержать более {{ symbols }} символов</small>
+    <small class="error-message" v-else-if="messageType === 'email'">Неправильный формат почты</small>
 </template>
 
 <script setup>
@@ -16,6 +18,11 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    symbols: {
+        type: Number,
+        required: false,
+        default: 6,
+    }
 })
 
 </script>

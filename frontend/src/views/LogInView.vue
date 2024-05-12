@@ -14,6 +14,7 @@
       <form action="" @submit.prevent="login">
         <div class="sign-up-labels__wrapper">
           <UIInput
+            :invalid="v.email.$error"
             type="text"
             placeholder="Почта"
             label="Почта"
@@ -21,9 +22,19 @@
             :fullWidth="true"
             :multiline="false"
           />
+          <UiErrorContanier>
+            <ErrorMessage
+              :messageType="v.email.required.$invalid ? 'required' :
+              v.email.email.$invalid ? 'email'
+              : false"
+              labelName="почта"
+              v-show="v.email.$error"
+            ></ErrorMessage>
+          </UiErrorContanier>
         </div>
         <div class="sign-up-labels__wrapper">
           <UIInput
+            :invalid="v.password.$error"
             type="password"
             name="password"
             autocomplete="off"
@@ -33,6 +44,15 @@
             :fullWidth="true"
             :multiline="false"
           />
+          <UiErrorContanier>
+            <ErrorMessage
+              :messageType="v.password.required.$invalid ? 'required' :
+              v.password.minLength.$invalid ? 'small' 
+              : false"
+              labelName="пароль"
+              v-show="v.password.$error"
+            ></ErrorMessage>
+          </UiErrorContanier>
         </div>
         <div class="sign-up-labels__wrapper">
             <UIButton class="signUp-button" type="submit" buttonType="success" successMargin="0px">
@@ -49,6 +69,10 @@
 import UIInput from "../components/ui/UiInput.vue";
 import UIButton from "../components/ui/UiButton.vue";
 import TheToaster from "../components/common/TheToaster.vue";
+import ErrorMessage from '../components/common/ErrorMessage.vue';
+import UiErrorContanier from '../components/ui/UiErrorContanier.vue';
+import { useVuelidate } from '@vuelidate/core';
+import { email, minLength, required } from '@vuelidate/validators';
 import axios from "axios";
 import { loginUser } from "../services/projectServices";
 import { useUserStore } from "../stores/user";
@@ -61,6 +85,8 @@ export default {
     UIInput,
     UIButton,
     TheToaster,
+    UiErrorContanier,
+    ErrorMessage,
   },
 
   setup(props, context) {
@@ -70,12 +96,14 @@ export default {
     const userLogin = loginUser();
     const localUserLogin = ref({...userLogin});
     const router = useRouter();
-
+    const rules = {
+      email: { required, email },
+      password: { required, minLength: minLength(6) },
+    };
+    const v = useVuelidate(rules, localUserLogin);
     const login = async () => {
-      if (localUserLogin.value.email === '') {
-        toaster.value.error('Проверьте e-mail');
-      } else if (localUserLogin.value.password === '') {
-        toaster.value.error('Проверьте пароль');
+      if (v.value.$invalid) {
+        v.value.$touch();
       } else {
         //login
         await axios
@@ -107,6 +135,8 @@ export default {
       userLogin,
       localUserLogin,
       userStore,
+      v,
+      rules,
     }
   }
 
@@ -155,4 +185,16 @@ export default {
     width: 100%; 
     /* не рабоатет */
 }
-</style>../components/UiInput.vue../components/UiButton.vue../services/projectServices
+@media screen and (max-width: 768px) {
+  .sign-up__wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    height: 100%;
+  }
+  .have-account__contanier,
+  .sign-up__contanier {
+    width: 100%;
+  }
+}
+</style>

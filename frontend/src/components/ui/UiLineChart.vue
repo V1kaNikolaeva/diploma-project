@@ -1,6 +1,6 @@
 <template>
-    <LineChart v-if="!chartData.datasets[0].data.length" :chartData="chartData" :options="chartOptions" />
-    <UiNoData v-else-if="chartData.datasets[0].data.length"></UiNoData>
+    <LineChart v-if="chartData.datasets[0].data.length" :chartData="chartData" :options="chartOptions" />
+    <UiNoData v-else-if="!chartData.datasets[0].data.length"></UiNoData>
 </template>
   
 <script setup>

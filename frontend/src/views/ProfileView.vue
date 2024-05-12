@@ -12,10 +12,10 @@
       <div class="stats-contanier">
         <strong><p class="account-p">Статистика</p></strong>
         <div class="stats">
-          <p class="account-p">За все время вы {{ statsStore.stats.spending }} раза потратили деньги</p>
+          <p class="account-p">Всего расходов за все время: {{ statsStore.stats.spending }}</p>
         </div>
         <div class="stats">
-          <p class="account-p">За все время вы {{ statsStore.stats.balance }} заработали деньги</p>
+          <p class="account-p">Всего доходов за все время: {{ statsStore.stats.balance }}</p>
         </div>
       </div>
       <div class="settings">
@@ -49,7 +49,7 @@ import UiCheckbox from '@/components/ui/UiCheckbox.vue';
 import { useRouter } from 'vue-router';
 import { useModalWindowStore } from '@/stores/modalWindow';
 import { ref, watch } from 'vue';
-//выйти из акка
+
 const userStore = useUserStore();
 const statsStore = useStatsStore();
 const modalWindowStore = useModalWindowStore();
@@ -68,7 +68,6 @@ const checkboxes = ref([
 ]);
 
 watch(() => {
-  console.log('imherre', checkboxes.value)
   modalWindowStore.setSettings({
     showDeleteSpending: checkboxes.value[0].checked,
     switchDeleteSpending: checkboxes.value[1].checked,
@@ -79,6 +78,8 @@ const router = useRouter();
 const quit = () => {
   router.push({ name: 'login' });
   userStore.removeToken();
+  statsStore.removeToken();
+  modalWindowStore.removeToken();
 };
 </script>
 

@@ -10,7 +10,7 @@
 
 <style scoped>
 .error-contanier {
-    height: 35px;
+    height: 30px;
     padding: 5px 5px 5px 0px;
 }
 </style>

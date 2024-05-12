@@ -69,9 +69,9 @@ export default {
       { name: 'Радар', value: 'polarAreaChart' },
     ];
 
-    let categoriesChart = ref('doughnutChart');
-    let spentChart = ref('doughnutChart');
-    let balanceChart = ref('doughnutChart');
+    const categoriesChart = ref('doughnutChart');
+    const spentChart = ref('doughnutChart');
+    const balanceChart = ref('doughnutChart');
     const selectedYear = ref('all');
 
     const selectedYears = computed(() => {

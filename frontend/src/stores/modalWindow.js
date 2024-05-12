@@ -26,5 +26,13 @@ export const useModalWindowStore = defineStore({
       localStorage.setItem("settings.showDeleteSpending", this.settings.showDeleteSpending);
       localStorage.setItem("settings.switchDeleteSpending", this.settings.switchDeleteSpending);
     },
+
+    removeSettings() {
+      this.settings.showDeleteSpending = null;
+      this.settings.switchDeleteSpending = null;
+
+      localStorage.setItem("settings.showDeleteSpending", '');
+      localStorage.setItem("settings.switchDeleteSpending", '');
+    }
   },
 });
