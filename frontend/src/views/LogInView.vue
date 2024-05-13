@@ -139,8 +139,6 @@ export default {
       rules,
     }
   }
-
-
 };
 </script>
 
