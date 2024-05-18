@@ -48,7 +48,16 @@
       </UIButton>
       <Transition name="list">
         <div v-show="list[1].value" class="contanier list-active-categories">
-          <UIButton class="category-item" @click="sortCategory('products')" :border="false">
+          <CategoryItem
+            v-for="category in categories"
+            :icon="category.icon"
+            :name="category.name"
+            :value="category.value"
+            v-model:picked="category.picked"
+            @sortCategory="sortCategory"
+          />
+
+          <!-- <UIButton class="category-item" @click="sortCategory('products')" :border="false">
             <p>Продукты</p>
             <template #right-icon>
               <UiIcon icon="cart" />
@@ -101,7 +110,7 @@
             <template #right-icon>
               <UiIcon icon="search" />
             </template>
-          </UIButton>
+          </UIButton> -->
         </div>
       </Transition>
     </div>
@@ -162,12 +171,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watchEffect } from 'vue';
-import { isMobile } from '@/utils/isMobile';
+import { computed, ref, watchEffect } from 'vue';
 import { vOnClickOutside } from '@vueuse/components';
 import { useUserWidthObserver } from '@/composables/useUserWidthObserver';
 import UIButton from '../ui/UiButton.vue';
 import UiIcon from '../ui/UIIcon.vue';
+import CategoryItem from '../common/CategoryItem.vue'
 
 const props = defineProps({
   isModalVisible: {
@@ -213,6 +222,18 @@ const emits = defineEmits([
   'update:deleteSpendingMode',
   'update:spendingMode',
 ]);
+
+const categories = ref([
+  {icon: 'pulse', name: 'Здоровье', value: 'medications', picked: false},
+  {icon: 'cart', name: 'Продукты', value: 'products', picked: false},
+  {icon: 'acousticGuitar', name: 'Развлечения', value: 'entertainment', picked: false},
+  {icon: 'smartwatch', name: 'Электроника', value: 'electronics', picked: false},
+  {icon: 'plane', name: 'Путешествия', value: 'trips', picked: false},
+  {icon: 'tShirt', name: 'Одежда', value: 'cloth', picked: false},
+  {icon: 'gift', name: 'Подарки', value: 'present', picked: false},
+  {icon: 'search', name: 'Другое', value: 'other', picked: false},
+  {icon: 'search', name: 'Все', value: 'all', picked: true},
+])
 
 const createCard = (value) => {
   emits('update:isModalVisible', value);
@@ -306,6 +327,11 @@ const sortQuantityDate = (value) => {
 };
 
 const sortCategory = (value) => {
+  categories.value.forEach((category) => {
+    if (category.value !== value) {
+      category.picked = false
+    } 
+  })
   emits('update:sortCategoryType', value);
 };
 

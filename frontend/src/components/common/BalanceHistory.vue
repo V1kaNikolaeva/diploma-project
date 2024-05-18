@@ -1,6 +1,6 @@
 <template>
   <div class="history">
-    <table v-if="props.balances" class="history-table">
+    <table v-if="props.balances.length" class="history-table">
       <tr>
         <th>Сумма</th>
         <th>Дата</th>
@@ -74,6 +74,9 @@
         </td>
       </tr>
     </table>
+    <div class="no-balance" v-else-if="!props.balances.length">
+      <p class="p-no-balance">Доходов нет</p>
+    </div>
   </div>
 
   <div class="buttons-contanier">
@@ -250,5 +253,11 @@ td {
 .date {
   width: 40%;
 }
-
+.no-balance {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

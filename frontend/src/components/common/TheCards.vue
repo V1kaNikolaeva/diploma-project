@@ -1,5 +1,4 @@
 <template>
-  <div>
   <div v-if="spendingsSortedWithDates.length" v-for="item in spendingsSortedWithDates">
     <div class="line">
       <p class="date-name">{{ item.date }}</p>
@@ -14,12 +13,10 @@
       @changeCard="changeCard"
     />
   </div>
-  <div v-else-if="!spendingsSortedWithDates.length" class="no-spendings-contanier">
+  <div v-else-if="!spendingsSortedWithDates.length" class="no-spendings-contanier-sort">
     <div class="no-spendings">
       <strong><p class="p-no-spendings">Тут ничего нет</p></strong>
-      <p class="p-no-spendings">Создайте трату</p>
     </div>
-  </div>
   </div>
 </template>
 
@@ -182,5 +179,22 @@ watchEffect(() => {
 }
 .date-name {
   color: var(--light-orange);
+}
+.no-spendings-contanier-sort {
+  margin-bottom: 100px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.no-spendings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  outline: 1px solid var(--main-line);
+  border-radius: 10px;
 }
 </style>

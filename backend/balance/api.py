@@ -25,7 +25,7 @@ def create_balance(request):
         return JsonResponse(serializer.data, safe=False)
     else:
         message = form.errors.as_json() 
-        return JsonResponse({'message': message})
+        return JsonResponse(message)
     
 @api_view(['PUT'])
 def update_balance(request, pk):
