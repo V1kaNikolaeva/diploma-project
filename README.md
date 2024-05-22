@@ -29,7 +29,7 @@ python -m venv venv
 ```
 Затем активировать
 ```
-.\.venv\scripts\activate   
+.\venv\scripts\activate   
 ```
 После активации установить зависимости в директории backend
 ```
@@ -38,6 +38,10 @@ pip install -r requirements.txt
 В директории backend запустить сервер
 ```
 python manage.py runserver
+```
+Если возникает проблема с setuptools, то:
+```
+pip install --upgrade pippip install --force-reinstall -U setuptools
 ```
 Затем перейти в директорию frontend и установить node_modules
 ```
