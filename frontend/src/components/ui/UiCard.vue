@@ -57,7 +57,7 @@ const emits = defineEmits(['cardFromGroup']);
 
 const cardFromUi = (id, updatedData) => {
   lightCard.value = null;
-  emits('cardFromGroup', id, updatedData);
+  emits('cardFromGroup', id, { id: updatedData.id, spending: updatedData.one_spending, reason: updatedData.reason, spendingType: updatedData.spending_type });
 };
 
 let lightCard = ref(null)

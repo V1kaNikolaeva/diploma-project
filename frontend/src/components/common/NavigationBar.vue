@@ -191,8 +191,8 @@ const menu = () => {
 .bar {
   display: block;
   width: 35px;
-  height: 3px;
-  margin: 5px;
+  height: 1px;
+  margin: 10px;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   background-color: var(--light-green);
@@ -210,11 +210,11 @@ const menu = () => {
   }
 
   .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+    transform: translateY(11px) rotate(45deg);
   }
 
   .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+    transform: translateY(-11px) rotate(-45deg);
   }
   .logoWrapper {
     display: none;

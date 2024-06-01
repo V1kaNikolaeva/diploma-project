@@ -39,7 +39,10 @@ const props = defineProps({
     type: String,
     required: true,
     default: 'all',
-    validator: (value) => ['medications', 'products', 'entertainment', 'electronics', 'trips', 'cloth', 'present', 'other', 'all'].includes(value)
+    validator: (value) =>
+      ['medications', 'products', 'entertainment', 'electronics', 'trips', 'cloth', 'present', 'other', 'all'].includes(
+        value,
+      ),
   },
   sortQuantityByDate: {
     type: String,
@@ -56,49 +59,53 @@ const props = defineProps({
   },
   deleteSpendingId: {},
   modalFormType: {
-    type: String
+    type: String,
   },
-  isModalVisible: {	
-      type: Boolean,		
-      required: true,		
-    },	
-    spendingMode: {
+  isModalVisible: {
+    type: Boolean,
+    required: true,
+  },
+  spendingMode: {
     type: String,
     required: true,
   },
-  updatedData: {},
-  deletedData: {},
+  updatedData: {
+    type: Object,
+  },
+  deletedData: {
+    type: Object,
+  },
 });
 
 const emits = defineEmits([
-  'update:modalFormType', 
-  'update:isModalVisible', 
-  'update:deleteSpendingMode', 
-  'update:deleteSpendingId', 
-  'update:oneMounth', 
+  'update:modalFormType',
+  'update:isModalVisible',
+  'update:deleteSpendingMode',
+  'update:deleteSpendingId',
+  'update:oneMounth',
   'deleteSpending',
   'update:updatedData',
   'update:deletedData',
 ]);
-const modalWindowStore = useModalWindowStore()
-
+const modalWindowStore = useModalWindowStore();
 
 const deleteCard = (id, deletedData) => {
-	if (JSON.parse(modalWindowStore.settings.showDeleteSpending) == true) {
-		emits('update:deleteSpendingId', id)
-		emits('deleteSpending')
-	} else {
-    emits('update:deletedData', deletedData)
-  	emits('update:deleteSpendingId', id)	
-    emits('update:isModalVisible', true)
-  	emits('update:modalFormType', 'deleteSpending')
-	}
-}
+  if (JSON.parse(modalWindowStore.settings.showDeleteSpending) == true) {
+    emits('update:deleteSpendingId', id);
+    emits('deleteSpending');
+  } else {
+    console.log(deletedData);
+    emits('update:deletedData', deletedData);
+    emits('update:deleteSpendingId', id);
+    emits('update:isModalVisible', true);
+    emits('update:modalFormType', 'deleteSpending');
+  }
+};
 const changeCard = (id, updatedData) => {
-  emits('update:updatedData', updatedData)
-	emits('update:isModalVisible', true)
-  emits('update:modalFormType', 'updateCard')
-}
+  emits('update:updatedData', updatedData);
+  emits('update:isModalVisible', true);
+  emits('update:modalFormType', 'updateCard');
+};
 
 let localSpendings = ref([...props.spendings]);
 
@@ -116,9 +123,9 @@ const numToMounth = {
   '07': 'Июль',
   '08': 'Август',
   '09': 'Сентябрь',
-  '10': 'Октябрь',
-  '11': 'Ноябрь',
-  '12': 'Декабрь',
+  10: 'Октябрь',
+  11: 'Ноябрь',
+  12: 'Декабрь',
 };
 
 const spendingsSortedWithDates = computed(() => {
@@ -158,17 +165,15 @@ const sortedCards = computed(() => {
   } else if (props.sortQuantityType === 'common') {
     return currentSort;
   }
-  
 });
 
 watchEffect(() => {
   if (spendingsSortedWithDates.value.length >= 2) {
-    emits('update:oneMounth', false)
+    emits('update:oneMounth', false);
   } else {
-    emits('update:oneMounth', true)
+    emits('update:oneMounth', true);
   }
-})
-
+});
 </script>
 
 <style scoped>

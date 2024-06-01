@@ -3,11 +3,6 @@
     <div class="have-account__contanier">
       <h2>Регистрация</h2>
       <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum exercitationem labore magnam, ipsum nihil, at
-        tempora ea sint amet, delectus distinctio ex consequuntur. Explicabo, hic eaque aperiam repudiandae sapiente
-        ipsa.
-      </p>
-      <p>
         Уже есть аккаунт?
         <RouterLink :to="{ name: 'login' }">Нажми сюда</RouterLink>, чтобы войти
       </p>
@@ -25,7 +20,7 @@
           />
           <UiErrorContanier>
             <ErrorMessage
-              :messageType="v.name.required.$invalid ? 'required' : false"
+              :messageType="v.name.required.$invalid ? 'required' : v.name.maxLength.$invalid ? 'long' : false"
               labelName="имя"
               v-show="v.name.$error"
             ></ErrorMessage>
@@ -42,9 +37,7 @@
           />
           <UiErrorContanier>
             <ErrorMessage
-              :messageType="v.email.required.$invalid ? 'required' :
-              v.email.email.$invalid ? 'email'
-              : false"
+              :messageType="v.email.required.$invalid ? 'required' : v.email.email.$invalid ? 'email' : false"
               labelName="почта"
               v-show="v.email.$error"
             ></ErrorMessage>
@@ -63,9 +56,7 @@
           />
           <UiErrorContanier>
             <ErrorMessage
-              :messageType="v.password.required.$invalid ? 'required' :
-              v.password.minLength.$invalid ? 'small' 
-              : false"
+              :messageType="v.password.required.$invalid ? 'required' : v.password.minLength.$invalid ? 'small' : false"
               labelName="пароль"
               v-show="v.password.$error"
             ></ErrorMessage>
@@ -85,9 +76,9 @@
           />
           <UiErrorContanier>
             <ErrorMessage
-              :messageType="v.repeatPassword.required.$invalid ? 'required' :
-              v.repeatPassword.minLength.$invalid ? 'small' 
-              : false"
+              :messageType="
+                v.repeatPassword.required.$invalid ? 'required' : v.repeatPassword.minLength.$invalid ? 'small' : v.repeatPassword.sameAs.$invalid ? 'password' : false
+              "
               labelName="пароль"
               v-show="v.repeatPassword.$error"
             ></ErrorMessage>
@@ -113,9 +104,9 @@ import UiErrorContanier from '../components/ui/UiErrorContanier.vue';
 import { signupUser } from '../services/projectServices';
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
-import { email, minLength, required } from '@vuelidate/validators';
+import { email, maxLength, minLength, required, sameAs } from '@vuelidate/validators';
 import { RouterLink } from 'vue-router';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -126,16 +117,16 @@ export default {
   setup() {
     const toaster = ref(null);
     const router = useRouter();
-
+    const sameEmail = (value) => value.includes(true)
     //простой конструктор для User
     const userSignup = signupUser();
 
     const localSignupUser = ref({ ...userSignup });
     const rules = {
-      name: { required },
-      email: { required, email },
+      name: { required, maxLength: maxLength(30) },
+      email: { required, email }, //sameemail
       password: { required, minLength: minLength(6) },
-      repeatPassword: { required, minLength: minLength(6) },
+      repeatPassword: { required, minLength: minLength(6), sameAs: sameAs(computed(()=> localSignupUser.value.password)) },
     };
     const v = useVuelidate(rules, localSignupUser);
 
@@ -147,11 +138,16 @@ export default {
           .post('/api/signup/', localSignupUser.value)
           .then((response) => {
             if (response.data.message === 'success') {
-              toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
+              // toaster.value.success('Вы зарегистрировались!'); //починить Je89cC2ThV3y
               router.push('/login');
-            } else {
-              toaster.value.error('Проверьте поля');
-            }
+            } 
+            let errors;
+            if (response.data.message !== 'success') {
+              errors = JSON.parse(response.data.message)
+              if (errors.email) {
+                toaster.value.error('Почта занята');
+              }
+            } 
           })
           .catch((error) => {
             console.log(error);
@@ -166,6 +162,7 @@ export default {
       toaster,
       v,
       rules,
+      sameEmail
     };
   },
 };

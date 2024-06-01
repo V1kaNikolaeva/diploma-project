@@ -5,7 +5,7 @@
     </div>
     <div class="chart__wrapper">
       <div class="select-contanier">
-        <p>На какую категорию вы потратили больше всего</p>
+        <p>Траты по категориям</p>
         <UiSelect
           labelText="Тип диаграммы"
           class="select-charts"
@@ -20,7 +20,7 @@
 
     <div class="chart__wrapper">
       <div class="select-contanier">
-        <p>За какой месяц вы потратили больше всего</p>
+        <p>Траты по месяцам</p>
         <UiSelect
           labelText="Тип диаграммы"
           class="select-charts"
@@ -35,7 +35,7 @@
 
     <div class="chart__wrapper">
       <div class="select-contanier">
-        <p>В какой месяц вы заработали больше всего</p>
+        <p>Заработок по месяцам</p>
         <UiSelect
           labelText="Тип диаграммы"
           class="select-charts"

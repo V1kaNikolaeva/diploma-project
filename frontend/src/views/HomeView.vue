@@ -79,7 +79,7 @@
     />
     <CardForm
       v-else-if="modalFormType === 'updateCard'"
-      :updatedData="updatedData"
+      v-model:updatedData="updatedData"
       @updateSpending="updateSpending"
       :balanceAmount="amount"
       v-model:isModalVisible="isModalVisible"
@@ -103,10 +103,10 @@
       warningText="Вы действительно хотите удалить эту затрату?"
     >
       <UiCard
-        :one_spending="deletedData.one_spending"
+        :one_spending="deletedData.spending"
         :reason="deletedData.reason"
-        :spending_type="deletedData.spending_type"
-        :delete-spending-mode="false"
+        :spending_type="deletedData.spendingType"
+        :deleteSpendingMode="false"
         spending-mode=""
       />
     </TheWarning>
@@ -153,6 +153,16 @@ export default {
   async setup() {
     const [{ spendings }, { balances }] = await Promise.all([useSpendingAxios(), useBalanceAxios()]);
     const statsStore = useStatsStore();
+    //Функция для установки статы для профиля
+    const setProfileStats = () => {
+      statsStore.setStats({
+        spending: spendings.value.length,
+        balance: balances.value.length,
+      });
+    };
+    setProfileStats()
+
+
     let isModalVisible = ref(false);
 
     let sortQuantityType = ref('common');
@@ -237,13 +247,6 @@ export default {
       setProfileStats();
     };
 
-    //Функция для установки статы для профиля
-    const setProfileStats = () => {
-      statsStore.setStats({
-        spending: spendings.value.length,
-        balance: balances.value.length,
-      });
-    };
 
     const deleteSpendingCheckboxes = ref([
       { text: 'Больше не показывать', checked: modalWindowStore.settings.showDeleteSpending, id: 'showDeleteSpending' },

@@ -107,4 +107,9 @@ textarea:focus {
 .invalid:focus {
   outline: 1px solid var(--red-error);
 }
+@media(max-width: 768px) {
+  input, textarea {
+    font-size: 16px;
+  }
+}
 </style>

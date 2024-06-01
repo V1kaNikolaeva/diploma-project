@@ -3,9 +3,6 @@
     <div class="have-account__contanier">
       <h2>Вход</h2>
       <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum exercitationem labore magnam, ipsum nihil, at tempora ea sint amet, delectus distinctio ex consequuntur. Explicabo, hic eaque aperiam repudiandae sapiente ipsa.
-      </p>
-      <p>
         Нет аккаунта?
         <RouterLink :to="{ name: 'signup' }">Нажми сюда</RouterLink>, чтобы зарегистрироваться
       </p>
@@ -24,9 +21,7 @@
           />
           <UiErrorContanier>
             <ErrorMessage
-              :messageType="v.email.required.$invalid ? 'required' :
-              v.email.email.$invalid ? 'email'
-              : false"
+              :messageType="v.email.required.$invalid ? 'required' : v.email.email.$invalid ? 'email' : false"
               labelName="почта"
               v-show="v.email.$error"
             ></ErrorMessage>
@@ -46,18 +41,17 @@
           />
           <UiErrorContanier>
             <ErrorMessage
-              :messageType="v.password.required.$invalid ? 'required' :
-              v.password.minLength.$invalid ? 'small' 
-              : false"
+              :messageType="v.password.required.$invalid ? 'required' : v.password.minLength.$invalid ? 'small' : backendError ? 'backendError' : false"
               labelName="пароль"
-              v-show="v.password.$error"
+              v-show="v.password.$error || backendError"
             ></ErrorMessage>
           </UiErrorContanier>
         </div>
+
         <div class="sign-up-labels__wrapper">
-            <UIButton class="signUp-button" type="submit" buttonType="success" successMargin="0px">
-                <p>Войти</p>
-            </UIButton>
+          <UIButton class="signUp-button" type="submit" buttonType="success" successMargin="0px">
+            <p>Войти</p>
+          </UIButton>
         </div>
       </form>
     </div>
@@ -96,6 +90,8 @@ export default {
     const userLogin = loginUser();
     const localUserLogin = ref({...userLogin});
     const router = useRouter();
+    const backendError = ref(false)
+
     const rules = {
       email: { required, email },
       password: { required, minLength: minLength(6) },
@@ -111,21 +107,29 @@ export default {
           .then(response => {
             userStore.setToken(response.data);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access
-          })
+
+            //user page
+            axios
+              .get('/api/home/')
+              .then(response => {
+                userStore.setUserInfo(response.data);
+                // toaster.value.success('Вы авторизировались!'); //починить Je89cC2ThV3y
+                router.push({ name: 'home', params: { 'id': userStore.user.id } })
+              })
+              .catch(error => {
+                toaster.value.error('Что-то пошло не так...')
+                console.log(error);
+              })
+            })
+
           .catch(error => {
-            console.log('error', error);
+            //Обработка ошибок
+            if (error.response.status === 401 || error.response.status === 403) {
+              backendError.value = true
+              // toaster.value.error('Ошибка')
+            }
           })
-        //user page
-        await axios
-          .get('/api/home/')
-          .then(response => {
-            userStore.setUserInfo(response.data);
-            toaster.value.success('Вы авторизировались!'); //починить Je89cC2ThV3y
-            router.push({ name: 'home', params: { 'id': userStore.user.id } })
-          })
-          .catch(error => {
-            console.log('error', error);
-          })
+
       }
     }
 
@@ -137,6 +141,7 @@ export default {
       userStore,
       v,
       rules,
+      backendError,
     }
   }
 };
@@ -162,26 +167,26 @@ export default {
 }
 
 .have-account__contanier > * {
-    margin: 20px;
-    color: var(--main-text);
+  margin: 20px;
+  color: var(--main-text);
 }
 
 .sign-up-labels__wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  margin: 20px;
 }
 
 .sign-up__label {
-    width: 100%;
-    margin-bottom: 5px;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
 .signUp-button {
-    width: 100%; 
-    /* не рабоатет */
+  width: 100%;
+  /* не рабоатет */
 }
 @media screen and (max-width: 768px) {
   .sign-up__wrapper {

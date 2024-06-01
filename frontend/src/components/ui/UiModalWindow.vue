@@ -59,5 +59,8 @@ const outsideClose = () => {
  .modal__content {
   padding: 30px 10px 30px 10px;
  } 
+ .modal__wrapper {
+    padding-top: 100px;
+  }
 }
 </style>

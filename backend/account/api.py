@@ -1,4 +1,9 @@
+from django.conf import settings
 from django.http import JsonResponse
+from backend.settings import EMAIL_HOST_USER
+
+# from django.contrib.auth.forms import PasswordChangeForm
+from django.core.mail import send_mail
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import SignupForm
 
@@ -26,7 +31,18 @@ def signup(request):
     })
 
     if form.is_valid():
-        form.save()
+        user = form.save()
+        # user.is_active = False
+        user.save()
+
+        # url = f'{settings.WEBSITE_URL}/activateemail/?email={user.email}&id={user.id}'
+        # send_mail(
+        #     "Подтверждение аккаунта",
+        #     f"Чтобы активировать свой аккаунт перейдите по ссылке: { url }",
+        #     f"{ EMAIL_HOST_USER }@mail.ru",
+        #     [user.email],
+        #     fail_silently=False,
+        # )
     else: 
         message = form.errors.as_json()
 

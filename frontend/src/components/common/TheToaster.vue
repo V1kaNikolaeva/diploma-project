@@ -56,7 +56,7 @@ export default {
 <style scoped>
 .toasts {
   position: fixed;
-  bottom: 8px;
+  bottom: 18px;
   right: 22px;
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ export default {
 
 @media all and (min-width: 992px) {
   .toasts {
-    bottom: 68px;
+    bottom: 72px;
     right: 72px;
   }
 }
@@ -77,7 +77,7 @@ export default {
   flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
-  padding: 16px;
+  padding: 10px;
   background: var(--card-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border-radius: 10px;

@@ -4,15 +4,15 @@
       <UIButton class="setting-button" @click="changeVisibility(0)" :border="false">
         <p v-if="userWidth > 768">Действия</p>
         <template v-if="userWidth > 768" #left-icon>
-          <Transition name="icon">
+          <!-- <Transition name="icon"> -->
             <UiIcon :icon="list[0].value ? 'downArrow' : 'upArrow'" />
-          </Transition>
+          <!-- </Transition> -->
         </template>
         <template #right-icon v-if="userWidth < 768">
           <UiIcon icon="actions"></UiIcon>
         </template>
       </UIButton>
-      <Transition name="list">
+      <!-- <Transition name="list"> -->
         <div v-show="list[0].value" class="contanier list-active-actions">
           <UIButton class="actions-item" @click="createCard(true)" :border="false">
             <p>Добавить</p>
@@ -33,7 +33,7 @@
             </template>
           </UIButton>
         </div>
-      </Transition>
+      <!-- </Transition> -->
     </div>
 
     <div class="button__wrapper">
@@ -46,7 +46,7 @@
           <UiIcon icon="categories"></UiIcon>
         </template>
       </UIButton>
-      <Transition name="list">
+      <!-- <Transition name="list"> -->
         <div v-show="list[1].value" class="contanier list-active-categories">
           <CategoryItem
             v-for="category in categories"
@@ -56,63 +56,8 @@
             v-model:picked="category.picked"
             @sortCategory="sortCategory"
           />
-
-          <!-- <UIButton class="category-item" @click="sortCategory('products')" :border="false">
-            <p>Продукты</p>
-            <template #right-icon>
-              <UiIcon icon="cart" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('electronics')" :border="false">
-            <p>Электроника</p>
-            <template #right-icon>
-              <UiIcon icon="smartwatch" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('medications')" :border="false">
-            <p>Медицина</p>
-            <template #right-icon>
-              <UiIcon icon="pulse" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('entertainment')" :border="false">
-            <p>Развлечения</p>
-            <template #right-icon>
-              <UiIcon icon="acousticGuitar" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('trips')" :border="false">
-            <p>Путешествия</p>
-            <template #right-icon>
-              <UiIcon icon="plane" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('cloth')" :border="false">
-            <p>Одежда</p>
-            <template #right-icon>
-              <UiIcon icon="tShirt" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('present')" :border="false">
-            <p>Подарки</p>
-            <template #right-icon>
-              <UiIcon icon="gift" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('other')" :border="false">
-            <p>Другое</p>
-            <template #right-icon>
-              <UiIcon icon="search" />
-            </template>
-          </UIButton>
-          <UIButton class="category-item" @click="sortCategory('all')" :border="false">
-            <p>Все</p>
-            <template #right-icon>
-              <UiIcon icon="search" />
-            </template>
-          </UIButton> -->
         </div>
-      </Transition>
+      <!-- </Transition> -->
     </div>
 
     <div class="button__wrapper">
@@ -125,7 +70,7 @@
           <UiIcon icon="sorting"></UiIcon>
         </template>
       </UIButton>
-      <Transition name="list">
+      <!-- <Transition name="list"> -->
         <div v-show="list[2].value" class="contanier list-active-sorting">
           <UIButton class="sort-item" @click="sortQuantity(sortValue[sortIndex])" :border="false">
             <p>По сумме</p>
@@ -165,7 +110,7 @@
             </template>
           </UIButton>
         </div>
-      </Transition>
+      <!-- </Transition> -->
     </div>
   </div>
 </template>
@@ -354,13 +299,13 @@ const activeColorChange = computed(() => {
 
 .settings__contanier {
   position: sticky;
-  top: 0;
+  top: 80px;
   left: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 700px;
-  padding: 80px 30px 0px 30px;
+  padding: 30px 50px 0px 30px;
 }
 
 .contanier {
@@ -400,8 +345,6 @@ const activeColorChange = computed(() => {
 }
 
 @media (max-width: 768px) {
-  /* .settings__wrapper {
-  } */
   .settings__contanier {
     flex-direction: row-reverse;
     position: relative;
@@ -410,6 +353,7 @@ const activeColorChange = computed(() => {
     height: 100%;
     width: 100%;
     padding: 0;
+    top: 0;
   }
   .contanier {
     align-items: normal;
@@ -419,16 +363,6 @@ const activeColorChange = computed(() => {
     border: 1px solid var(--main-line);
     border-top: none;
   }
-
-  /* .actions-item {
-
-  }
-  .category-item {
-
-  }
-  .sort-item {
-
-  } */
   .button__wrapper {
     width: auto;
     margin: 10px 0px 10px 0px;

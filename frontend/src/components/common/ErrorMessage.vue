@@ -4,7 +4,10 @@
     <small class="error-message" v-else-if="messageType === 'zero'">Поле {{ labelName }} не должно быть нулем</small>
     <small class="error-message" v-else-if="messageType === 'long'">Поле {{ labelName }} имеет слишком много символов</small>
     <small class="error-message" v-else-if="messageType === 'small'">Поле {{ labelName }} должно быть содержать более {{ symbols }} символов</small>
+    <small class="error-message" v-else-if="messageType === 'sameEmail'">Такая почта уже занята</small>
     <small class="error-message" v-else-if="messageType === 'email'">Неправильный формат почты</small>
+    <small class="error-message" v-else-if="messageType === 'password'">Пароли не совпали</small>
+    <small class="error-message" v-else-if="messageType === 'backendError'">Подтвердите почту или проверьте правильно ли введены данные</small>
 </template>
 
 <script setup>
@@ -16,7 +19,7 @@ const props = defineProps({
     },
     labelName: {
         type: String,
-        required: true,
+        required: false,
     },
     symbols: {
         type: Number,

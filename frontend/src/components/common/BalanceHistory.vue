@@ -167,7 +167,7 @@ const updateBalance = async (currentChange, id, oldValue) => {
     toaster.value.error('Неправильный формат!')
     return;
   } else if (props.balanceAmount < oldValue - Number(currentChange)) {
-    toaster.value.error('Нехватает средств!')
+    toaster.value.error('Часть денег потрачена!')
     return
   }
 
@@ -186,7 +186,7 @@ const updateBalance = async (currentChange, id, oldValue) => {
 
 const deleteBalanceFromHistory = async (id, currentChange) => {
   if (props.balanceAmount < Number(currentChange)) {
-    toaster.value.error('Нехватает средств!')
+    toaster.value.error('Часть денег потрачена!')
     return
   }
   toaster.value.success('Баланс удален!');
@@ -194,7 +194,6 @@ const deleteBalanceFromHistory = async (id, currentChange) => {
   action.value = 'Действия';
   actionType.value = '';
   showInput.value = false;
-  console.log(id);
 };
 </script>
 
@@ -255,7 +254,6 @@ td {
 }
 .no-balance {
   width: 100%;
-  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;

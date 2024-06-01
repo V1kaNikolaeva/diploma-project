@@ -6,7 +6,7 @@
     <div class="info">
       <slot></slot>
     </div> 
-    <div class="checkboxes-contanier">
+    <div class="checkboxes-contanier" v-if="props.deleteSpendingCheckboxes">
       <div class="solution-checkbox" v-for="checkbox in deleteSpendingCheckboxes">
         <UiCheckbox v-model:checked="checkbox.checked" :checkboxText="checkbox.text" :id="checkbox.id" :value="checkbox.checked"/>
       </div>

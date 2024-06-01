@@ -51,9 +51,14 @@
       <UIButton
         :buttonType="'success'"
         :withoutIcon="true"
-        @click="props.updatedData === null ? createSpending(localSpending, currentItem) : updateSpending(localSpending, currentItem)"
+        @click="
+          props.updatedData === null
+            ? createSpending(localSpending, currentItem)
+            : updateSpending(localSpending, currentItem)
+        "
       >
-        <p>Добавить</p>
+        <p v-if="props.updatedData">Изменить</p>
+        <p v-else-if="!props.updatedData">Добавить</p>
       </UIButton>
     </div>
   </form>
@@ -84,9 +89,9 @@ const props = defineProps({
   },
   balanceAmount: {
     type: Number,
-  }
+  },
 });
-const emits = defineEmits(['update:isModalVisible', 'postSpending', 'updateSpending']);
+const emits = defineEmits(['update:isModalVisible', 'update:updatedData', 'postSpending', 'updateSpending']);
 
 const selectItems = [
   { name: 'Здоровье', value: 'medications' },
@@ -98,7 +103,7 @@ const selectItems = [
   { name: 'Подарки', value: 'present' },
   { name: 'Другое', value: 'other' },
 ];
-let currentItem = props.updatedData === null ? ref('other') : ref(props.updatedData.spending_type);
+let currentItem = props.updatedData === null ? ref('other') : ref(props.updatedData.spendingType);
 
 const showItemFirst = computed(() => {
   for (let i = 0; i < selectItems.length; i++) {
@@ -111,11 +116,7 @@ const showItemFirst = computed(() => {
 let localSpending =
   props.updatedData === null
     ? ref(spending())
-    : ref({
-        spending: props.updatedData.one_spending,
-        reason: props.updatedData.reason,
-        spendingType: props.updatedData.spending_type,
-      });
+    : ref(spending(props.updatedData.spending, props.updatedData.reason, props.updatedData.spendingType));
 
 const route = useRoute();
 const toaster = ref(null);
@@ -127,16 +128,21 @@ const rules = {
 const $v = useVuelidate(rules, localSpending);
 
 const createSpending = async (data, choose) => {
-  console.log(props.balanceAmount)
   if (data === false) {
+    //Закрытие модального окна
     return emits('update:isModalVisible', data);
+
   } else if ($v.value.$invalid) {
+    //Ошибки валидации
     return $v.value.$touch();
+
+  } else if (props.balanceAmount < Number(localSpending.value.spending)) {
+    //Баланса меньше чем трата
+    toaster.value.error('Недостаточно средств!');
+    return;
+
   } else {
-    if (props.balanceAmount < localSpending.value.spending) {
-      toaster.value.error('Недостаточно средств!');
-      return
-    }
+    //Создание
     localSpending.value.spendingType = choose;
     emits(
       'postSpending',
@@ -146,24 +152,37 @@ const createSpending = async (data, choose) => {
         spending_type: localSpending.value.spendingType,
       }),
     );
+
     toaster.value.success('Трата создана!');
   }
 };
 
 const updateSpending = async (data, choose) => {
   if (data === false) {
+    //Закрытие модального окна
     return emits('update:isModalVisible', data);
+
   } else if ($v.value.$invalid) {
+    //Ошибки валидации
     return $v.value.$touch();
+
+  } else if (props.balanceAmount < Number(localSpending.value.spending) - Number(props.updatedData.spending)) {
+    //Баланса меньше чем измененая трата
+    toaster.value.error('Недостаточно средств!');
+    return;
+
   } else {
-    // if (localSpending.value.spending === props.updatedData.one_spending) {
-    //   emits('update:isModalVisible', false);
-    // }
-    if (props.balanceAmount < localSpending.value.spending - props.updatedData.one_spending) {
-      toaster.value.error('Недостаточно средств!');
+    localSpending.value.spendingType = choose;
+    //Отмена PUT запроса при отсутствии изменений
+    if (Number(localSpending.value.spending) === Number(props.updatedData.spending) && 
+        localSpending.value.reason === props.updatedData.reason && 
+        localSpending.value.spendingType === props.updatedData.spendingType) 
+    {
+      toaster.value.error('Вы ничего не изменили!');
       return;
     }
-    localSpending.value.spendingType = choose;
+
+    //Изменение
     emits(
       'updateSpending',
       await putSpending(props.updatedData.id, {
@@ -172,7 +191,17 @@ const updateSpending = async (data, choose) => {
         spending_type: localSpending.value.spendingType,
       }),
     );
+    emits(
+      'update:updatedData',
+      {
+        id: props.updatedData.id,
+        spending: Number(localSpending.value.spending),
+        reason: localSpending.value.reason,
+        spendingType: localSpending.value.spendingType,
+      }
+    )
     toaster.value.success('Трата изменена!');
+    return;
   }
 };
 </script>

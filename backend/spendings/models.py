@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 
 from django.db import models
-
+from django.db.models import Sum
 from django.utils import timezone
 tz = timezone.get_default_timezone()
 
@@ -32,3 +32,6 @@ class Spending(models.Model):
     
     def created_at_formated(self):
         return format(self.created_at.astimezone(tz).strftime('%d.%m.%Y'))
+    
+
+

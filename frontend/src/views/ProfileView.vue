@@ -30,9 +30,9 @@
         </div>
       </div>
       <div class="quit-change-contanier">
-        <UiButton @click="" class="button-default" :withoutIcon="true" buttonType="default"
+        <!-- <UiButton @click="" class="button-default" :withoutIcon="true" buttonType="default"
           ><p>Изменить данные</p></UiButton
-        >
+        > -->
         <UiButton @click="quit" class="button-cancel" :withoutIcon="true" buttonType="cancel"><p>Выйти</p></UiButton>
       </div>
 
@@ -48,7 +48,7 @@ import UiButton from '@/components/ui/UiButton.vue';
 import UiCheckbox from '@/components/ui/UiCheckbox.vue';
 import { useRouter } from 'vue-router';
 import { useModalWindowStore } from '@/stores/modalWindow';
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 
 const userStore = useUserStore();
 const statsStore = useStatsStore();
@@ -67,7 +67,7 @@ const checkboxes = ref([
   },
 ]);
 
-watch(() => {
+watchEffect(() => {
   modalWindowStore.setSettings({
     showDeleteSpending: checkboxes.value[0].checked,
     switchDeleteSpending: checkboxes.value[1].checked,
@@ -78,8 +78,8 @@ const router = useRouter();
 const quit = () => {
   router.push({ name: 'login' });
   userStore.removeToken();
-  statsStore.removeToken();
-  modalWindowStore.removeToken();
+  statsStore.removeStats();
+  modalWindowStore.removeSettings();
 };
 </script>
 
