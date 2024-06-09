@@ -38,7 +38,7 @@
 
 <script setup>
 import { quantityFormatterRUB } from '../../utils/quantityFormatters';
-import UiIcon from './UIIcon.vue';
+import UiIcon from './UiIcon.vue';
 import { ref, computed } from 'vue';
 
 
