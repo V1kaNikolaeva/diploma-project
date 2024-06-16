@@ -17,7 +17,9 @@
                 ? 'long'
                 : $v.spending.minValue.$invalid
                   ? 'zero'
-                  : false
+                  : $v.spending.isZeroFirst.$invalid
+                    ? 'zeroFirst'
+                    : false
         "
         labelName="трата"
         v-show="$v.spending.$error"
@@ -75,6 +77,7 @@ import UiErrorContanier from '../ui/UiErrorContanier.vue';
 import { spending } from '../../services/spendingService';
 import { useVuelidate } from '@vuelidate/core';
 import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
+import { isZeroFirst } from '../../validators/isZeroFirst';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { postSpending, putSpending } from '@/api/spending';
@@ -122,7 +125,7 @@ const route = useRoute();
 const toaster = ref(null);
 
 const rules = {
-  spending: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
+  spending: { required, numeric, maxLength: maxLength(8), minValue: minValue(1), isZeroFirst },
   reason: { required },
 };
 const $v = useVuelidate(rules, localSpending);
@@ -131,16 +134,13 @@ const createSpending = async (data, choose) => {
   if (data === false) {
     //Закрытие модального окна
     return emits('update:isModalVisible', data);
-
   } else if ($v.value.$invalid) {
     //Ошибки валидации
     return $v.value.$touch();
-
   } else if (props.balanceAmount < Number(localSpending.value.spending)) {
     //Баланса меньше чем трата
     toaster.value.error('Недостаточно средств!');
     return;
-
   } else {
     //Создание
     localSpending.value.spendingType = choose;
@@ -161,23 +161,21 @@ const updateSpending = async (data, choose) => {
   if (data === false) {
     //Закрытие модального окна
     return emits('update:isModalVisible', data);
-
   } else if ($v.value.$invalid) {
     //Ошибки валидации
     return $v.value.$touch();
-
   } else if (props.balanceAmount < Number(localSpending.value.spending) - Number(props.updatedData.spending)) {
     //Баланса меньше чем измененая трата
     toaster.value.error('Недостаточно средств!');
     return;
-
   } else {
     localSpending.value.spendingType = choose;
     //Отмена PUT запроса при отсутствии изменений
-    if (Number(localSpending.value.spending) === Number(props.updatedData.spending) && 
-        localSpending.value.reason === props.updatedData.reason && 
-        localSpending.value.spendingType === props.updatedData.spendingType) 
-    {
+    if (
+      Number(localSpending.value.spending) === Number(props.updatedData.spending) &&
+      localSpending.value.reason === props.updatedData.reason &&
+      localSpending.value.spendingType === props.updatedData.spendingType
+    ) {
       toaster.value.error('Вы ничего не изменили!');
       return;
     }
@@ -191,15 +189,12 @@ const updateSpending = async (data, choose) => {
         spending_type: localSpending.value.spendingType,
       }),
     );
-    emits(
-      'update:updatedData',
-      {
-        id: props.updatedData.id,
-        spending: Number(localSpending.value.spending),
-        reason: localSpending.value.reason,
-        spendingType: localSpending.value.spendingType,
-      }
-    )
+    emits('update:updatedData', {
+      id: props.updatedData.id,
+      spending: Number(localSpending.value.spending),
+      reason: localSpending.value.reason,
+      spendingType: localSpending.value.spendingType,
+    });
     toaster.value.success('Трата изменена!');
     return;
   }

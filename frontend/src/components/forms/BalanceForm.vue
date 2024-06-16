@@ -12,7 +12,9 @@
                 ? 'long'
                 : $v.balance.minValue.$invalid
                   ? 'zero'
-                  : false
+                  : $v.balance.isZeroFirst.$invalid
+                    ? 'zeroFirst'
+                    : false
         "
         labelName="баланс"
         v-show="$v.balance.$error"
@@ -41,6 +43,7 @@ import { useRoute } from 'vue-router';
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, numeric, maxLength, minValue } from '@vuelidate/validators';
+import { isZeroFirst } from '../../validators/isZeroFirst';
 import { postBalance } from '@/api/balance';
 
 let localBalance = ref(balance());
@@ -62,10 +65,9 @@ const route = useRoute();
 const toaster = ref(null);
 
 const rules = {
-  balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1) },
+  balance: { required, numeric, maxLength: maxLength(8), minValue: minValue(1), isZeroFirst },
 };
 const $v = useVuelidate(rules, localBalance);
-
 
 const replenishBalance = async (value) => {
   if (value === false) {
@@ -74,11 +76,11 @@ const replenishBalance = async (value) => {
     $v.value.$touch();
   } else {
     try {
-      const response = await postBalance({ amount: Number(localBalance.value.balance) })
-      emits('postBalance', response)
+      const response = await postBalance({ amount: Number(localBalance.value.balance) });
+      emits('postBalance', response);
       toaster.value.success('Пополнено!');
-    } catch(error) {
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   }
 };

@@ -8,7 +8,7 @@
             <UiIcon :icon="list[0].value ? 'downArrow' : 'upArrow'" />
           <!-- </Transition> -->
         </template>
-        <template #right-icon v-if="userWidth < 768">
+        <template #right-icon v-if="userWidth <= 768">
           <UiIcon icon="actions"></UiIcon>
         </template>
       </UIButton>
@@ -42,7 +42,7 @@
         <template v-if="userWidth > 768" #left-icon>
           <UiIcon :icon="list[1].value ? 'downArrow' : 'upArrow'" />
         </template>
-        <template #right-icon v-if="userWidth < 768">
+        <template #right-icon v-if="userWidth <= 768">
           <UiIcon icon="categories"></UiIcon>
         </template>
       </UIButton>
@@ -66,7 +66,7 @@
         <template v-if="userWidth > 768" #left-icon>
           <UiIcon :icon="list[2].value ? 'downArrow' : 'upArrow'" />
         </template>
-        <template #right-icon v-if="userWidth < 768">
+        <template #right-icon v-if="userWidth <= 768">
           <UiIcon icon="sorting"></UiIcon>
         </template>
       </UIButton>
@@ -120,7 +120,7 @@ import { computed, ref, watchEffect } from 'vue';
 import { vOnClickOutside } from '@vueuse/components';
 import { useUserWidthObserver } from '@/composables/useUserWidthObserver';
 import UIButton from '../ui/UiButton.vue';
-import UiIcon from '../ui/UIIcon.vue';
+import UiIcon from '../ui/UiIcon.vue';
 import CategoryItem from '../common/CategoryItem.vue'
 
 const props = defineProps({
@@ -226,7 +226,7 @@ watchEffect(() => {
   }
 })
 const changeVisibility = (index) => {
-  if (userWidth.value < 768) {
+  if (userWidth.value <= 768) {
     for (let i in list.value) {
       if (i == index) {
         list.value[i].value = !list.value[i].value;
@@ -240,7 +240,7 @@ const changeVisibility = (index) => {
 };
 
 const outside = () => {
-  if (userWidth.value < 768) {
+  if (userWidth.value <= 768) {
     for (let i in list.value) {
       list.value[i].value = false;
     }

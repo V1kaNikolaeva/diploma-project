@@ -126,7 +126,7 @@ import TheWarning from '../components/common/TheWarning.vue';
 import UIModalWindow from '../components/ui/UiModalWindow.vue';
 import UIButton from '../components/ui/UiButton.vue';
 import UiCard from '../components/ui/UiCard.vue';
-import UIIcon from '../components/ui/UIIcon.vue';
+import UIIcon from '../components/ui/UiIcon.vue';
 import { computed, ref, watchEffect } from 'vue';
 import { quantityFormatterRUB } from '../utils/quantityFormatters';
 import { useBalanceAxios } from '../composables/useBalanceAxios';

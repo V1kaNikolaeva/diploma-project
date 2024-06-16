@@ -2,6 +2,7 @@
     <small class="error-message" v-if="messageType === 'required'">Поле {{ labelName }} обязательно для заполнения</small>
     <small class="error-message" v-else-if="messageType === 'numeric'">Поле {{ labelName }} должно содеражать число без пробелов</small>
     <small class="error-message" v-else-if="messageType === 'zero'">Поле {{ labelName }} не должно быть нулем</small>
+    <small class="error-message" v-else-if="messageType === 'zeroFirst'">В поле {{ labelName }} ноль в начале</small>
     <small class="error-message" v-else-if="messageType === 'long'">Поле {{ labelName }} имеет слишком много символов</small>
     <small class="error-message" v-else-if="messageType === 'small'">Поле {{ labelName }} должно быть содержать более {{ symbols }} символов</small>
     <small class="error-message" v-else-if="messageType === 'sameEmail'">Такая почта уже занята</small>
