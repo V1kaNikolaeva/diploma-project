@@ -54,11 +54,11 @@ npm run dev
 Перейти по ссылке `http://localhost:5173/`
 # Результат
 
-
+https://github.com/user-attachments/assets/6e0c8403-7bc1-460f-b983-03d4c20654d9
 
 https://github.com/user-attachments/assets/8a4875b2-036b-4dbe-aa7a-12758e375d6f
 
-
 https://github.com/user-attachments/assets/8e95a7ed-a059-4fc0-a43b-1ad076cfaf41
 
+https://github.com/user-attachments/assets/06648f05-9454-4996-8279-b77237af4cd0
 
