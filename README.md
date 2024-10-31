@@ -52,3 +52,13 @@ npm install
 npm run dev
 ```
 Перейти по ссылке `http://localhost:5173/`
+# Результат
+
+
+
+https://github.com/user-attachments/assets/8a4875b2-036b-4dbe-aa7a-12758e375d6f
+
+
+https://github.com/user-attachments/assets/8e95a7ed-a059-4fc0-a43b-1ad076cfaf41
+
+
